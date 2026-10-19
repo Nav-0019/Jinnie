@@ -3,6 +3,8 @@
  * Accurate, sincere, BTS-inspired cosmic narrative for Jinnie's 18th Birthday.
  */
 
+import { getAssetUrl } from '../utils/assetPath';
+
 const defaultGirlNickname = import.meta.env?.VITE_GIRL_NICKNAME || "Jinnie";
 const defaultBoyNickname = import.meta.env?.VITE_BOY_NICKNAME || "Bewakuf";
 const defaultPhone = import.meta.env?.VITE_DEFAULT_PHONE_NUMBER || "+91 7310347742";
@@ -17,7 +19,7 @@ export const storyContent = {
 
   // Audio track configuration
   audio: {
-    src: "/assets/audio/background-music.mp3",
+    src: getAssetUrl("/assets/audio/background-music.mp3"),
     title: "Background Music",
   },
 
@@ -170,37 +172,37 @@ export const storyContent = {
   photos: [
     {
       id: "photo-1",
-      src: "/assets/images/photo1.jpg",
+      src: getAssetUrl("/assets/images/photo1.jpg"),
       title: "Radiant Smile",
       caption: "The charm and warmth that light up every conversation."
     },
     {
       id: "photo-2",
-      src: "/assets/images/photo2.jpg",
+      src: getAssetUrl("/assets/images/photo2.jpg"),
       title: "A Glimpse of You",
       caption: "Delightfully dramatic, effortlessly herself."
     },
     {
       id: "photo-3",
-      src: "/assets/images/photo3.jpg",
+      src: getAssetUrl("/assets/images/photo3.jpg"),
       title: "Grace & Light",
       caption: "A presence that stayed in my mind across miles of distance."
     },
     {
       id: "photo-4",
-      src: "/assets/images/photo4.jpg",
+      src: getAssetUrl("/assets/images/photo4.jpg"),
       title: "The Quiet Moments",
       caption: "Behind the banter and jokes, a soft and genuine soul."
     },
     {
       id: "photo-5",
-      src: "/assets/images/photo5.jpg",
+      src: getAssetUrl("/assets/images/photo5.jpg"),
       title: "Turning Eighteen",
       caption: "A brand new year, infinite possibilities, and reasons to smile."
     },
     {
       id: "photo-6",
-      src: "/assets/images/photo6.jpg",
+      src: getAssetUrl("/assets/images/photo6.jpg"),
       title: "In Our Universe",
       caption: "The girl who found her way back into my sky."
     }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
+import { getAssetUrl } from '../utils/assetPath';
 
 export function AudioController({ shouldPlay, startUnmuted = true }) {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -54,7 +55,7 @@ export function AudioController({ shouldPlay, startUnmuted = true }) {
     <>
       <audio
         ref={audioRef}
-        src="/assets/audio/background-music.mp3"
+        src={getAssetUrl("/assets/audio/background-music.mp3")}
         loop
         preload="auto"
       />

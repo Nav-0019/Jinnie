@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { getAssetUrl } from '../utils/assetPath';
 
 /**
  * CosmicUniverse: Persistent 3D cinematic world for "A Universe Made for Her"
@@ -639,12 +640,12 @@ export class CosmicUniverse {
 
     // 6 Picture Frames with real photos of Jinnie
     const photoUrls = [
-      '/assets/images/photo1.jpg',
-      '/assets/images/photo2.jpg',
-      '/assets/images/photo3.jpg',
-      '/assets/images/photo4.jpg',
-      '/assets/images/photo5.jpg',
-      '/assets/images/photo6.jpg',
+      getAssetUrl('/assets/images/photo1.jpg'),
+      getAssetUrl('/assets/images/photo2.jpg'),
+      getAssetUrl('/assets/images/photo3.jpg'),
+      getAssetUrl('/assets/images/photo4.jpg'),
+      getAssetUrl('/assets/images/photo5.jpg'),
+      getAssetUrl('/assets/images/photo6.jpg'),
     ];
 
     const framePlacements = [
