@@ -1,0 +1,1494 @@
+/* Chapter & Component Styles for "A Little World Made for You" */
+
+/* Background Floating Petals Container */
+.petals-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.petal {
+  position: absolute;
+  top: -20px;
+  background: radial-gradient(circle at 30% 30%, #BF2D4C, #6D1125);
+  border-radius: 80% 0 55% 50% / 55% 0 80% 50%;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+/* Story Section Wrapper */
+.story-section {
+  position: relative;
+  min-height: 100vh;
+  padding: 6rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  max-width: 750px;
+}
+
+.section-tag {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 0.825rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 0.75rem;
+  padding: 0.35rem 1rem;
+  background: rgba(216, 183, 120, 0.1);
+  border: 1px solid rgba(216, 183, 120, 0.25);
+  border-radius: 999px;
+}
+
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--text-ivory-light);
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.section-subtitle {
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  color: var(--text-ivory-muted);
+  line-height: 1.6;
+}
+
+/* Floating Navigation & Header Controls */
+.story-header-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
+  background: rgba(30, 7, 17, 0.75);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(216, 183, 120, 0.15);
+  z-index: 100;
+  transition: all var(--transition-smooth);
+}
+
+.nav-brand {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-icon-btn {
+  background: rgba(70, 25, 41, 0.8);
+  border: 1px solid rgba(216, 183, 120, 0.3);
+  color: var(--text-ivory);
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.nav-icon-btn:hover {
+  background: var(--accent-rose);
+  border-color: var(--accent-gold);
+  transform: scale(1.08);
+}
+
+/* Scroll Progress Bar */
+.progress-bar-container {
+  position: fixed;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 99;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-rose), var(--accent-gold));
+  transition: width 0.1s ease-out;
+}
+
+/* Chapter Progress Dots (Side Navigator) */
+.chapter-dots-nav {
+  position: fixed;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 90;
+}
+
+.chapter-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(216, 183, 120, 0.3);
+  border: 1px solid rgba(216, 183, 120, 0.4);
+  transition: all var(--transition-fast);
+  position: relative;
+}
+
+.chapter-dot.active {
+  background: var(--accent-gold);
+  box-shadow: 0 0 10px var(--accent-gold);
+  transform: scale(1.4);
+}
+
+.chapter-dot .dot-tooltip {
+  position: absolute;
+  right: 22px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(30, 7, 17, 0.9);
+  border: 1px solid var(--accent-gold);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: var(--text-ivory);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+
+.chapter-dot:hover .dot-tooltip {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .chapter-dots-nav {
+    display: none;
+  }
+}
+
+/* ========================================================
+   CHAPTER 1: BOOK OPENING
+   ======================================================== */
+.book-hero {
+  perspective: 1200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 650px;
+  width: 100%;
+  text-align: center;
+}
+
+.storybook-cover {
+  width: min(90vw, 420px);
+  min-height: 540px;
+  background: linear-gradient(135deg, #4A1727 0%, #2A0915 100%);
+  border: 3px solid var(--accent-gold);
+  border-radius: 12px 24px 24px 12px;
+  padding: 3rem 2rem;
+  box-shadow: -15px 20px 45px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.6s ease;
+}
+
+.storybook-cover::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(216, 183, 120, 0.3);
+  box-shadow: 2px 0 0 rgba(0, 0, 0, 0.4);
+}
+
+.storybook-cover:hover {
+  transform: translateY(-8px) rotateX(4deg);
+  box-shadow: -20px 25px 60px rgba(0, 0, 0, 0.8), 0 0 35px var(--accent-gold-glow);
+}
+
+.book-corner-decor {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border-color: var(--accent-gold);
+  border-style: solid;
+  opacity: 0.6;
+}
+
+.book-corner-tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+.book-corner-tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+.book-corner-bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+.book-corner-br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+
+.book-emblem {
+  font-size: 3rem;
+  color: var(--accent-gold);
+  margin-bottom: 1rem;
+}
+
+.book-main-title {
+  font-size: 2.25rem;
+  font-family: var(--font-serif);
+  color: var(--text-ivory-light);
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.book-quote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--accent-gold-bright);
+  margin: 1.5rem 0;
+  line-height: 1.5;
+}
+
+.book-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-ivory-muted);
+  line-height: 1.5;
+}
+
+.btn-open-story {
+  margin-top: 2rem;
+  padding: 0.9rem 2.2rem;
+  background: linear-gradient(135deg, var(--accent-rose), #7B1B2F);
+  color: var(--text-ivory-light);
+  border: 1px solid var(--accent-gold);
+  border-radius: 999px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 15px var(--accent-rose-glow);
+  transition: all var(--transition-fast);
+}
+
+.btn-open-story:hover {
+  background: linear-gradient(135deg, var(--accent-rose-hover), var(--accent-rose));
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5), 0 0 25px var(--accent-gold-glow);
+}
+
+/* ========================================================
+   CHAPTER 2: CHAT TIMELINE
+   ======================================================== */
+.timeline-track {
+  position: relative;
+  max-width: 780px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.timeline-line {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 28px;
+  width: 2px;
+  background: linear-gradient(180deg, rgba(216, 183, 120, 0.2), var(--accent-gold), rgba(216, 183, 120, 0.2));
+}
+
+@media (min-width: 768px) {
+  .timeline-line {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+.timeline-beat-card {
+  position: relative;
+  margin-bottom: 3rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-smooth);
+}
+
+.timeline-beat-card:hover {
+  border-color: var(--card-border-hover);
+  box-shadow: var(--shadow-lg), 0 0 20px var(--accent-gold-glow);
+  transform: translateY(-4px);
+}
+
+.beat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 0.75rem;
+}
+
+.badge-clash {
+  background: rgba(199, 48, 80, 0.2);
+  color: #FF8BA0;
+  border: 1px solid rgba(199, 48, 80, 0.5);
+}
+
+.badge-peace {
+  background: rgba(216, 183, 120, 0.15);
+  color: var(--accent-gold-bright);
+  border: 1px solid var(--accent-gold);
+}
+
+.badge-warm {
+  background: rgba(159, 36, 61, 0.2);
+  color: var(--text-ivory);
+  border: 1px solid rgba(216, 183, 120, 0.3);
+}
+
+.beat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.beat-title {
+  font-size: 1.4rem;
+  color: var(--text-ivory-light);
+}
+
+.beat-time {
+  font-size: 0.85rem;
+  color: var(--accent-gold);
+}
+
+.beat-summary {
+  font-size: 0.95rem;
+  color: var(--text-ivory-muted);
+  margin-bottom: 1.25rem;
+  line-height: 1.5;
+}
+
+/* Chat bubble mockup */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: rgba(25, 6, 14, 0.6);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.chat-bubble {
+  max-width: 82%;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  border-radius: 14px;
+}
+
+.chat-boy {
+  align-self: flex-start;
+  background: rgba(70, 25, 41, 0.9);
+  color: var(--text-ivory);
+  border: 1px solid rgba(216, 183, 120, 0.2);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-girl {
+  align-self: flex-end;
+  background: linear-gradient(135deg, var(--accent-rose), #7B1B2F);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom-right-radius: 4px;
+}
+
+.chat-sender {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  opacity: 0.75;
+}
+
+/* ========================================================
+   CHAPTER 3: BIRTHDAY CAKE & 18 CANDLES
+   ======================================================== */
+.cake-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 680px;
+  width: 100%;
+}
+
+.cake-counter-banner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: rgba(70, 25, 41, 0.85);
+  border: 1px solid var(--accent-gold);
+  border-radius: 999px;
+  padding: 0.5rem 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.candle-count-display {
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--accent-gold-bright);
+}
+
+.cake-visual-wrapper {
+  position: relative;
+  width: min(92vw, 440px);
+  height: 380px;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Tiered Cake Construction */
+.cake-stand {
+  width: 320px;
+  height: 16px;
+  background: linear-gradient(90deg, #8A6836, #D8B778, #8A6836);
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+  margin-top: -2px;
+}
+
+.cake-tier {
+  position: relative;
+  border-radius: 16px 16px 6px 6px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 -8px 12px rgba(0, 0, 0, 0.25);
+  display: flex;
+  justify-content: center;
+}
+
+.cake-tier-bottom {
+  width: 280px;
+  height: 95px;
+  background: linear-gradient(180deg, #F9F1E6 0%, #EBDBC8 100%);
+  border: 2px solid var(--accent-gold);
+}
+
+.cake-tier-top {
+  width: 200px;
+  height: 80px;
+  background: linear-gradient(180deg, #FAF4EC 0%, #EDE1D2 100%);
+  border: 2px solid var(--accent-gold);
+  margin-bottom: -4px;
+}
+
+/* Cake Decor Ribbons & Frosting */
+.cake-frosting-drip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 18px;
+  background: linear-gradient(180deg, #9F243D, #6D1125);
+  border-radius: 16px 16px 10px 10px;
+}
+
+.cake-ribbon {
+  position: absolute;
+  bottom: 12px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: linear-gradient(90deg, #BF2D4C, #9F243D, #BF2D4C);
+  border-top: 1px solid var(--accent-gold);
+  border-bottom: 1px solid var(--accent-gold);
+}
+
+/* 18 Candles Layout Area on Top of Cake */
+.candles-grid-layer {
+  position: absolute;
+  top: 50px;
+  width: 190px;
+  height: 65px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 3px;
+  z-index: 10;
+}
+
+.candle-item {
+  width: 8px;
+  height: 44px;
+  background: repeating-linear-gradient(45deg, #FFF8EE, #FFF8EE 3px, #D8B778 3px, #D8B778 6px);
+  border-radius: 3px;
+  position: relative;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.candle-wick {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 6px;
+  background: #333;
+}
+
+.candle-flame {
+  position: absolute;
+  top: -22px;
+  left: 50%;
+  width: 12px;
+  height: 20px;
+  background: radial-gradient(ellipse at bottom, #FFFFFF 0%, #FFE072 40%, #FF851B 75%, transparent 100%);
+  border-radius: 50% 50% 35% 35% / 60% 60% 40% 40%;
+  animation: flameFlicker 1.8s ease-in-out infinite alternate;
+}
+
+.candle-slot-empty {
+  width: 8px;
+  height: 12px;
+  border-bottom: 2px dashed rgba(216, 183, 120, 0.4);
+}
+
+/* Cake Controls */
+.cake-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.btn-primary-action {
+  padding: 0.85rem 1.8rem;
+  background: linear-gradient(135deg, var(--accent-rose), #7B1B2F);
+  color: var(--text-ivory-light);
+  border: 1px solid var(--accent-gold);
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.btn-primary-action:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--accent-rose-hover), var(--accent-rose));
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), 0 0 15px var(--accent-rose-glow);
+}
+
+.btn-primary-action:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.6);
+}
+
+.btn-secondary-action {
+  padding: 0.85rem 1.8rem;
+  background: rgba(70, 25, 41, 0.8);
+  color: var(--text-ivory);
+  border: 1px solid rgba(216, 183, 120, 0.4);
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-secondary-action:hover {
+  background: rgba(90, 33, 54, 0.9);
+  border-color: var(--accent-gold);
+}
+
+/* Celebration Banner */
+.celebration-box {
+  margin-top: 2rem;
+  padding: 1.5rem 2rem;
+  background: rgba(70, 25, 41, 0.9);
+  border: 2px solid var(--accent-gold);
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 0 35px var(--accent-gold-glow);
+  max-width: 600px;
+}
+
+.celebration-box h3 {
+  font-size: 1.8rem;
+  color: var(--accent-gold-bright);
+  margin-bottom: 0.5rem;
+}
+
+/* ========================================================
+   CHAPTER 4: CAKE SLICE GAME & CHALLENGE
+   ======================================================== */
+.slice-game-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 900px;
+  width: 100%;
+}
+
+@media (min-width: 800px) {
+  .slice-game-container {
+    grid-template-columns: 1fr 1.2fr;
+    align-items: start;
+  }
+}
+
+.slices-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.slice-card-btn {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.slice-card-btn:hover {
+  border-color: var(--accent-gold);
+  background: rgba(90, 33, 54, 0.8);
+  transform: translateY(-3px);
+}
+
+.slice-card-btn.selected {
+  border-color: var(--accent-gold-bright);
+  background: linear-gradient(135deg, rgba(159, 36, 61, 0.7), rgba(70, 25, 41, 0.9));
+  box-shadow: 0 0 20px var(--accent-gold-glow);
+  transform: scale(1.03);
+}
+
+.slice-number {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.slice-label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-ivory);
+}
+
+/* Slice Details & Input Form */
+.slice-details-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 2rem;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow-md);
+}
+
+.slice-prompt-box {
+  background: rgba(30, 7, 17, 0.6);
+  border-left: 3px solid var(--accent-gold);
+  padding: 1rem 1.25rem;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 1.5rem;
+  font-style: italic;
+  color: var(--text-ivory-light);
+}
+
+.slice-form-group {
+  margin-bottom: 1.25rem;
+}
+
+.slice-form-group label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.slice-input, .slice-textarea {
+  width: 100%;
+  background: rgba(30, 7, 17, 0.7);
+  border: 1px solid rgba(216, 183, 120, 0.3);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  color: var(--text-ivory);
+  font-size: 0.95rem;
+  transition: border-color var(--transition-fast);
+}
+
+.slice-input:focus, .slice-textarea:focus {
+  border-color: var(--accent-gold-bright);
+}
+
+/* Share Preview Box */
+.share-preview-card {
+  background: rgba(20, 4, 11, 0.7);
+  border: 1px dashed rgba(216, 183, 120, 0.4);
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+}
+
+.preview-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-gold);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+
+.preview-content {
+  font-size: 0.875rem;
+  color: var(--text-ivory-muted);
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+
+.share-btn-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.btn-whatsapp-share {
+  flex: 1;
+  background: #25D366;
+  color: #053316;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-whatsapp-share:hover {
+  background: #2BF075;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(37, 211, 102, 0.35);
+}
+
+.btn-copy-share {
+  background: rgba(70, 25, 41, 0.8);
+  border: 1px solid var(--accent-gold);
+  color: var(--text-ivory);
+  font-size: 0.9rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all var(--transition-fast);
+}
+
+.btn-copy-share:hover {
+  background: var(--accent-rose);
+}
+
+/* ========================================================
+   CHAPTER 5: THE MYSTERIOUS FLOATING GIFT
+   ======================================================== */
+.gift-scene {
+  perspective: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 600px;
+  min-height: 480px;
+  position: relative;
+}
+
+.gift-box-3d {
+  position: relative;
+  width: 180px;
+  height: 180px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+.gift-box-body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #7A1930 0%, #35121F 100%);
+  border: 2px solid var(--accent-gold);
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 35px var(--accent-rose-glow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gift-ribbon-vertical {
+  position: absolute;
+  width: 32px;
+  height: 100%;
+  background: linear-gradient(90deg, #B88E4B, #F5DCA5, #B88E4B);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.gift-ribbon-horizontal {
+  position: absolute;
+  height: 32px;
+  width: 100%;
+  background: linear-gradient(180deg, #B88E4B, #F5DCA5, #B88E4B);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.gift-lid {
+  position: absolute;
+  top: -12px;
+  left: -8px;
+  width: calc(100% + 16px);
+  height: 40px;
+  background: linear-gradient(135deg, #9F243D 0%, #461929 100%);
+  border: 2px solid var(--accent-gold);
+  border-radius: 8px 8px 4px 4px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform-origin: top;
+  z-index: 5;
+}
+
+.gift-bow {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 2.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.gift-box-3d.opened .gift-lid {
+  transform: translateY(-80px) rotateX(-50deg) rotateZ(15deg);
+  opacity: 0.3;
+}
+
+.gift-box-3d.opened .gift-light-burst {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(245, 220, 165, 0.9) 0%, rgba(159, 36, 61, 0.6) 50%, transparent 70%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: lightBurst 1.2s ease-out forwards;
+  pointer-events: none;
+}
+
+/* ========================================================
+   CHAPTER 6: THE SECRET ROOM OF RED ROSES
+   ======================================================== */
+.secret-room-container {
+  position: relative;
+  width: 100%;
+  min-height: 85vh;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(216, 183, 120, 0.3);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem 1.5rem;
+}
+
+/* Dark vs Illuminated state */
+.room-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: filter 1.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.room-dark .room-backdrop {
+  filter: brightness(0.04) contrast(1.2);
+}
+
+.room-lit .room-backdrop {
+  filter: brightness(0.85) contrast(1.05);
+}
+
+/* Room dark overlay */
+.room-shadow-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 30%, rgba(15, 3, 9, 0.85) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Glowing discoverable Wall Switch */
+.wall-switch-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.wall-switch {
+  width: 64px;
+  height: 100px;
+  background: #3A322D;
+  border: 3px solid var(--accent-gold);
+  border-radius: 12px;
+  padding: 6px;
+  cursor: pointer;
+  box-shadow: 0 0 25px rgba(216, 183, 120, 0.4);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.wall-switch:hover {
+  transform: scale(1.06);
+  box-shadow: 0 0 35px var(--accent-gold);
+}
+
+.switch-toggle-rocker {
+  width: 100%;
+  height: 42px;
+  background: #C4A468;
+  border-radius: 6px;
+  transition: all 0.25s ease;
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+.switch-toggle-rocker.on {
+  transform: translateY(38px);
+  background: #E8D3A2;
+  box-shadow: 0 0 15px #FFF8E7;
+}
+
+.switch-hint-label {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--accent-gold-bright);
+  background: rgba(20, 4, 11, 0.85);
+  padding: 0.5rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent-gold);
+  animation: pulseGlow 2.5s infinite;
+}
+
+/* Memory Wall Grid */
+.memory-wall-grid {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem;
+  width: 100%;
+  max-width: 1000px;
+  margin-top: 2rem;
+}
+
+.memory-frame {
+  background: rgba(30, 7, 17, 0.85);
+  border: 3px solid var(--accent-gold);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: all var(--transition-smooth);
+}
+
+.memory-frame:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: var(--accent-gold-bright);
+  box-shadow: var(--shadow-lg), 0 0 30px var(--accent-gold-glow);
+}
+
+.memory-image-box {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  position: relative;
+}
+
+.memory-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.memory-frame:hover .memory-image-box img {
+  transform: scale(1.08);
+}
+
+.memory-info {
+  padding: 1rem 1.25rem;
+}
+
+.memory-title {
+  font-size: 1.15rem;
+  color: var(--text-ivory-light);
+  margin-bottom: 0.35rem;
+}
+
+.memory-caption {
+  font-size: 0.85rem;
+  color: var(--text-ivory-muted);
+  line-height: 1.4;
+}
+
+/* Lightbox Modal */
+.lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 3, 9, 0.92);
+  backdrop-filter: blur(12px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.lightbox-modal {
+  background: var(--bg-burgundy-surface);
+  border: 2px solid var(--accent-gold);
+  border-radius: 16px;
+  max-width: 700px;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), 0 0 30px var(--accent-gold-glow);
+  position: relative;
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--accent-gold);
+  color: #FFF;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* ========================================================
+   CHAPTER 7: THE CONFESSION
+   ======================================================== */
+.confession-card {
+  max-width: 760px;
+  width: 100%;
+  background: linear-gradient(135deg, #FAF4EC 0%, #F4E7D7 100%);
+  color: #2D0F1B;
+  border-radius: 18px;
+  padding: clamp(2rem, 5vw, 4rem);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 60px rgba(184, 142, 75, 0.15);
+  border: 2px solid var(--accent-gold);
+  position: relative;
+}
+
+.confession-salutation {
+  font-family: var(--font-serif);
+  font-size: 2.2rem;
+  color: #7A1930;
+  margin-bottom: 1.5rem;
+}
+
+.confession-text p {
+  color: #381523;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+
+.confession-highlight {
+  font-family: var(--font-serif);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #9F243D;
+  text-align: center;
+  margin: 2rem 0;
+  padding: 1rem;
+  border-top: 1px solid rgba(159, 36, 61, 0.2);
+  border-bottom: 1px solid rgba(159, 36, 61, 0.2);
+}
+
+.confession-choices-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+@media (min-width: 640px) {
+  .confession-choices-row {
+    flex-direction: row;
+  }
+}
+
+.btn-choice {
+  flex: 1;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.btn-choice-yes {
+  background: linear-gradient(135deg, #9F243D, #6D1125);
+  color: #FFF;
+  border: 1px solid var(--accent-gold);
+  box-shadow: 0 4px 15px rgba(159, 36, 61, 0.35);
+}
+
+.btn-choice-yes:hover {
+  background: linear-gradient(135deg, #B82C49, #8A1731);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(159, 36, 61, 0.5);
+}
+
+.btn-choice-time {
+  background: #E8D3B8;
+  color: #461929;
+  border: 1px solid #C4A468;
+}
+
+.btn-choice-time:hover {
+  background: #DFCAAD;
+  transform: translateY(-2px);
+}
+
+.btn-choice-friend {
+  background: #EDE1D2;
+  color: #461929;
+  border: 1px solid #D2BA9E;
+}
+
+.btn-choice-friend:hover {
+  background: #E4D5C4;
+  transform: translateY(-2px);
+}
+
+.choice-response-banner {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  background: rgba(112, 28, 48, 0.08);
+  border: 1px solid #9F243D;
+  animation: floatGentle 4s ease-in-out infinite;
+}
+
+.choice-response-banner h4 {
+  font-size: 1.35rem;
+  color: #9F243D;
+  margin-bottom: 0.5rem;
+}
+
+.choice-response-banner p {
+  color: #441727;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ========================================================
+   CHAPTER 8: HER CHAPTER (INTERACTIVE JOURNAL)
+   ======================================================== */
+.journal-container {
+  max-width: 760px;
+  width: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(12px);
+}
+
+.journal-field {
+  margin-bottom: 1.5rem;
+}
+
+.journal-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--accent-gold-bright);
+  margin-bottom: 0.5rem;
+}
+
+.journal-textarea {
+  width: 100%;
+  min-height: 90px;
+  background: rgba(25, 6, 14, 0.7);
+  border: 1px solid rgba(216, 183, 120, 0.3);
+  border-radius: 10px;
+  padding: 0.85rem 1.15rem;
+  color: var(--text-ivory);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  transition: all var(--transition-fast);
+}
+
+.journal-textarea:focus {
+  border-color: var(--accent-gold-bright);
+  box-shadow: 0 0 15px var(--accent-gold-glow);
+}
+
+.journal-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* Outro Storybook Closing */
+.closing-storybook-card {
+  margin-top: 4rem;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: linear-gradient(180deg, rgba(70, 25, 41, 0.4) 0%, rgba(20, 4, 11, 0.8) 100%);
+  border: 1px solid rgba(216, 183, 120, 0.2);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 700px;
+}
+
+.closing-title {
+  font-size: 3rem;
+  color: var(--accent-gold-bright);
+  margin-bottom: 0.75rem;
+  font-family: var(--font-serif);
+}
+
+.closing-sub {
+  font-size: 1.15rem;
+  color: var(--text-ivory-muted);
+}
+
+/* --------------------------------------------------------------------------
+   AUDIO TOGGLE & PERSONALIZE FLOATING ACTIONS
+   -------------------------------------------------------------------------- */
+.audio-toggle-wrap {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 99;
+}
+
+.audio-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(30, 8, 17, 0.85);
+  border: 1px solid var(--color-border);
+  color: var(--color-gold);
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-fast);
+}
+
+.audio-btn:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(216, 183, 120, 0.3);
+}
+
+.audio-btn.playing {
+  border-color: var(--color-gold-bright);
+  background: rgba(55, 18, 32, 0.9);
+  box-shadow: 0 0 15px rgba(216, 183, 120, 0.4);
+}
+
+.personalize-btn-wrap {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 99;
+}
+
+.personalize-trigger-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(30, 8, 17, 0.85);
+  border: 1px solid var(--color-border);
+  color: var(--color-ivory);
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-fast);
+}
+
+.personalize-trigger-btn:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
+  color: var(--color-gold);
+}
+
+/* Personalization Modal */
+.settings-modal-card {
+  background: #250B15;
+  border: 2px solid var(--color-gold);
+  border-radius: var(--radius-md);
+  padding: 2.2rem;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  box-shadow: 0 15px 45px rgba(0,0,0,0.8);
+}
+
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(216, 183, 120, 0.25);
+  padding-bottom: 0.75rem;
+}
+
+.settings-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.settings-title-wrap h3 {
+  font-size: 1.5rem;
+  color: var(--color-ivory);
+}
+
+.settings-lead {
+  font-size: 0.9rem;
+  color: var(--color-ivory-soft);
+  margin-bottom: 1.5rem;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.settings-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.settings-input-group label {
+  font-size: 0.85rem;
+  color: var(--color-gold);
+  font-weight: 500;
+}
+
+.field-hint {
+  display: block;
+  font-size: 0.75rem;
+  color: var(--color-ivory-muted);
+  font-weight: normal;
+}
+
+.settings-input-group input {
+  background: rgba(18, 5, 10, 0.85);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 1rem;
+  color: var(--color-ivory);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition: border-color var(--transition-fast);
+}
+
+.settings-input-group input:focus {
+  border-color: var(--color-gold);
+}
+
+.settings-actions {
+  margin-top: 0.75rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
