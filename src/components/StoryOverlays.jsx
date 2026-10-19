@@ -146,10 +146,10 @@ export function StoryOverlays({
   // Share response via WhatsApp
   const handleShareResponse = () => {
     soundEffects.click();
-    const text = `🌹 A Universe Made for Her — Response from ${girlNickname}
-💜 Choice: "${confessionResponse ? confessionResponse.label : 'Thoughtful silence'}"
-${userCustomNote ? `📝 Message for ${boyNickname}: "${userCustomNote}"\n` : ''}
-Sent from our celestial universe ✨`;
+    const text = `🌹 A Universe Made for You — Response from ${girlNickname}
+💜 My Answer: "${confessionResponse ? confessionResponse.label : 'Thoughtful silence'}"
+${userCustomNote ? `📝 Message for you, ${boyNickname}: "${userCustomNote}"\n` : ''}
+Sent to my Bewakuf from our celestial universe ✨`;
 
     const url = createWhatsAppShareUrl(text, recipientPhone);
     window.open(url, '_blank', 'noopener,noreferrer');
@@ -157,8 +157,8 @@ Sent from our celestial universe ✨`;
 
   const handleCopyNote = async () => {
     soundEffects.click();
-    const text = `🌹 Response from ${girlNickname} to ${boyNickname}:
-Choice: "${confessionResponse ? confessionResponse.label : 'Shared'}"
+    const text = `🌹 Response from ${girlNickname} to you (${boyNickname}):
+My Answer: "${confessionResponse ? confessionResponse.label : 'Shared'}"
 ${userCustomNote ? `Note: "${userCustomNote}"` : ''}`;
     const res = await copyToClipboard(text);
     if (res.success) {
@@ -293,12 +293,12 @@ ${userCustomNote ? `Note: "${userCustomNote}"` : ''}`;
             <div className="candles-extinguished-note">
               <Sparkles size={24} color="#D8B778" style={{ margin: '0 auto 0.5rem' }} />
               <h4>Happy 18th Birthday, {girlNickname}! 🎂✨</h4>
-              <p>All 18 candles are extinguished. Your wish is carried across the cosmos.</p>
+              <p>All 18 candles are extinguished. Your wish is carried across our cosmos.</p>
               <button
                 className="btn-continue-journey"
                 onClick={() => onScrollToProgress(0.85)}
               >
-                <span>Continue Into Her Universe</span>
+                <span>Continue Into The World I Made For You</span>
                 <ArrowDown size={16} />
               </button>
             </div>
@@ -322,7 +322,7 @@ ${userCustomNote ? `Note: "${userCustomNote}"` : ''}`;
           style={{ margin: '1.5rem auto 0' }}
         >
           <Gift size={20} />
-          <span>{isGiftOpened ? 'Gift Opened ✨' : 'Tap to Open the Gift'}</span>
+          <span>{isGiftOpened ? 'Gift Opened ✨' : 'Tap to Open My Gift for You'}</span>
         </button>
       </section>
 
@@ -411,12 +411,12 @@ ${userCustomNote ? `Note: "${userCustomNote}"` : ''}`;
           {/* Optional Free Text Note */}
           <div className="optional-response-form">
             <label htmlFor="jinnie-note">
-              Write anything you want to say (Optional):
+              Write anything you want to tell me (Optional):
             </label>
             <textarea
               id="jinnie-note"
               className="note-textarea"
-              placeholder="Your honest thoughts, a tease, or whatever feels comfortable..."
+              placeholder="Your honest thoughts, a tease, or whatever you want to tell me..."
               value={userCustomNote}
               onChange={(e) => setUserCustomNote(e.target.value)}
             />
@@ -425,10 +425,10 @@ ${userCustomNote ? `Note: "${userCustomNote}"` : ''}`;
               <button
                 className="btn-whatsapp-send"
                 onClick={handleShareResponse}
-                title="Send reply to Bewakuf on WhatsApp"
+                title="Send reply to me on WhatsApp"
               >
                 <MessageSquare size={16} />
-                <span>Send via WhatsApp to {boyNickname}</span>
+                <span>Send to me on WhatsApp ({boyNickname}) 💌</span>
               </button>
 
               <button

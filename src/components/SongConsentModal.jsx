@@ -29,15 +29,15 @@ export function SongConsentModal({
         <span className="cosmic-tag text-purple">Special 18th Birthday Surprise</span>
 
         <h3 id="song-modal-title" className="song-modal-title">
-          A Song Made for {girlNickname} 🎵
+          A Song I Made for You, {girlNickname} 🎵
         </h3>
 
         <div className="song-modal-body">
           <p>
-            Hey <strong>{girlNickname}</strong>, <strong>{boyNickname}</strong> put in genuine effort to write and record his own song just for you, hoping to impress you on your 18th birthday.
+            Hey <strong>{girlNickname}</strong>, it's me, your <strong>{boyNickname}</strong>! I put my genuine heart and effort into making and recording my own song just for you, hoping to impress you on your 18th birthday.
           </p>
           <p>
-            Would you like to hear it playing in the background as you travel through our universe?
+            Would you like to hear it playing in the background as we travel through this universe together?
           </p>
         </div>
 

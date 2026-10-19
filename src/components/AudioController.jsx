@@ -71,7 +71,7 @@ export function AudioController({ shouldPlay, startUnmuted = true }) {
           <Volume2 size={18} className="audio-icon-pulse" />
         )}
         <span className="audio-label">
-          {isMuted || !isPlaying ? 'Muted' : 'Bewakuf\'s Song Playing 🎵'}
+          {isMuted || !isPlaying ? 'Muted' : 'My Song Playing for You 🎵'}
         </span>
       </button>
     </>

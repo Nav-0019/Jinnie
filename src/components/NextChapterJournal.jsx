@@ -9,17 +9,17 @@ export function NextChapterJournal({ content, boyNickname = 'Persistent Boy', re
   const [nextChapter, setNextChapter] = useState('');
   const [copySuccess, setCopySuccess] = useState(false);
 
-  const formattedJournalText = `📖 The Next Chapter — Written by Her
-🌹 Memory of Us:
+  const formattedJournalText = `📖 The Next Chapter — From Her to Her Bewakuf
+🌹 A Memory of Us:
 ${memory || '(Not written yet)'}
 
-💌 One Thing I Want to Tell You:
+💌 One Thing I Want to Tell You, Bewakuf:
 ${message || '(Not written yet)'}
 
 ✨ What I Hope for Next:
 ${nextChapter || '(Not written yet)'}
 
-Sent from "A Little World Made for You" ❤️`;
+Sent to you from "A Universe Made for You" ❤️`;
 
   const handleWhatsAppShare = () => {
     soundEffects.click();
@@ -96,10 +96,10 @@ Sent from "A Little World Made for You" ❤️`;
           <button
             className="btn-whatsapp-share"
             onClick={handleWhatsAppShare}
-            title="Share with him via WhatsApp"
+            title="Share with me via WhatsApp"
           >
             <MessageSquare size={18} />
-            <span>Send to {boyNickname} via WhatsApp</span>
+            <span>Send to me ({boyNickname}) via WhatsApp 💌</span>
           </button>
 
           <button

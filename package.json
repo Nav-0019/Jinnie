@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/sync-build.js",
-    "lint": "oxlint",
+    "lint": "oxlint src",
     "preview": "vite preview",
     "deploy": "npx gh-pages -d dist"
   },
