@@ -677,7 +677,9 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 
 <!-- Background Audio Player (Loops seamlessly) -->
 <audio id="bgm" preload="auto" loop playsinline>
+  <source src="./public/audio/background-music.mp3" type="audio/mpeg">
   <source src="./audio/background-music.mp3" type="audio/mpeg">
+  <source src="./docs/audio/background-music.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Audio Permission Gate Modal (Locks universe until user enters with music) -->
@@ -1367,7 +1369,9 @@ function openGate(e){
       bgm.loop = true;
       var p = bgm.play();
       if(p && typeof p.catch === 'function'){
-        p.catch(function(err){ console.warn('Audio play deferred:', err); });
+        p.catch(function(err){
+          console.warn('Audio play deferred:', err);
+        });
       }
       bgm.onended = function(){
         try {
@@ -1398,6 +1402,52 @@ function openGate(e){
   } catch(err){}
 }
 
+/* Background Audio Candidate Fallback Helper
+   Natively, the browser will sequentially try the <source> elements in #bgm:
+   1. ./public/audio/background-music.mp3 (Works on GitHub Pages root & Vite dev)
+   2. ./audio/background-music.mp3 (Works in /dist, /docs, & Vite dev)
+   3. ./docs/audio/background-music.mp3 (Works on GitHub Pages)
+   If and only if the audio element signals a fatal network/source error, we probe candidates cleanly.
+*/
+function checkAndFallbackAudio(){
+  var bgm = $('#bgm');
+  if(!bgm) return;
+  if(bgm.currentSrc && !bgm.error && bgm.networkState !== 3) return;
+  var candidates = [
+    './public/audio/background-music.mp3',
+    './audio/background-music.mp3',
+    './docs/audio/background-music.mp3'
+  ];
+  var idx = 0;
+  function probeNext(){
+    if(idx >= candidates.length) return;
+    var url = candidates[idx++];
+    fetch(url, {method: 'HEAD'}).then(function(res){
+      if(res.ok){
+        bgm.src = url;
+        bgm.load();
+        if(gateOpened){
+          bgm.play().catch(function(){});
+        }
+      } else {
+        probeNext();
+      }
+    }).catch(function(){
+      probeNext();
+    });
+  }
+  probeNext();
+}
+
+var bgmEl = $('#bgm');
+if(bgmEl){
+  bgmEl.addEventListener('error', function(){
+    if(bgmEl.error){
+      checkAndFallbackAudio();
+    }
+  });
+}
+
 var gateBtn = $('#gate-btn');
 if(gateBtn){
   gateBtn.addEventListener('click', openGate);
@@ -1413,15 +1463,17 @@ if(audioGateEl){
 }
 
 // Any user gesture resumes audio context and keeps music unpaused
-document.addEventListener('pointerdown', function(){
-  var bgm = $('#bgm');
-  if(gateOpened && bgm && bgm.paused){
-    bgm.play().catch(function(){});
-  }
-  if(AC && AC.state === 'suspended'){
-    AC.resume().catch(function(){});
-  }
-}, {passive: true});
+['click', 'touchstart', 'touchend', 'pointerdown', 'keydown'].forEach(function(evt){
+  document.addEventListener(evt, function(){
+    var bgm = $('#bgm');
+    if(gateOpened && bgm && bgm.paused){
+      bgm.play().catch(function(){});
+    }
+    if(AC && AC.state === 'suspended'){
+      AC.resume().catch(function(){});
+    }
+  }, {passive: true});
+});
 
 /* Discrete Step Button Click Listeners */
 document.querySelectorAll('.step-btn, #go').forEach(function(b){
@@ -1708,6 +1760,10 @@ function blowPhase(){
 function autoBlow(){
   if(phase !== 3 && phase !== 2) return;
   phase = 4;
+  if(stream){
+    try { stream.getTracks().forEach(function(t){ t.stop(); }); } catch(err){}
+    stream = null;
+  }
   var bp = $('#bp'); if(bp) bp.hidden = true;
   var halo = $('#halo'); if(halo) halo.style.opacity = 0;
   var ord = placed.slice().sort(function(a, b){ return SL.indexOf(a.s) - SL.indexOf(b.s); });
@@ -1719,6 +1775,13 @@ function autoBlow(){
       pop(600 - i*20);
     }, i * 50);
   });
+  // Resume background music if microphone suspended it
+  setTimeout(function(){
+    var bgm = $('#bgm');
+    if(gateOpened && bgm && bgm.paused){
+      bgm.play().catch(function(){});
+    }
+  }, 250);
   setTimeout(finishCake, ord.length * 50 + 200);
 }
 
@@ -1799,7 +1862,17 @@ function finishCake(){
   cakeLocked = false;
   TT.party();
   hold = false;
-  if(stream) stream.getTracks().forEach(function(t){ t.stop(); });
+  if(stream){
+    try { stream.getTracks().forEach(function(t){ t.stop(); }); } catch(err){}
+    stream = null;
+  }
+  // Resume background music after microphone release
+  setTimeout(function(){
+    var bgm = $('#bgm');
+    if(gateOpened && bgm && bgm.paused){
+      bgm.play().catch(function(){});
+    }
+  }, 250);
   var bp = $('#bp'); if(bp) bp.hidden = true;
   var halo = $('#halo'); if(halo) halo.style.opacity = 0;
   T_('🎉 Happy 18th Birthday, Jinnie! 🎉', 'Every candle out. Wish accepted into the universe. 💜');
@@ -1942,7 +2015,7 @@ function showLeafMemory(idx){
   card.className = 'leaf-card leaf-fly-in';
   card.innerHTML = 
     '<div class="leaf-img-wrap">' +
-      '<img class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" alt="Memory for Jinnie">' +
+      '<img class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.includes(\'/public/\')?this.src.replace(\'/public/\',\'/\'):this.src.replace(\'/images/\',\'/public/images/\');}" alt="Memory for Jinnie">' +
     '</div>' +
     '<div class="leaf-caption">' + data.caption + '</div>' +
     '<div class="leaf-hint">🍃 Tap photo to blow into the wind</div>';
