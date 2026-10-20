@@ -13,37 +13,182 @@ body{margin:0;background:#0a0414;color:var(--ink);font:500 21px/1.45 "Cormorant 
 #cv{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 .tint{position:fixed;inset:0;z-index:1;pointer-events:none;mix-blend-mode:screen;background:radial-gradient(70% 40% at 50% 0,rgba(168,85,247,.28),transparent),radial-gradient(80% 50% at 50% 100%,rgba(236,72,153,.2),transparent)}
 
-/* Top Fixed HUD */
-.hud{position:fixed;top:calc(env(safe-area-inset-top,0px) + 10px);left:12px;right:12px;display:flex;justify-content:space-between;align-items:center;z-index:90;font:500 12px "DM Sans",sans-serif;font-style:normal;color:var(--soft);pointer-events:none;text-shadow:0 1px 6px #000}
-.hud button{pointer-events:auto;background:rgba(40,12,80,.55);color:var(--ink);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 14px;min-height:32px;font:500 12px "DM Sans",sans-serif;cursor:pointer;backdrop-filter:blur(4px);transition:all .25s ease}
+/* Virtual Scroll Track for Butter-Smooth Momentum */
+#track{position:relative;width:100%;height:11000px;pointer-events:none}
+
+/* ========================================================
+   MOBILE VIEW FRAME (ON LAPTOP IT ENFORCES THE MOBILE VIEW)
+   ======================================================== */
+#mobile-frame{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+  z-index:10;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+@media (min-width: 601px){
+  #mobile-frame{
+    inset:auto;
+    left:50%;
+    top:50%;
+    transform:translate(-50%, -50%);
+    width:min(430px, 92vw);
+    height:min(880px, 94vh);
+    border-radius:44px;
+    border:2px solid rgba(220, 188, 255, 0.28);
+    box-shadow:0 0 60px rgba(168, 85, 247, 0.35), 0 25px 80px rgba(0, 0, 0, 0.95);
+    background:rgba(10, 4, 20, 0.68);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+  }
+}
+
+/* Phone Top Speaker Notch on Laptop */
+.phone-notch{display:none}
+@media (min-width: 601px){
+  .phone-notch{
+    display:block;
+    position:absolute;
+    top:10px;
+    left:50%;
+    transform:translateX(-50%);
+    width:90px;
+    height:5px;
+    background:rgba(255,255,255,0.22);
+    border-radius:99px;
+    z-index:99;
+    pointer-events:none;
+  }
+}
+
+/* Desktop Scroll Hint */
+.desktop-scroll-hint{display:none}
+@media (min-width: 601px){
+  .desktop-scroll-hint{
+    display:block;
+    position:fixed;
+    bottom:14px;
+    left:50%;
+    transform:translateX(-50%);
+    font:500 12px "DM Sans",sans-serif;
+    color:rgba(214,199,242,0.6);
+    letter-spacing:0.04em;
+    z-index:5;
+    pointer-events:none;
+    text-shadow:0 1px 4px #000;
+  }
+}
+
+/* Top HUD inside Mobile Frame */
+.hud{
+  position:absolute;
+  top:calc(env(safe-area-inset-top,0px) + 14px);
+  left:14px;
+  right:14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  z-index:90;
+  font:500 12px "DM Sans",sans-serif;
+  font-style:normal;
+  color:var(--soft);
+  pointer-events:none;
+  text-shadow:0 1px 6px #000;
+}
+.hud button{
+  pointer-events:auto;
+  background:rgba(40,12,80,.55);
+  color:var(--ink);
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:999px;
+  padding:6px 14px;
+  min-height:32px;
+  font:500 12px "DM Sans",sans-serif;
+  cursor:pointer;
+  backdrop-filter:blur(4px);
+  transition:all .25s ease;
+}
 .hud button:hover{background:rgba(70,22,130,.85);border-color:#dcbcff}
 #crew{color:#e9d2ff}
 
-/* Virtual Scroll Track: Gives smooth native momentum without content scrolling down */
-#track{position:relative;width:100%;height:11000px;pointer-events:none}
+/* Main Viewport Container inside Mobile Frame */
+main{
+  position:absolute;
+  inset:0;
+  z-index:10;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  pointer-events:none;
+  padding:calc(env(safe-area-inset-top,0px) + 60px) 20px calc(env(safe-area-inset-bottom,0px) + 24px);
+}
 
-/* Fixed Viewport: The content stays centered on screen and fades in/out in place */
-main{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;pointer-events:none;padding:calc(env(safe-area-inset-top,0px) + 60px) 24px calc(env(safe-area-inset-bottom,0px) + 24px)}
-
-/* Section in-place fading mechanism: NO card box around text */
-.sc{position:absolute;width:100%;max-width:480px;margin:0 auto;text-align:center;pointer-events:none;opacity:0;visibility:hidden;transform:translateY(16px);filter:blur(8px);transition:opacity .75s cubic-bezier(.2,.8,.2,1),transform .75s cubic-bezier(.2,.8,.2,1),filter .75s cubic-bezier(.2,.8,.2,1);will-change:opacity,transform,filter}
+/* In-place fading section (NO card box around text) */
+.sc{
+  position:absolute;
+  width:100%;
+  max-width:390px;
+  margin:0 auto;
+  text-align:center;
+  pointer-events:none;
+  opacity:0;
+  visibility:hidden;
+  transform:translateY(16px);
+  filter:blur(8px);
+  transition:opacity .75s cubic-bezier(.2,.8,.2,1),transform .75s cubic-bezier(.2,.8,.2,1),filter .75s cubic-bezier(.2,.8,.2,1);
+  will-change:opacity,transform,filter;
+}
 .sc[hidden]{display:none}
 .sc.in{opacity:1;visibility:visible;transform:translateY(0);filter:none;pointer-events:auto}
 .sc.out{opacity:0;visibility:hidden;transform:translateY(-16px);filter:blur(8px);pointer-events:none}
 
 /* Pure Floating Starlight Text (No Card Boxing) */
-.card{text-align:center;text-shadow:0 1px 3px #000,0 0 20px rgba(0,0,0,.9);background:none;border:none;box-shadow:none;padding:0}
-h1,h2{font-style:normal;font-weight:500;line-height:1.15;margin:0 0 .45em;letter-spacing:.01em;color:#f7edff;text-shadow:0 0 22px rgba(192,120,255,.85),0 1px 3px #000}
-h1{font-size:clamp(34px,10vw,46px)}
-h2{font-size:clamp(28px,8.4vw,36px)}
+.card{
+  text-align:center;
+  text-shadow:0 1px 3px #000,0 0 20px rgba(0,0,0,.9);
+  background:none;
+  border:none;
+  box-shadow:none;
+  padding:0;
+}
+h1,h2{
+  font-style:normal;
+  font-weight:500;
+  line-height:1.15;
+  margin:0 0 .45em;
+  letter-spacing:.01em;
+  color:#f7edff;
+  text-shadow:0 0 22px rgba(192,120,255,.85),0 1px 3px #000;
+}
+h1{font-size:clamp(32px,8vw,42px)}
+h2{font-size:clamp(26px,6.8vw,34px)}
 .card p{margin:0 0 .75em}
 .note{font-size:.8em;color:var(--soft);margin-top:1em}
 
-button{font:500 15px "DM Sans",sans-serif;font-style:normal;color:#fff;background:linear-gradient(135deg,rgba(168,85,247,.6),rgba(236,72,153,.42));border:1px solid #dcbcff;box-shadow:0 0 18px rgba(168,85,247,.45);border-radius:999px;padding:12px 24px;min-height:46px;cursor:pointer;touch-action:manipulation;backdrop-filter:blur(4px);transition:all .25s ease}
+button{
+  font:500 15px "DM Sans",sans-serif;
+  font-style:normal;
+  color:#fff;
+  background:linear-gradient(135deg,rgba(168,85,247,.6),rgba(236,72,153,.42));
+  border:1px solid #dcbcff;
+  box-shadow:0 0 18px rgba(168,85,247,.45);
+  border-radius:999px;
+  padding:12px 24px;
+  min-height:46px;
+  cursor:pointer;
+  touch-action:manipulation;
+  backdrop-filter:blur(4px);
+  transition:all .25s ease;
+}
 button:hover{transform:translateY(-2px);box-shadow:0 0 26px rgba(168,85,247,.75)}
 button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 
-.big{font-size:100px;line-height:1;cursor:pointer;user-select:none;animation:fl 3s ease-in-out infinite alternate;margin-bottom:12px;filter:drop-shadow(0 0 16px rgba(255,227,163,.6))}
+.big{font-size:96px;line-height:1;cursor:pointer;user-select:none;animation:fl 3s ease-in-out infinite alternate;margin-bottom:12px;filter:drop-shadow(0 0 16px rgba(255,227,163,.6))}
 @keyframes fl{to{transform:translateY(-12px)}}
 
 #arena{position:relative;height:220px;margin:8px 0}
@@ -51,17 +196,36 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 @keyframes tw{to{transform:scale(1.25);opacity:.75}}
 .msg{color:var(--gold);font-size:1.1em;min-height:3em;line-height:1.4}
 
-.letter p{font:600 25px/1.35 Caveat,cursive}
+.letter p{font:600 24px/1.35 Caveat,cursive}
 .ch2{display:flex;flex-direction:column;gap:12px;margin-top:14px}
 .ch2 button{width:100%}
 
-/* Cake Overlay */
-#cg{position:fixed;inset:0;z-index:70;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:46px 14px 14px;background:rgba(3,4,12,.55);touch-action:none;user-select:none;-webkit-user-select:none;opacity:0;transition:opacity .6s;text-align:center;text-shadow:0 1px 3px #000,0 0 18px #000;pointer-events:none}
+/* Cake Overlay inside Mobile Frame */
+#cg{
+  position:absolute;
+  inset:0;
+  z-index:70;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:46px 14px 14px;
+  background:rgba(3,4,12,.75);
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  opacity:0;
+  transition:opacity .6s;
+  text-align:center;
+  text-shadow:0 1px 3px #000,0 0 18px #000;
+  pointer-events:none;
+}
 #cg[hidden]{display:none}
 #cg.on{opacity:1;pointer-events:auto}
-.ct{font:500 clamp(26px,8vw,34px)/1.1 "Cormorant Garamond",serif;font-style:normal;margin:0}
-#cs{font-size:18px;color:var(--soft);min-height:2.6em;margin:0;max-width:340px}
-.cw{position:relative;width:min(92vw,380px)}
+.ct{font:500 clamp(24px,7vw,32px)/1.1 "Cormorant Garamond",serif;font-style:normal;margin:0}
+#cs{font-size:16px;color:var(--soft);min-height:2.6em;margin:0;max-width:320px}
+.cw{position:relative;width:min(90%,360px)}
 #halo{position:absolute;inset:-14% -10% 18%;background:radial-gradient(closest-side,rgba(255,190,110,.6),rgba(255,140,80,.15) 62%,transparent);opacity:0;transition:opacity .8s;pointer-events:none}
 #cvs{position:relative;display:block;overflow:visible}
 .drag{position:fixed;z-index:100;pointer-events:none;transform:translate(-50%,-100%) scale(1.25);filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
@@ -77,22 +241,22 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .fl{transform-box:fill-box;transform-origin:50% 100%;transform:skewX(calc(var(--lean,0)*1deg))}
 .smk{opacity:0;transform-box:fill-box}.out .smk{animation:sm 1.4s ease-out forwards}
 @keyframes sm{from{opacity:.7;transform:translateY(0) scale(.6)}to{opacity:0;transform:translateY(-28px) scale(2.2)}}
-#meter{width:min(80vw,300px);height:16px;border:1px solid rgba(255,255,255,.55);border-radius:99px;overflow:hidden;background:rgba(0,0,0,.4)}
+#meter{width:min(80vw,290px);height:16px;border:1px solid rgba(255,255,255,.55);border-radius:99px;overflow:hidden;background:rgba(0,0,0,.4)}
 #mf{height:100%;width:0;background:linear-gradient(90deg,#ffd98a,#ff8fb8,#b79cff);transition:width .1s linear}
 #bp{display:flex;flex-direction:column;gap:10px;align-items:center}#bp[hidden]{display:none}
 
-/* BTS GIF Crew Stickers & Peek-a-boo */
+/* BTS GIF Crew Stickers & Peek-a-boo inside Mobile Frame */
 .cb.gif{width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.55))}
-.pk{position:fixed;bottom:12px;width:86px;z-index:60;pointer-events:none}
-.pk.l{left:12px}
-.pk.r{right:12px}
-.pkc{height:100px;overflow:hidden}
+.pk{position:absolute;bottom:12px;width:82px;z-index:60;pointer-events:none}
+.pk.l{left:8px}
+.pk.r{right:8px}
+.pkc{height:96px;overflow:hidden}
 .pkc .cb{cursor:pointer;pointer-events:auto;transform:translateY(105%);transition:transform .75s cubic-bezier(.3,1.7,.5,1)}
 .pk.up .cb{transform:translateY(8%)}
 .pk.wig .cb{animation:wg .6s}
 @keyframes wg{30%{transform:translateY(-12%) rotate(-9deg)}65%{transform:translateY(-4%) rotate(9deg)}}
 .pk.got .cb{filter:drop-shadow(0 0 12px #d9a8ff)}
-.sb{position:absolute;bottom:104px;width:max-content;max-width:175px;padding:8px 12px;font:500 13px/1.3 "DM Sans",sans-serif;font-style:normal;color:#fff;background:rgba(70,22,130,.92);border:1px solid #cfa8ff;border-radius:14px;box-shadow:0 0 16px rgba(168,85,247,.6);opacity:0;transform:scale(.6);transition:.35s;pointer-events:none;text-shadow:none}
+.sb{position:absolute;bottom:100px;width:max-content;max-width:160px;padding:8px 12px;font:500 13px/1.3 "DM Sans",sans-serif;font-style:normal;color:#fff;background:rgba(70,22,130,.92);border:1px solid #cfa8ff;border-radius:14px;box-shadow:0 0 16px rgba(168,85,247,.6);opacity:0;transform:scale(.6);transition:.35s;pointer-events:none;text-shadow:none}
 .pk.l .sb{left:0;transform-origin:0 100%}.pk.r .sb{right:0;transform-origin:100% 100%}
 .pk.say .sb{opacity:1;transform:none}
 .sb b{color:#f0d8ff}
@@ -101,28 +265,28 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 @keyframes mp{from{transform:translate(-50%,-60%) scale(.2);opacity:0}}
 .mn .sb{left:50%;bottom:92%;opacity:1;transform:translateX(-50%)}
 
-.crowd{display:flex;justify-content:center;gap:3px;margin-top:22px;height:72px;overflow:hidden}
-.crowd .ci{width:50px;cursor:pointer;transform:translateY(80%);animation:cu .8s cubic-bezier(.3,1.7,.5,1) forwards;animation-delay:calc(var(--k)*.15s + .4s)}
+.crowd{display:flex;justify-content:center;gap:3px;margin-top:20px;height:70px;overflow:hidden}
+.crowd .ci{width:46px;cursor:pointer;transform:translateY(80%);animation:cu .8s cubic-bezier(.3,1.7,.5,1) forwards;animation-delay:calc(var(--k)*.15s + .4s)}
 @keyframes cu{to{transform:translateY(6%)}}
 .crowd .ci:active{transform:translateY(-8%)}
 .crowd .ci.got{filter:drop-shadow(0 0 10px #e0a8ff)}
 
-.run{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);left:0;z-index:30;display:flex;gap:6px;pointer-events:none}
-.rn{width:56px;animation:hop .3s ease-in-out infinite alternate}
+.run{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);left:0;z-index:30;display:flex;gap:6px;pointer-events:none}
+.rn{width:52px;animation:hop .3s ease-in-out infinite alternate}
 .run.rev img{transform:scaleX(-1)}
 @keyframes hop{to{transform:translateY(-14px) rotate(4deg)}}
 
-.party{position:fixed;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);z-index:95;display:flex;justify-content:center;gap:4px;pointer-events:none}
-.party div{width:64px;animation:dn .38s ease-in-out infinite alternate}
+.party{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);z-index:95;display:flex;justify-content:center;gap:4px;pointer-events:none}
+.party div{width:60px;animation:dn .38s ease-in-out infinite alternate}
 @keyframes dn{from{transform:translateY(0) rotate(-8deg)}to{transform:translateY(-24px) rotate(8deg)}}
 .whale{position:fixed;left:0;top:22vh;width:min(78vw,420px);z-index:96;pointer-events:none;filter:drop-shadow(0 0 22px #e040fb)}
 
-.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);z-index:999;padding:12px 22px;border-radius:99px;background:rgba(70,22,130,.92);border:1px solid #dcbcff;font:500 15px "DM Sans",sans-serif;font-style:normal;color:#fff;box-shadow:0 0 28px rgba(190,100,255,.8);animation:mp .5s both;text-align:center;max-width:90vw}
+.toast{position:absolute;left:50%;bottom:80px;transform:translateX(-50%);z-index:999;padding:12px 20px;border-radius:99px;background:rgba(70,22,130,.92);border:1px solid #dcbcff;font:500 14px "DM Sans",sans-serif;font-style:normal;color:#fff;box-shadow:0 0 28px rgba(190,100,255,.8);animation:mp .5s both;text-align:center;max-width:88%}
 
 /* Swipe Deck */
-.deck{position:relative;height:280px;margin:6px auto 14px;max-width:320px}
+.deck{position:relative;height:280px;margin:6px auto 14px;max-width:310px}
 .dc{position:absolute;inset:0;padding:22px 18px;border-radius:26px;background:linear-gradient(160deg,rgba(120,50,200,.88),rgba(60,20,120,.92));border:1px solid #d6b4ff;box-shadow:0 0 26px rgba(168,85,247,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;text-align:center}
-.dc i{font-style:normal;font-size:56px}.dc h3{margin:6px 0;font:500 24px "Cormorant Garamond",serif;font-style:normal;color:#fff}.dc p{margin:0;font-size:18px}
+.dc i{font-style:normal;font-size:54px}.dc h3{margin:6px 0;font:500 24px "Cormorant Garamond",serif;font-style:normal;color:#fff}.dc p{margin:0;font-size:18px}
 .dc .rb{position:absolute;left:20px;right:20px;top:12px;height:4px;border-radius:9px;background:rgba(255,255,255,.2);overflow:hidden}
 .dc .rb:after{content:"";display:block;height:100%;width:0;background:#f0d8ff}
 .dc.top .rb:after{animation:rd 2s linear forwards}.dc.top.ready .rb:after{animation:none;width:100%;box-shadow:0 0 10px #fff}
@@ -141,182 +305,190 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 <canvas id="cv" aria-hidden="true"></canvas>
 <div class="tint" aria-hidden="true"></div>
 
-<!-- Top Fixed HUD -->
-<div class="hud">
-  <span>🚀 <b id="ly">0</b> light-years from home</span>
-  <span id="crew">💜 <b id="fc">0</b>/7 ARMY crew</span>
-  <button id="snd">♪ Sound off</button>
-</div>
+<!-- Desktop Ambient Scroll Hint -->
+<div class="desktop-scroll-hint">✦ Scroll on trackpad or mouse to journey through the universe ✦</div>
 
-<!-- Virtual Scroll Track (Gives native scroll depth & momentum) -->
+<!-- Virtual Scroll Track (Drives native scroll momentum on both desktop and mobile) -->
 <div id="track"></div>
 
-<!-- Fixed Viewport: Pure floating starlight text that fades without going down -->
-<main>
-  <section class="sc in" data-o="earth">
-    <div class="card">
-      <h1>A Universe Made for You.</h1>
-      <p>Some stars enter quietly. And somehow, you found your way back into our sky.</p>
-      <p>Turn up your sound, take a slow breath… and scroll. ✦</p>
-      <button id="go">Begin ↓</button>
-    </div>
-  </section>
+<!-- Mobile View Frame: Constrains the experience to a mobile viewport on laptop/desktop -->
+<div id="mobile-frame">
+  <div class="phone-notch" aria-hidden="true"></div>
 
-  <section class="sc" data-o="const">
-    <div class="card">
-      <h2>Across six months of distance</h2>
-      <p>We met online, through my classmate’s sister.</p>
-      <p>Never face to face. Only glowing screens, late into the night.</p>
-      <p>And you: nonchalant, a little dramatic, impossible to ignore. ✦</p>
-    </div>
-  </section>
-
-  <section class="sc" data-o="neb">
-    <div class="card">
-      <h2>Day 5: our collision</h2>
-      <p>No fairy-tale beginning.</p>
-      <p>Five days in, we crashed like two clouds of gas. You were rude. I was blunt.</p>
-      <p>Then, a cold silence. ❄️</p>
-    </div>
-  </section>
-
-  <section class="sc" data-o="grb">
-    <div class="card">
-      <h2>When words went too far</h2>
-      <p>A gamma-ray burst is the brightest explosion in the universe.</p>
-      <p>That argument felt like one.</p>
-      <p>You were hurt, and neither of us was innocent. 🥀</p>
-    </div>
-  </section>
-
-  <section class="sc" data-o="bh">
-    <div class="card">
-      <h2>And then, the dark</h2>
-      <p>You blocked me.</p>
-      <p>Not even light escapes a black hole.</p>
-      <p>That’s how that silence felt.</p>
-    </div>
-  </section>
-
-  <section class="sc" data-o="dead">
-    <div class="card">
-      <h2>A planet where nothing speaks</h2>
-      <p>Cold. Quiet. Still.</p>
-      <p>A world with no one left to answer.</p>
-    </div>
-  </section>
-
-  <section class="sc" data-o="birth">
-    <div class="card">
-      <h2>Finding your way back</h2>
-      <p>When two stars drift apart, they usually never cross paths again.</p>
-      <p>But you unblocked me. You came back.</p>
-      <p>Not a movie scene, just a second chance. To me, your Bewakuf, it meant the world. 💜</p>
-      <div class="note">✦ our doorway: the Magic Shop, where warm hearts find comfort</div>
-    </div>
-  </section>
-
-  <section class="sc" data-o="gal">
-    <div class="card">
-      <h2>The conversations that stayed</h2>
-      <p>Five months of quietly becoming the best part of my ordinary days.</p>
-      <p>Your dramatic reactions. Our inside jokes. 3 a.m. thoughts.</p>
-      <p>I’ve genuinely fallen for your vibe. 🥹</p>
-    </div>
-  </section>
-
-  <section class="sc" data-o="msg">
-    <div class="card">
-      <h2>Message stars</h2>
-      <p>Five stars carry messages for you. Tap them. ✦</p>
-      <div id="arena"></div>
-      <div class="msg" id="sm">Tap a star…</div>
-    </div>
-  </section>
-
-  <section class="sc" id="cakesec" data-o="none">
-    <div class="card">
-      <h2>Eighteen Candles in the Sky</h2>
-      <p>Make a wish, Jinnie. Drop all 18 candles on your cake and blow them out! 🎂</p>
-    </div>
-  </section>
-
-  <section class="sc" data-o="none" id="giftsec">
-    <div class="big" id="gift">🎁</div>
-    <div class="card">
-      <h2>A surprise in the stars</h2>
-      <p>One last thing is waiting for you in the quiet of space.</p>
-      <button id="open">Open the gift 🎁</button>
-    </div>
-  </section>
-
-  <section class="sc plain" hidden id="decksec">
-    <div class="card">
-      <h2>What I adore about your soul</h2>
-      <div class="car" id="car" style="display:none">
-        <div class="sl"><i>🌸</i><h3>Your beautiful soul</h3><p>Pure, honest, gloriously unapologetic.</p></div>
-        <div class="sl"><i>😭</i><h3>Your dramatic reactions</h3><p>My favourite show, every single day.</p></div>
-        <div class="sl"><i>⚡</i><h3>Your energy</h3><p>It fills my ordinary days with light.</p></div>
-        <div class="sl"><i>🪞</i><h3>Your honesty</h3><p>Even when it’s blunt. Especially then.</p></div>
-        <div class="sl"><i>🌙</i><h3>Our late nights</h3><p>The best talks happen after midnight.</p></div>
-        <div class="sl"><i>💜</i><h3>You</h3><p>Exactly as you are.</p></div>
-      </div>
-      <div class="cnt" id="cnt">1 / 6 · read each card, then swipe 💌</div>
-    </div>
-  </section>
-
-  <section class="sc plain" hidden data-lock="1" id="lettersec">
-    <div class="card letter">
-      <p>Jinnie,</p>
-      <p>I don’t know what the future holds, and I won’t pretend five months online means I know everything about you.</p>
-      <p>But on your eighteenth birthday, I wanted to say what has been quietly growing in my heart.</p>
-      <p><b>I like you, Jinnie. Truly, honestly, more than a friend.</b></p>
-    </div>
-  </section>
-
-  <section class="sc plain" hidden data-lock="1" id="replysec">
-    <div class="card">
-      <h2>So, what does your star say?</h2>
-      <div class="ch2">
-        <button data-m="Then the stars got it right. Happy birthday, Jinnie. 💜" data-e="1">I feel the same way 💜</button>
-        <button data-m="Take all the time you need. The sky isn’t going anywhere, and neither am I.">I need time to think 🌙</button>
-        <button data-m="Then I’m grateful for exactly that. Best friend in the stars, always. Happy birthday, Jinnie.">I see you as a friend 🤝</button>
-      </div>
-      <div class="msg" id="ans" style="margin-top:14px"></div>
-      <div id="wa-container" style="display:none">
-        <button class="wa-btn" id="wa-btn">Send answer on WhatsApp 💬</button>
-      </div>
-    </div>
-  </section>
-</main>
-
-<!-- Interactive 18 Candles Cake Modal -->
-<div id="cg" hidden>
-  <h2 class="ct" id="ct">Plant 18 candles 🎂</h2>
-  <p id="cs">Drag or tap the candle from below and drop it on top of the cake.</p>
-  <div class="cw">
-    <div id="halo"></div>
-    <svg id="cvs" viewBox="0 0 360 330" width="100%" role="img" aria-label="Birthday cake">
-      <defs>
-        <linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc3d2"/><stop offset="1" stop-color="#ff8eaa"/></linearGradient>
-        <radialGradient id="gl"><stop offset="0" stop-color="#ffd27a" stop-opacity=".8"/><stop offset="1" stop-color="#ff9a3c" stop-opacity="0"/></radialGradient>
-        <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c8"/><stop offset=".5" stop-color="#ffc24a"/><stop offset="1" stop-color="#ff7a2a"/></linearGradient>
-      </defs>
-      <ellipse cx="180" cy="294" rx="160" ry="24" fill="#cfcbe6"/><ellipse cx="180" cy="290" rx="156" ry="21" fill="#f3f1ff"/>
-      <path d="M52,198L52,268Q52,298 180,298Q308,298 308,268L308,198Z" fill="url(#cb)"/>
-      <path d="M52,238Q180,266 308,238L308,252Q180,280 52,252Z" fill="#fff4e6"/>
-      <ellipse cx="180" cy="198" rx="128" ry="34" fill="#fff6ea"/>
-      <g id="spr"></g>
-      <ellipse id="zone" cx="180" cy="198" rx="124" ry="31" fill="none" stroke="#ffe3a3" stroke-width="2" stroke-dasharray="6 6" opacity="0" style="transition:opacity .3s"/>
-      <g id="cd"></g>
-    </svg>
+  <!-- Top Fixed HUD -->
+  <div class="hud">
+    <span>🚀 <b id="ly">0</b> light-years from home</span>
+    <span id="crew">💜 <b id="fc">0</b>/7 ARMY crew</span>
+    <button id="snd">♪ Sound off</button>
   </div>
-  <div id="tray"><div id="tc" aria-label="Candle to drag"></div><span id="cn">0 / 18</span></div>
-  <div id="bp" hidden>
-    <div id="meter"><div id="mf"></div></div>
-    <div style="display:flex;gap:10px">
-      <button id="mic">Allow mic &amp; blow 🎤</button>
-      <button id="hold">Hold to blow instead 🌬️</button>
+
+  <!-- Fixed Viewport: Pure floating starlight text that fades without going down -->
+  <main>
+    <section class="sc in" data-o="earth">
+      <div class="card">
+        <h1>A Universe Made for You.</h1>
+        <p>Some stars enter quietly. And somehow, you found your way back into our sky.</p>
+        <p>Turn up your sound, take a slow breath… and scroll. ✦</p>
+        <button id="go">Begin ↓</button>
+      </div>
+    </section>
+
+    <section class="sc" data-o="const">
+      <div class="card">
+        <h2>Across six months of distance</h2>
+        <p>We met online, through my classmate’s sister.</p>
+        <p>Never face to face. Only glowing screens, late into the night.</p>
+        <p>And you: nonchalant, a little dramatic, impossible to ignore. ✦</p>
+      </div>
+    </section>
+
+    <section class="sc" data-o="neb">
+      <div class="card">
+        <h2>Day 5: our collision</h2>
+        <p>No fairy-tale beginning.</p>
+        <p>Five days in, we crashed like two clouds of gas. You were rude. I was blunt.</p>
+        <p>Then, a cold silence. ❄️</p>
+      </div>
+    </section>
+
+    <section class="sc" data-o="grb">
+      <div class="card">
+        <h2>When words went too far</h2>
+        <p>A gamma-ray burst is the brightest explosion in the universe.</p>
+        <p>That argument felt like one.</p>
+        <p>You were hurt, and neither of us was innocent. 🥀</p>
+      </div>
+    </section>
+
+    <section class="sc" data-o="bh">
+      <div class="card">
+        <h2>And then, the dark</h2>
+        <p>You blocked me.</p>
+        <p>Not even light escapes a black hole.</p>
+        <p>That’s how that silence felt.</p>
+      </div>
+    </section>
+
+    <section class="sc" data-o="dead">
+      <div class="card">
+        <h2>A planet where nothing speaks</h2>
+        <p>Cold. Quiet. Still.</p>
+        <p>A world with no one left to answer.</p>
+      </div>
+    </section>
+
+    <section class="sc" data-o="birth">
+      <div class="card">
+        <h2>Finding your way back</h2>
+        <p>When two stars drift apart, they usually never cross paths again.</p>
+        <p>But you unblocked me. You came back.</p>
+        <p>Not a movie scene, just a second chance. To me, your Bewakuf, it meant the world. 💜</p>
+        <div class="note">✦ our doorway: the Magic Shop, where warm hearts find comfort</div>
+      </div>
+    </section>
+
+    <section class="sc" data-o="gal">
+      <div class="card">
+        <h2>The conversations that stayed</h2>
+        <p>Five months of quietly becoming the best part of my ordinary days.</p>
+        <p>Your dramatic reactions. Our inside jokes. 3 a.m. thoughts.</p>
+        <p>I’ve genuinely fallen for your vibe. 🥹</p>
+      </div>
+    </section>
+
+    <section class="sc" data-o="msg">
+      <div class="card">
+        <h2>Message stars</h2>
+        <p>Five stars carry messages for you. Tap them. ✦</p>
+        <div id="arena"></div>
+        <div class="msg" id="sm">Tap a star…</div>
+      </div>
+    </section>
+
+    <section class="sc" id="cakesec" data-o="none">
+      <div class="card">
+        <h2>Eighteen Candles in the Sky</h2>
+        <p>Make a wish, Jinnie. Drop all 18 candles on your cake and blow them out! 🎂</p>
+      </div>
+    </section>
+
+    <section class="sc" data-o="none" id="giftsec">
+      <div class="big" id="gift">🎁</div>
+      <div class="card">
+        <h2>A surprise in the stars</h2>
+        <p>One last thing is waiting for you in the quiet of space.</p>
+        <button id="open">Open the gift 🎁</button>
+      </div>
+    </section>
+
+    <section class="sc plain" hidden id="decksec">
+      <div class="card">
+        <h2>What I adore about your soul</h2>
+        <div class="car" id="car" style="display:none">
+          <div class="sl"><i>🌸</i><h3>Your beautiful soul</h3><p>Pure, honest, gloriously unapologetic.</p></div>
+          <div class="sl"><i>😭</i><h3>Your dramatic reactions</h3><p>My favourite show, every single day.</p></div>
+          <div class="sl"><i>⚡</i><h3>Your energy</h3><p>It fills my ordinary days with light.</p></div>
+          <div class="sl"><i>🪞</i><h3>Your honesty</h3><p>Even when it’s blunt. Especially then.</p></div>
+          <div class="sl"><i>🌙</i><h3>Our late nights</h3><p>The best talks happen after midnight.</p></div>
+          <div class="sl"><i>💜</i><h3>You</h3><p>Exactly as you are.</p></div>
+        </div>
+        <div class="cnt" id="cnt">1 / 6 · read each card, then swipe 💌</div>
+      </div>
+    </section>
+
+    <section class="sc plain" hidden data-lock="1" id="lettersec">
+      <div class="card letter">
+        <p>Jinnie,</p>
+        <p>I don’t know what the future holds, and I won’t pretend five months online means I know everything about you.</p>
+        <p>But on your eighteenth birthday, I wanted to say what has been quietly growing in my heart.</p>
+        <p><b>I like you, Jinnie. Truly, honestly, more than a friend.</b></p>
+      </div>
+    </section>
+
+    <section class="sc plain" hidden data-lock="1" id="replysec">
+      <div class="card">
+        <h2>So, what does your star say?</h2>
+        <div class="ch2">
+          <button data-m="Then the stars got it right. Happy birthday, Jinnie. 💜" data-e="1">I feel the same way 💜</button>
+          <button data-m="Take all the time you need. The sky isn’t going anywhere, and neither am I.">I need time to think 🌙</button>
+          <button data-m="Then I’m grateful for exactly that. Best friend in the stars, always. Happy birthday, Jinnie.">I see you as a friend 🤝</button>
+        </div>
+        <div class="msg" id="ans" style="margin-top:14px"></div>
+        <div id="wa-container" style="display:none">
+          <button class="wa-btn" id="wa-btn">Send answer on WhatsApp 💬</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Interactive 18 Candles Cake Modal inside Mobile Frame -->
+  <div id="cg" hidden>
+    <h2 class="ct" id="ct">Plant 18 candles 🎂</h2>
+    <p id="cs">Drag or tap the candle from below and drop it on top of the cake.</p>
+    <div class="cw">
+      <div id="halo"></div>
+      <svg id="cvs" viewBox="0 0 360 330" width="100%" role="img" aria-label="Birthday cake">
+        <defs>
+          <linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc3d2"/><stop offset="1" stop-color="#ff8eaa"/></linearGradient>
+          <radialGradient id="gl"><stop offset="0" stop-color="#ffd27a" stop-opacity=".8"/><stop offset="1" stop-color="#ff9a3c" stop-opacity="0"/></radialGradient>
+          <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c8"/><stop offset=".5" stop-color="#ffc24a"/><stop offset="1" stop-color="#ff7a2a"/></linearGradient>
+        </defs>
+        <ellipse cx="180" cy="294" rx="160" ry="24" fill="#cfcbe6"/><ellipse cx="180" cy="290" rx="156" ry="21" fill="#f3f1ff"/>
+        <path d="M52,198L52,268Q52,298 180,298Q308,298 308,268L308,198Z" fill="url(#cb)"/>
+        <path d="M52,238Q180,266 308,238L308,252Q180,280 52,252Z" fill="#fff4e6"/>
+        <ellipse cx="180" cy="198" rx="128" ry="34" fill="#fff6ea"/>
+        <g id="spr"></g>
+        <ellipse id="zone" cx="180" cy="198" rx="124" ry="31" fill="none" stroke="#ffe3a3" stroke-width="2" stroke-dasharray="6 6" opacity="0" style="transition:opacity .3s"/>
+        <g id="cd"></g>
+      </svg>
+    </div>
+    <div id="tray"><div id="tc" aria-label="Candle to drag"></div><span id="cn">0 / 18</span></div>
+    <div id="bp" hidden>
+      <div id="meter"><div id="mf"></div></div>
+      <div style="display:flex;gap:10px">
+        <button id="mic">Allow mic &amp; blow 🎤</button>
+        <button id="hold">Hold to blow instead 🌬️</button>
+      </div>
     </div>
   </div>
 </div>
@@ -324,6 +496,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 <script>
 (function(){
 var $ = function(s){return document.querySelector(s)}, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, AC, hum;
+var appFrame = $('#mobile-frame');
 
 function pop(f){
   try{
@@ -391,7 +564,7 @@ function rain(l, n){
   }
 }
 
-/* Canvas Universe Background */
+/* Canvas Universe Background (Spans full desktop window smoothly) */
 var cv = $('#cv'), g = cv.getContext('2d'), W, H, ST = [], GAL = [], lastY = scrollY, T = 0;
 function size(){var d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; cv.width = W*d; cv.height = H*d; g.setTransform(d,0,0,d,0,0);}
 for(var i=0; i<240; i++) ST.push({x:Math.random()*2-1, y:Math.random()*2-1, z:Math.random()});
@@ -432,7 +605,7 @@ var O = {
 };
 
 /* Nebula Procedural Buffer */
-var NW=150, NH=1000, nb=document.createElement('canvas'), fc=0; nb.width=NW; nb.height=NH;
+var NW=150, NH=1000, nb=document.createElement('canvas'); nb.width=NW; nb.height=NH;
 function hs(x,y){var h=Math.sin(x*127.1+y*311.7)*43758.5453;return h-Math.floor(h)}
 function vn(x,y){var xi=Math.floor(x),yi=Math.floor(y),xf=x-xi,yf=y-yi,u=xf*xf*(3-2*xf),v=yf*yf*(3-2*yf);return hs(xi,yi)*(1-u)*(1-v)+hs(xi+1,yi)*u*(1-v)+hs(xi,yi+1)*(1-u)*v+hs(xi+1,yi+1)*u*v}
 function fbm(x,y){var s=0,a=.5;for(var o=0;o<5;o++){s+=a*vn(x,y);x=x*2.03+17;y=y*2.03+9;a*=.5}return s}
@@ -495,7 +668,7 @@ function updateStepFromScroll(){
   var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
   var prog = Math.max(0, Math.min(1, window.scrollY / maxScroll));
   
-  // Cake lock: If cake not blown out, stop at the cake step
+  // Cake lock: Stop at cake until candles are blown out
   var cakeIndex = secs.findIndex(function(s){ return s.id === 'cakesec'; });
   var cakeProg = cakeIndex >= 0 ? cakeIndex / (secs.length - 1) : 0.7;
 
@@ -514,7 +687,7 @@ function updateStepFromScroll(){
       s.classList.add('in');
       s.classList.remove('out');
       // Trigger peek-a-boo
-      var pk = s.querySelector('.pk');
+      var pk = pks[i];
       if(pk){
         pk.classList.add('up');
         if(!pk.dataset.s){
@@ -525,8 +698,10 @@ function updateStepFromScroll(){
     } else if(i < currentStep){
       s.classList.add('out');
       s.classList.remove('in');
+      if(pks[i]) pks[i].classList.remove('up', 'say');
     } else {
       s.classList.remove('in', 'out');
+      if(pks[i]) pks[i].classList.remove('up', 'say');
     }
   });
 
@@ -682,7 +857,8 @@ $('#tc').addEventListener('pointerdown', function(e){
 $('#tc').addEventListener('click', function(e){
   if(phase !== 1) return;
   var c = CS[placed.length % 5];
-  drop(innerWidth/2, innerHeight*.42, c);
+  var b = cvs.getBoundingClientRect();
+  drop(b.left + b.width/2, b.top + b.height*0.4, c);
 });
 
 function drop(cx, cy, c){
@@ -694,7 +870,6 @@ function drop(cx, cy, c){
     if(d < bd){ bd = d; best = i; }
   });
   if(best === -1){
-    // pick first unused
     best = SL.findIndex(function(s){ return !s.used; });
   }
   if(best === -1) return;
@@ -828,7 +1003,6 @@ function finishCake(){
     cg.classList.remove('on');
     setTimeout(function(){ cg.hidden = true; }, 600);
     toast('Gift unlocked 🎁 Scroll to open!');
-    // Advance to gift
     var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     var secs = getSections();
     var giftIdx = secs.findIndex(function(s){ return s.id === 'giftsec'; });
@@ -850,7 +1024,6 @@ function openG(){
   $('#gift').textContent = '✨';
   burst(ctr($('#gift')), ['✨','💜','🎀'], 16, 150);
 
-  // Unhide swipe deck
   var dsec = $('#decksec');
   if(dsec){
     dsec.hidden = false;
@@ -918,7 +1091,6 @@ function dArm(){
 }
 dLay();
 
-// Trigger card arming when deck section becomes active
 setInterval(function(){
   if(!dS && $('#decksec') && $('#decksec').classList.contains('in')){
     dS = 1;
@@ -1070,7 +1242,7 @@ function toast(t){
   var d = document.createElement('div');
   d.className = 'toast';
   d.textContent = t;
-  document.body.appendChild(d);
+  appFrame.appendChild(d);
   setTimeout(function(){ d.remove(); }, 3600);
 }
 
@@ -1094,7 +1266,7 @@ TT.party = function(){
   var d = document.createElement('div');
   d.className = 'party';
   for(var i=0; i<7; i++) d.innerHTML += '<div style="animation-delay:' + (-i * 0.11) + 's">' + chibi(i) + '</div>';
-  document.body.appendChild(d);
+  appFrame.appendChild(d);
   TT.whale();
   setTimeout(function(){ d.remove(); }, 6000);
 };
@@ -1115,14 +1287,16 @@ function collect(i, el){
   }
 }
 
-// Attach Peek-a-boo hiding members
+// Attach Peek-a-boo hiding members to mobile-frame
+var pks = [];
 var peekSecs = [].slice.call(document.querySelectorAll('.sc')).filter(function(s){ return s.id !== 'cakesec'; });
 peekSecs.forEach(function(s, k){
   var c = k % 7, p = document.createElement('div');
   p.className = 'pk ' + (k % 2 ? 'l' : 'r');
   p.dataset.l = zL[k % zL.length];
   p.innerHTML = '<div class="sb"></div><div class="pkc">' + chibi(c) + '</div>';
-  document.body.appendChild(p);
+  appFrame.appendChild(p);
+  pks.push(p);
 
   p.querySelector('.cb').addEventListener('click', function(e){
     e.stopPropagation();
@@ -1155,17 +1329,17 @@ for(var q=0; q<7; q++){
 }
 document.querySelector('.card').appendChild(cr);
 
-// Runners sprinting across on scroll
+// Runners sprinting across inside mobile-frame
 var ly0 = scrollY, lr = 0;
 function run(dn){
   var w = document.createElement('div'), k = 3 + (Math.random()*3|0), s = Math.random()*7|0, h = '';
   w.className = 'run' + (dn ? '' : ' rev');
   for(var i=0; i<k; i++) h += '<div class="rn" style="animation-delay:' + (-i * 0.13) + 's">' + chibi((s + i) % 7) + '</div>';
   w.innerHTML = h;
-  document.body.appendChild(w);
+  appFrame.appendChild(w);
   w.animate([
-    {transform: 'translateX(' + (dn ? '-120%' : '105vw') + ')'},
-    {transform: 'translateX(' + (dn ? '105vw' : '-120%') + ')'}
+    {transform: 'translateX(' + (dn ? '-120%' : '105%') + ')'},
+    {transform: 'translateX(' + (dn ? '105%' : '-120%') + ')'}
   ], {duration: 3600, easing: 'linear'}).onfinish = function(){ w.remove(); };
 }
 
