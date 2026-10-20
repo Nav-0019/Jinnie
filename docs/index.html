@@ -353,7 +353,7 @@
             <!-- Active leaf photo animates in folding from top-right, fills center, then blows away -->
           </div>
           <div class="leaf-controls">
-            <div id="leaf-counter" class="cnt">1 / 6 · Tap photo to let it drift into the wind 🍃</div>
+            <div id="leaf-counter" class="cnt">1 / 5 · Tap photo to let it drift into the wind 🍃</div>
             <button id="leaf-next-btn" class="step-btn">Next Memory 🍃</button>
           </div>
         </div>
@@ -388,7 +388,7 @@
               <p>Exactly as you are.</p>
             </div>
           </div>
-          <div class="cnt" id="cnt">1 / 6 · read each card, then swipe 💌</div>
+          <div class="cnt" id="cnt">1 / 5 · read each card, then swipe 💌</div>
         </div>
       </section>
 
@@ -1774,11 +1774,6 @@
         },
         {
           url: getImgUrl('photo5.jpg'),
-          caption: 'My favourite view in this whole universe ✨',
-          hint: 'Holding the beauty of this moment…'
-        },
-        {
-          url: getImgUrl('photo6.jpg'),
           caption: 'Happy 18th Birthday, Jinnie. You are unforgettable 🎂💜',
           hint: 'Blowing like starlight into eternity…'
         }
@@ -1928,12 +1923,6 @@
         },
         {
           image: 'photo5.jpg',
-          tag: 'Your Radiant Smile',
-          title: 'A Smile That Heals Every Storm',
-          compliment: 'Your smile has this unbelievable superpower to wash away any bad day of mine in five seconds flat. When you genuinely laugh at my silly jokes at 2 AM and cover your face, my whole universe suddenly feels right where it belongs. Never let anyone dim that glow, Jinnie, because it’s the brightest light in my sky.'
-        },
-        {
-          image: 'photo6.jpg',
           tag: 'Turning Eighteen',
           title: 'The Brightest Star in My Sky',
           compliment: 'Eighteen years ago, this universe was blessed with someone truly extraordinary. Out of 8 billion people, our paths crossed, collided, parted, and found their way back to each other. You are stunning in every single way, Jinnie — your soul, your mind, your fiery spirit, and that golden heart of yours. Happy 18th Birthday, from your Bewakuf, to my favorite person in the world.'
@@ -1968,7 +1957,7 @@
       car.parentNode.insertBefore(dk, car);
       car.parentNode.insertBefore(db, car);
 
-      function dTxt() { $('#cnt').textContent = Math.min(dI + 1, 6) + ' / 6 · read each card, then swipe 💌'; }
+      function dTxt() { $('#cnt').textContent = Math.min(dI + 1, JINNIE_CARDS.length) + ' / ' + JINNIE_CARDS.length + ' · read each card, then swipe 💌'; }
       dTxt();
 
       function dLay() {
