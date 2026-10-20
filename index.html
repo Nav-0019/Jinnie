@@ -332,39 +332,40 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .ch2{display:flex;flex-direction:column;gap:12px;margin-top:14px}
 .ch2 button{width:100%}
 
-/* Cake Overlay inside Mobile Frame */
-#cg{
-  position:absolute;
-  inset:0;
-  z-index:70;
+/* Integrated Cake Card inside cakesec */
+.cake-card{
   display:flex;
   flex-direction:column;
   align-items:center;
   justify-content:center;
   gap:4px;
-  padding:46px 14px 14px;
-  background:rgba(3,4,12,.75);
+  padding:18px 14px 16px;
   touch-action:none;
   user-select:none;
   -webkit-user-select:none;
-  opacity:0;
-  transition:opacity .6s;
-  text-align:center;
-  text-shadow:0 1px 3px #000,0 0 18px #000;
-  pointer-events:none;
 }
-#cg[hidden]{display:none}
-#cg.on{opacity:1;pointer-events:auto}
-.ct{font:500 clamp(24px,7vw,32px)/1.1 "Cormorant Garamond",serif;font-style:normal;margin:0}
-#cs{font-size:16px;color:var(--soft);min-height:2.6em;margin:0;max-width:320px}
-.cw{position:relative;width:min(90%,360px)}
+.cake-card .ct{
+  font:600 clamp(20px,5.5vw,26px)/1.2 "Cormorant Garamond",serif;
+  margin:0 0 2px;
+  color:#fff;
+  text-shadow:0 0 20px rgba(220,180,255,0.9),0 0 10px rgba(168,85,247,0.8);
+}
+.cake-card #cs{
+  font-size:14px;
+  color:var(--soft);
+  min-height:2em;
+  margin:0 0 4px;
+  max-width:320px;
+  line-height:1.35;
+}
+.cw{position:relative;width:min(86%,280px);margin:0 auto}
 #halo{position:absolute;inset:-14% -10% 18%;background:radial-gradient(closest-side,rgba(255,190,110,.6),rgba(255,140,80,.15) 62%,transparent);opacity:0;transition:opacity .8s;pointer-events:none}
-#cvs{position:relative;display:block;overflow:visible}
-.drag{position:fixed;z-index:100;pointer-events:none;transform:translate(-50%,-100%) scale(1.25);filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
-#tray{display:flex;align-items:flex-end;justify-content:center;gap:16px;height:120px;touch-action:none}
-#tc{cursor:grab;animation:bob 1.1s ease-in-out infinite alternate;touch-action:none;padding:0 14px}
-@keyframes bob{to{transform:translateY(-9px)}}
-#cn{font:500 18px "DM Sans",sans-serif;font-style:normal;padding-bottom:14px;color:var(--gold)}
+#cvs{position:relative;display:block;overflow:visible;width:100%;height:auto}
+.drag{position:fixed;z-index:1000;pointer-events:none;transform:translate(-50%,-100%) scale(1.25);filter:drop-shadow(0 6px 8px rgba(0,0,0,.5))}
+#tray{display:flex;align-items:flex-end;justify-content:center;gap:14px;height:85px;touch-action:none}
+#tc{cursor:grab;animation:bob 1.1s ease-in-out infinite alternate;touch-action:none;padding:0 10px}
+@keyframes bob{to{transform:translateY(-8px)}}
+#cn{font:600 16px "DM Sans",sans-serif;font-style:normal;padding-bottom:8px;color:var(--gold);text-shadow:0 0 8px rgba(255,215,0,0.4)}
 .pl{animation:drop .45s cubic-bezier(.3,1.6,.5,1)}
 @keyframes drop{from{transform:translateY(-46px);opacity:0}}
 .fl2{opacity:0;transition:opacity .25s}.lit .fl2{opacity:1}
@@ -373,9 +374,11 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .fl{transform-box:fill-box;transform-origin:50% 100%;transform:skewX(calc(var(--lean,0)*1deg))}
 .smk{opacity:0;transform-box:fill-box}.out .smk{animation:sm 1.4s ease-out forwards}
 @keyframes sm{from{opacity:.7;transform:translateY(0) scale(.6)}to{opacity:0;transform:translateY(-28px) scale(2.2)}}
-#meter{width:min(80vw,290px);height:16px;border:1px solid rgba(255,255,255,.55);border-radius:99px;overflow:hidden;background:rgba(0,0,0,.4)}
+#meter{width:min(78vw,270px);height:14px;border:1px solid rgba(255,255,255,.55);border-radius:99px;overflow:hidden;background:rgba(0,0,0,.4)}
 #mf{height:100%;width:0;background:linear-gradient(90deg,#ffd98a,#ff8fb8,#b79cff);transition:width .1s linear}
-#bp{display:flex;flex-direction:column;gap:10px;align-items:center}#bp[hidden]{display:none}
+#bp{display:flex;flex-direction:column;gap:8px;align-items:center;width:100%}#bp[hidden]{display:none}
+.bp-btns{display:flex;gap:10px;justify-content:center;width:100%;margin-top:4px}
+.bp-btns .step-btn{width:auto;min-width:125px;margin:0;padding:10px 14px;font-size:13.5px}
 
 /* BTS GIF Crew Stickers & Peek-a-boo inside Mobile Frame */
 .cb{display:block;width:100%;overflow:visible}
@@ -470,6 +473,141 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 
 .wob{animation:wob 1.2s}
 @keyframes wob{15%{transform:rotate(-2.5deg) translateX(-8px)}35%{transform:rotate(2.5deg) translateX(8px)}55%{transform:rotate(-1.5deg)}75%{transform:rotate(1deg)}}
+
+/* ========================================================
+   MEMORIES LEAF WIND GALLERY (AFTER SURPRISE)
+   ======================================================== */
+.memories-card{
+  padding:20px 16px 18px;
+  overflow:hidden;
+}
+.memories-header h2{
+  font-size:clamp(23px, 6.2vw, 29px);
+  margin:0 0 .2em;
+  color:#fff;
+  text-shadow:0 0 20px rgba(220,188,255,.95), 0 2px 6px #000;
+}
+.memories-sub{
+  font-size:14px;
+  color:#d8bbf7;
+  margin:0 0 12px;
+}
+.leaf-stage{
+  position:relative;
+  width:100%;
+  max-width:320px;
+  height:355px;
+  margin:0 auto 10px;
+  perspective:1200px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.leaf-card{
+  position:absolute;
+  width:250px;
+  border-radius:22px;
+  background:linear-gradient(145deg, rgba(32,14,56,0.96), rgba(16,7,32,0.98));
+  border:2px solid rgba(220,188,255,0.48);
+  box-shadow:0 12px 35px rgba(0,0,0,0.85), 0 0 30px rgba(168,85,247,0.45);
+  padding:12px 12px 14px;
+  text-align:center;
+  cursor:pointer;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-user-select:none;
+  will-change:transform, opacity, filter;
+  transition:box-shadow .3s ease;
+}
+.leaf-card:hover, .leaf-card:active{
+  box-shadow:0 14px 40px rgba(0,0,0,0.9), 0 0 40px rgba(236,72,153,0.65);
+}
+.leaf-img-wrap{
+  width:100%;
+  height:250px;
+  border-radius:16px;
+  overflow:hidden;
+  position:relative;
+  background:#0d0618;
+}
+.leaf-img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .4s ease;
+}
+.leaf-card:hover .leaf-img{
+  transform:scale(1.04);
+}
+.leaf-caption{
+  margin-top:10px;
+  font:600 18px/1.3 "Caveat", cursive, sans-serif;
+  color:#fcf5ff;
+  text-shadow:0 0 12px rgba(192,120,255,0.85);
+}
+.leaf-hint{
+  font:500 11.5px "DM Sans", sans-serif;
+  color:#d6c7f2;
+  opacity:0.85;
+  margin-top:2px;
+}
+
+/* 3D Leaf wind flutter in from top-right */
+.leaf-fly-in{
+  animation:leafFlutterIn .95s cubic-bezier(.22, 1, .36, 1) forwards;
+}
+@keyframes leafFlutterIn{
+  0%{
+    opacity:0;
+    transform:translate3d(85vw, -65vh, 120px) rotate3d(1, 1, 0, 75deg) rotate(-35deg) scale(0.35);
+    filter:blur(8px);
+  }
+  45%{
+    opacity:0.85;
+    transform:translate3d(14vw, -12vh, 40px) rotate3d(0, 1, 1, -25deg) rotate(14deg) scale(0.9);
+    filter:blur(2px);
+  }
+  75%{
+    opacity:1;
+    transform:translate3d(-6vw, 4vh, 10px) rotate3d(1, 0, 1, 10deg) rotate(-6deg) scale(1.03);
+    filter:none;
+  }
+  100%{
+    opacity:1;
+    transform:translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg) rotate(0deg) scale(1);
+    filter:none;
+  }
+}
+
+/* 3D Leaf wind blow away into the cosmic breeze */
+.leaf-blow-away{
+  animation:leafFlutterOut .82s cubic-bezier(.55, 0, .85, .35) forwards;
+  pointer-events:none;
+}
+@keyframes leafFlutterOut{
+  0%{
+    opacity:1;
+    transform:translate3d(0, 0, 0) rotate(0deg) scale(1);
+    filter:none;
+  }
+  35%{
+    opacity:0.85;
+    transform:translate3d(-20vw, 8vh, -40px) rotate3d(-1, 1, 1, 45deg) rotate(-18deg) scale(0.85);
+  }
+  100%{
+    opacity:0;
+    transform:translate3d(-110vw, 45vh, -120px) rotate3d(-1, 2, 1, 85deg) rotate(-55deg) scale(0.3);
+    filter:blur(8px);
+  }
+}
+
+.leaf-controls{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+}
 
 /* Swipe Deck */
 .deck{position:relative;height:280px;margin:6px auto 14px;max-width:310px}
@@ -675,9 +813,35 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
     </section>
 
     <section class="sc" id="cakesec" data-o="none">
-      <div class="card">
-        <h2>Eighteen Candles in the Sky</h2>
-        <p>Make a wish, Jinnie. Drop all 18 candles on your cake and blow them out! 🎂</p>
+      <div class="card cake-card">
+        <h2 class="ct" id="ct">Eighteen Candles in the Sky 🎂</h2>
+        <p id="cs">Make a wish, Jinnie. Tap or drag the candle below to place 18 candles on your cake!</p>
+        <div class="cw">
+          <div id="halo"></div>
+          <svg id="cvs" viewBox="0 0 360 330" width="100%" role="img" aria-label="Birthday cake">
+            <defs>
+              <linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc3d2"/><stop offset="1" stop-color="#ff8eaa"/></linearGradient>
+              <radialGradient id="gl"><stop offset="0" stop-color="#ffd27a" stop-opacity=".8"/><stop offset="1" stop-color="#ff9a3c" stop-opacity="0"/></radialGradient>
+              <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c8"/><stop offset=".5" stop-color="#ffc24a"/><stop offset="1" stop-color="#ff7a2a"/></linearGradient>
+            </defs>
+            <ellipse cx="180" cy="294" rx="160" ry="24" fill="#cfcbe6"/><ellipse cx="180" cy="290" rx="156" ry="21" fill="#f3f1ff"/>
+            <path d="M52,198L52,268Q52,298 180,298Q308,298 308,268L308,198Z" fill="url(#cb)"/>
+            <path d="M52,238Q180,266 308,238L308,252Q180,280 52,252Z" fill="#fff4e6"/>
+            <ellipse cx="180" cy="198" rx="128" ry="34" fill="#fff6ea"/>
+            <g id="spr"></g>
+            <ellipse id="zone" cx="180" cy="198" rx="124" ry="31" fill="none" stroke="#ffe3a3" stroke-width="2" stroke-dasharray="6 6" opacity="0" style="transition:opacity .3s"/>
+            <g id="cd"></g>
+          </svg>
+        </div>
+        <div id="tray"><div id="tc" aria-label="Candle to drag"></div><span id="cn">0 / 18</span></div>
+        <div id="bp" hidden>
+          <div id="meter"><div id="mf"></div></div>
+          <div class="bp-btns">
+            <button id="mic" class="step-btn">Allow mic &amp; blow 🎤</button>
+            <button id="hold" class="step-btn">Hold to blow 🌬️</button>
+          </div>
+        </div>
+        <button id="cake-to-gift-btn" class="step-btn" style="display:none;margin-top:10px">Open Your Birthday Surprise 🎁</button>
       </div>
     </section>
 
@@ -687,6 +851,23 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <h2>A surprise in the stars</h2>
         <p>One last thing is waiting for you in the quiet of space.</p>
         <button id="open">Open the gift 🎁</button>
+      </div>
+    </section>
+
+    <!-- Memories Leaf-Wind Gallery (Inserted after Surprise) -->
+    <section class="sc plain" hidden id="memoriessec">
+      <div class="card memories-card">
+        <div class="memories-header">
+          <h2>Memories in the Wind 🍃</h2>
+          <p class="memories-sub">Every glance of you captured across the stars…</p>
+        </div>
+        <div class="leaf-stage" id="leaf-stage">
+          <!-- Active leaf photo animates in folding from top-right, fills center, then blows away -->
+        </div>
+        <div class="leaf-controls">
+          <div id="leaf-counter" class="cnt">1 / 6 · Tap photo to let it drift into the wind 🍃</div>
+          <button id="leaf-next-btn" class="step-btn">Next Memory 🍃</button>
+        </div>
       </div>
     </section>
 
@@ -730,37 +911,6 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
       </div>
     </section>
   </main>
-
-  <!-- Interactive 18 Candles Cake Modal inside Mobile Frame -->
-  <div id="cg" hidden>
-    <h2 class="ct" id="ct">Plant 18 candles 🎂</h2>
-    <p id="cs">Drag or tap the candle from below and drop it on top of the cake.</p>
-    <div class="cw">
-      <div id="halo"></div>
-      <svg id="cvs" viewBox="0 0 360 330" width="100%" role="img" aria-label="Birthday cake">
-        <defs>
-          <linearGradient id="cb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffc3d2"/><stop offset="1" stop-color="#ff8eaa"/></linearGradient>
-          <radialGradient id="gl"><stop offset="0" stop-color="#ffd27a" stop-opacity=".8"/><stop offset="1" stop-color="#ff9a3c" stop-opacity="0"/></radialGradient>
-          <linearGradient id="fg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff6c8"/><stop offset=".5" stop-color="#ffc24a"/><stop offset="1" stop-color="#ff7a2a"/></linearGradient>
-        </defs>
-        <ellipse cx="180" cy="294" rx="160" ry="24" fill="#cfcbe6"/><ellipse cx="180" cy="290" rx="156" ry="21" fill="#f3f1ff"/>
-        <path d="M52,198L52,268Q52,298 180,298Q308,298 308,268L308,198Z" fill="url(#cb)"/>
-        <path d="M52,238Q180,266 308,238L308,252Q180,280 52,252Z" fill="#fff4e6"/>
-        <ellipse cx="180" cy="198" rx="128" ry="34" fill="#fff6ea"/>
-        <g id="spr"></g>
-        <ellipse id="zone" cx="180" cy="198" rx="124" ry="31" fill="none" stroke="#ffe3a3" stroke-width="2" stroke-dasharray="6 6" opacity="0" style="transition:opacity .3s"/>
-        <g id="cd"></g>
-      </svg>
-    </div>
-    <div id="tray"><div id="tc" aria-label="Candle to drag"></div><span id="cn">0 / 18</span></div>
-    <div id="bp" hidden>
-      <div id="meter"><div id="mf"></div></div>
-      <div style="display:flex;gap:10px">
-        <button id="mic">Allow mic &amp; blow 🎤</button>
-        <button id="hold">Hold to blow instead 🌬️</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <script>
@@ -1163,8 +1313,12 @@ function goToStep(idx){
       s.classList.add('in');
       s.classList.remove('out');
 
+      if(s.id === 'memoriessec'){
+        startMemoriesWind();
+      }
+
       // Typewriter streaming on narrative steps
-      if(i <= 8 || s.id === 'lettersec'){
+      if(s.id !== 'cakesec' && s.id !== 'giftsec' && s.id !== 'memoriessec' && s.id !== 'decksec' && (i <= 7 || s.id === 'lettersec')){
         startTypewriter(s);
       }
     } else if(i < currentStep){
@@ -1183,6 +1337,7 @@ function goToStep(idx){
 
   $('#ly').textContent = Math.round(currentStep * 1380).toLocaleString();
 }
+window.goToStep = goToStep;
 
 /* Audio Gate Permission Click & Touch Handlers */
 function openGate(e){
@@ -1271,6 +1426,7 @@ document.addEventListener('pointerdown', function(){
 /* Discrete Step Button Click Listeners */
 document.querySelectorAll('.step-btn, #go').forEach(function(b){
   b.addEventListener('click', function(e){
+    if(b.id === 'leaf-next-btn') return; // Handled by leaf-wind animation controller
     e.stopPropagation();
     pop(650);
     var secs = getSections();
@@ -1393,9 +1549,10 @@ M.forEach(function(m, i){
 /* ========================================================
    CAKE GAME: 18 CANDLES, LIGHTING & BLOW
    ======================================================== */
-var cg = $('#cg'), cvs = $('#cvs'), cd = $('#cd'), NS = 'http://www.w3.org/2000/svg';
+var cvs = $('#cvs'), cd = $('#cd'), NS = 'http://www.w3.org/2000/svg';
 var CS = ['#ff8fb8','#7fe0ff','#ffe27a','#9cf0c0','#c6a8ff'];
 var phase = 0, placed = [], SL = [], ord = [], pow = 0, hold = false, an = null, buf, amb = 0, t0 = 0, lt = 0, stream = null;
+var justDropped = false;
 
 for(var si=0; si<11; si++){
   var sa = (si/11)*6.283 + .3;
@@ -1429,26 +1586,38 @@ function nextTray(){ $('#tc').innerHTML = SPR(CS[placed.length % 5]); $('#cn').t
 function T_(t, u){ $('#ct').textContent = t; $('#cs').textContent = u || ''; }
 
 function startCakeGame(){
-  cg.hidden = false;
-  void cg.offsetWidth;
-  cg.classList.add('on');
   phase = 1;
   nextTray();
-  T_('Plant 18 candles 🎂', 'Drag or tap the candle from below to place it on top of the cake.');
+  T_('Eighteen Candles in the Sky 🎂', 'Make a wish, Jinnie. Tap or drag the candle below to place 18 candles on your cake!');
 }
 
 $('#tc').addEventListener('pointerdown', function(e){
   if(phase !== 1) return;
   e.preventDefault();
+  var startX = e.clientX, startY = e.clientY, isDrag = false;
   var c = CS[placed.length % 5], d = document.createElement('div'), z = $('#zone');
-  d.className = 'drag'; d.innerHTML = SPR(c); document.body.appendChild(d);
-  z.style.opacity = 1;
-  function mv(ev){ d.style.left = ev.clientX + 'px'; d.style.top = (ev.clientY - 14) + 'px'; }
+  d.className = 'drag'; d.innerHTML = SPR(c);
+  d.style.left = startX + 'px'; d.style.top = (startY - 14) + 'px';
+  document.body.appendChild(d);
+  if(z) z.style.opacity = 1;
+
+  function mv(ev){
+    if(Math.hypot(ev.clientX - startX, ev.clientY - startY) > 8) isDrag = true;
+    d.style.left = ev.clientX + 'px'; d.style.top = (ev.clientY - 14) + 'px';
+  }
   function up(ev){
     document.removeEventListener('pointermove', mv);
     document.removeEventListener('pointerup', up);
-    z.style.opacity = 0; d.remove();
-    drop(ev.clientX, ev.clientY - 14, c);
+    if(z) z.style.opacity = 0;
+    d.remove();
+    justDropped = true;
+    setTimeout(function(){ justDropped = false; }, 250);
+    if(isDrag){
+      drop(ev.clientX, ev.clientY - 14, c);
+    } else {
+      var b = cvs.getBoundingClientRect();
+      drop(b.left + b.width/2, b.top + b.height*0.4, c);
+    }
   }
   document.addEventListener('pointermove', mv);
   document.addEventListener('pointerup', up);
@@ -1456,10 +1625,18 @@ $('#tc').addEventListener('pointerdown', function(e){
 
 // Also allow quick-tap to drop on next slot
 $('#tc').addEventListener('click', function(e){
-  if(phase !== 1) return;
+  e.preventDefault();
+  if(phase !== 1 || justDropped) return;
   var c = CS[placed.length % 5];
   var b = cvs.getBoundingClientRect();
   drop(b.left + b.width/2, b.top + b.height*0.4, c);
+});
+
+// Tapping cake directly also plants candle
+cvs.addEventListener('click', function(e){
+  if(phase !== 1 || placed.length >= 18 || justDropped) return;
+  var c = CS[placed.length % 5];
+  drop(e.clientX, e.clientY, c);
 });
 
 function drop(cx, cy, c){
@@ -1491,32 +1668,32 @@ function drop(cx, cy, c){
   nextTray();
 
   var n = placed.length;
-  $('#cs').textContent = n < 18 ? (18 - n) + ' more to go. You’re doing great! 💜' : '';
+  $('#cs').textContent = n < 18 ? (18 - n) + ' more candles to place 🎂 You’re doing great! 💜' : '';
   if(n === 18) lightUp();
 }
 
 function lightUp(){
   phase = 2;
-  $('#tray').style.visibility = 'hidden';
+  var tray = $('#tray'); if(tray) tray.style.display = 'none';
   T_('Lighting them up… 🔥', 'Watch every candle illuminate your sky.');
   ord = placed.slice().sort(function(a, b){ return SL.indexOf(a.s) - SL.indexOf(b.s); });
   ord.forEach(function(p, i){
     setTimeout(function(){
       p.g.classList.add('lit');
       pop(500 + i*30);
-    }, 400 + i*140);
+    }, 250 + i*110);
   });
   setTimeout(function(){
-    $('#halo').style.opacity = 1;
-    T_('Happy 18th, Jinnie! 💜', 'Make a wish…');
-  }, 400 + 18*140 + 400);
-  setTimeout(blowPhase, 400 + 18*140 + 2800);
+    var halo = $('#halo'); if(halo) halo.style.opacity = 1;
+    T_('Happy 18th Birthday, Jinnie! 💜', 'Make a heartfelt wish… ✨');
+  }, 250 + 18*110 + 200);
+  setTimeout(blowPhase, 250 + 18*110 + 2000);
 }
 
 function blowPhase(){
   phase = 3;
-  $('#bp').hidden = false;
-  T_('Now blow! 🌬️', 'Allow the mic and blow into your phone, or hold down the button below!');
+  var bp = $('#bp'); if(bp) bp.hidden = false;
+  T_('Now blow out your candles! 🌬️', 'Blow into your mic or hold down the button below!');
   lt = performance.now();
   requestAnimationFrame(tick);
 }
@@ -1569,7 +1746,7 @@ function tick(ts){
   pow = Math.max(0, Math.min(1, pow));
   $('#mf').style.width = (pow * 100) + '%';
   cd.style.setProperty('--lean', lvl * 40);
-  $('#halo').style.opacity = Math.max(.15, 1 - pow);
+  var halo = $('#halo'); if(halo) halo.style.opacity = Math.max(.15, 1 - pow);
 
   var n = Math.floor(pow * 18.99);
   ord.forEach(function(p, i){
@@ -1591,33 +1768,46 @@ function finishCake(){
   TT.party();
   hold = false;
   if(stream) stream.getTracks().forEach(function(t){ t.stop(); });
-  $('#bp').hidden = true;
-  $('#halo').style.opacity = 0;
+  var bp = $('#bp'); if(bp) bp.hidden = true;
+  var halo = $('#halo'); if(halo) halo.style.opacity = 0;
   T_('🎉 Happy 18th Birthday, Jinnie! 🎉', 'Every candle out. Wish accepted into the universe. 💜');
 
-  confetti(150);
-  rain(['💜','🎉','✨','🎂','💖'], 40);
+  confetti(160);
+  rain(['💜','🎉','✨','🎂','💖','🌟'], 40);
   [523, 659, 784, 1047, 1319].forEach(function(f, i){
     setTimeout(function(){ pop(f); }, i * 140);
   });
   var k = 0, iv = setInterval(function(){
     burst([innerWidth*(.15+Math.random()*.7), innerHeight*(.12+Math.random()*.4)], ['✨','💜','🎊','🎉','💖'], 14, 150);
     pop(600 + Math.random()*600);
-    if(++k > 10) clearInterval(iv);
-  }, 380);
+    if(++k > 8) clearInterval(iv);
+  }, 260);
 
+  var c2gBtn = $('#cake-to-gift-btn');
+  if(c2gBtn) c2gBtn.style.display = 'inline-block';
+
+  // Smoothly & promptly transition directly to the surprise gift step after 2.0s!
   setTimeout(function(){
-    cg.classList.remove('on');
-    setTimeout(function(){ cg.hidden = true; }, 600);
-    toast('Gift unlocked 🎁 Scroll to open!');
-    var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     var secs = getSections();
     var giftIdx = secs.findIndex(function(s){ return s.id === 'giftsec'; });
     if(giftIdx >= 0){
-      window.scrollTo({ top: (giftIdx / (secs.length - 1)) * maxScroll, behavior: 'smooth' });
+      goToStep(giftIdx);
+      toast('🎁 A surprise gift awaits in the stars!');
     }
-  }, 4500);
+  }, 2000);
 }
+
+var cakeToGiftBtn = $('#cake-to-gift-btn');
+if(cakeToGiftBtn){
+  cakeToGiftBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    var secs = getSections();
+    var giftIdx = secs.findIndex(function(s){ return s.id === 'giftsec'; });
+    if(giftIdx >= 0) goToStep(giftIdx);
+  });
+}
+window.finishCake = finishCake;
+window.startCakeGame = startCakeGame;
 
 /* ========================================================
    GIFT BOX UNLOCK & SWIPE DECK
@@ -1642,23 +1832,181 @@ function openG(){
   confetti(120);
   rain(['💜','✨','🎁'], 30);
 
-  toast('🎉 Surprise Unlocked! 💜 6 things I adore about your soul...');
+  toast('🎉 Surprise Unlocked! 💜 Memories carried by the wind…');
 
   setTimeout(function(){
-    var dsec = $('#decksec');
-    if(dsec){
-      dsec.hidden = false;
+    var msec = $('#memoriessec');
+    if(msec){
+      msec.hidden = false;
       giftLocked = false;
       var secs = getSections();
-      var deckIdx = secs.findIndex(function(s){ return s.id === 'decksec'; });
-      if(deckIdx >= 0){
-        goToStep(deckIdx);
+      var memIdx = secs.findIndex(function(s){ return s.id === 'memoriessec'; });
+      if(memIdx >= 0){
+        goToStep(memIdx);
+        startMemoriesWind();
       }
     }
   }, 400);
 }
 $('#open').addEventListener('click', openG);
 $('#gift').addEventListener('click', openG);
+
+/* ========================================================
+   MEMORIES LEAF WIND LOGIC (PHOTOS CARRIED BY THE COSMIC WIND)
+   ======================================================== */
+var MEMORIES_PHOTOS = [
+  {
+    url: './images/her photo/photo1.jpg',
+    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.39 PM.jpeg',
+    caption: 'The way your eyes catch the starlight ✦',
+    hint: 'A memory carried by the wind…'
+  },
+  {
+    url: './images/her photo/photo2.jpg',
+    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.39 PM (1).jpeg',
+    caption: 'That quiet, effortless smile I always look for 🌙',
+    hint: 'Dancing like a leaf in the cosmic breeze…'
+  },
+  {
+    url: './images/her photo/photo3.jpg',
+    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.39 PM (2).jpeg',
+    caption: 'Pure, dramatic, gloriously unapologetic 🌸',
+    hint: 'Folds softly onto the screen…'
+  },
+  {
+    url: './images/her photo/photo4.jpg',
+    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.40 PM.jpeg',
+    caption: 'Even across six months of distance, you feel so close 📱💜',
+    hint: 'Every late-night conversation with you…'
+  },
+  {
+    url: './images/her photo/photo5.jpg',
+    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.40 PM (1).jpeg',
+    caption: 'My favourite view in this whole universe ✨',
+    hint: 'Holding the beauty of this moment…'
+  },
+  {
+    url: './images/her photo/photo6.jpg',
+    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.41 PM.jpeg',
+    caption: 'Happy 18th Birthday, Jinnie. You are unforgettable 🎂💜',
+    hint: 'Blowing like starlight into eternity…'
+  }
+];
+
+var currentLeaf = 0;
+var leafBusy = false;
+var leafStarted = false;
+
+function showLeafMemory(idx){
+  var stage = $('#leaf-stage');
+  if(!stage) return;
+  var data = MEMORIES_PHOTOS[idx];
+  if(!data){
+    finishMemoriesWind();
+    return;
+  }
+
+  leafBusy = true;
+  currentLeaf = idx;
+
+  var card = document.createElement('div');
+  card.className = 'leaf-card leaf-fly-in';
+  card.innerHTML = 
+    '<div class="leaf-img-wrap">' +
+      '<img class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" alt="Memory for Jinnie" onerror="if(!this._tried){this._tried=true;this.src=\'' + data.fallback + '\';}">' +
+    '</div>' +
+    '<div class="leaf-caption">' + data.caption + '</div>' +
+    '<div class="leaf-hint">🍃 Tap photo to blow into the wind</div>';
+
+  // Sound effects: starlight breeze flutter
+  pop(620 + idx * 45);
+  setTimeout(function(){ pop(780 + idx * 30); }, 130);
+
+  // Sparkles along the wind entry path from top right
+  burst([innerWidth * 0.72, innerHeight * 0.28], ['🍃','✨','💜','🌸'], 8, 90);
+
+  stage.innerHTML = '';
+  stage.appendChild(card);
+
+  var counter = $('#leaf-counter');
+  if(counter){
+    counter.textContent = (idx + 1) + ' / ' + MEMORIES_PHOTOS.length + ' · Tap photo or button to let it drift 🍃';
+  }
+
+  var nextBtn = $('#leaf-next-btn');
+  if(nextBtn){
+    nextBtn.textContent = (idx === MEMORIES_PHOTOS.length - 1) ? 'What I Adore About You 💜' : 'Next Memory 🍃';
+  }
+
+  card.onclick = function(e){
+    e.stopPropagation();
+    blowAwayLeaf(card, idx);
+  };
+
+  setTimeout(function(){
+    leafBusy = false;
+  }, 950);
+}
+
+function blowAwayLeaf(cardEl, idx){
+  if(leafBusy) return;
+  leafBusy = true;
+
+  // Sound: whoosh breeze
+  pop(520);
+  pop(420);
+
+  // Particles blowing with the wind toward left
+  var pt = ctr(cardEl);
+  burst(pt, ['🍃','🍂','✨','💜','🌸','✦'], 14, 110);
+
+  cardEl.classList.remove('leaf-fly-in');
+  cardEl.classList.add('leaf-blow-away');
+
+  setTimeout(function(){
+    if(idx + 1 < MEMORIES_PHOTOS.length){
+      showLeafMemory(idx + 1);
+    } else {
+      finishMemoriesWind();
+    }
+  }, 780);
+}
+
+function startMemoriesWind(){
+  if(leafStarted) return;
+  leafStarted = true;
+  currentLeaf = 0;
+  showLeafMemory(0);
+}
+window.startMemoriesWind = startMemoriesWind;
+
+function finishMemoriesWind(){
+  toast('Every memory treasured in our stars 💜 Unlocking your cards...');
+  var dsec = $('#decksec');
+  if(dsec){
+    dsec.hidden = false;
+    var secs = getSections();
+    var deckIdx = secs.findIndex(function(s){ return s.id === 'decksec'; });
+    if(deckIdx >= 0){
+      goToStep(deckIdx);
+    }
+  }
+}
+
+var lnb = $('#leaf-next-btn');
+if(lnb){
+  lnb.addEventListener('click', function(e){
+    e.stopPropagation();
+    var activeCard = document.querySelector('.leaf-card:not(.leaf-blow-away)');
+    if(activeCard){
+      blowAwayLeaf(activeCard, currentLeaf);
+    } else if(currentLeaf < MEMORIES_PHOTOS.length - 1){
+      showLeafMemory(currentLeaf + 1);
+    } else {
+      finishMemoriesWind();
+    }
+  });
+}
 
 /* Swipe Deck Implementation */
 var car = $('#car'), sls = [].slice.call(car.querySelectorAll('.sl')), dk = document.createElement('div'), db = document.createElement('div');
