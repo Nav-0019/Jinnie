@@ -151,9 +151,9 @@ body{background:#0a0414}
   transition:opacity .7s cubic-bezier(.2,.8,.2,1), visibility .7s;
 }
 #audio-gate.hide{
-  opacity:0;
-  visibility:hidden;
-  pointer-events:none;
+  opacity:0 !important;
+  visibility:hidden !important;
+  pointer-events:none !important;
 }
 .gate-card{
   max-width:390px;
@@ -188,12 +188,20 @@ body{background:#0a0414}
   gap:10px;
   transition:all .25s ease;
   animation:gatePulse 2s infinite alternate;
+  pointer-events:auto !important;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:manipulation;
+}
+.gate-btn *{
+  pointer-events:none;
 }
 @keyframes gatePulse{
   from{box-shadow:0 0 18px rgba(168,85,247,.5);transform:scale(1)}
   to{box-shadow:0 0 34px rgba(236,72,153,.85);transform:scale(1.04)}
 }
 .gate-btn:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(236,72,153,1)}
+.gate-btn:active{transform:scale(0.98)}
 .gate-note{font:500 12px "DM Sans",sans-serif;color:rgba(214,199,242,.7);margin-top:16px}
 
 /* Main Viewport Container inside Mobile Frame */
@@ -725,30 +733,21 @@ function pop(f){
   }catch(e){}
 }
 
-$('#snd').addEventListener('click', function(){
-  try{
-    AC = AC || new(window.AudioContext || window.webkitAudioContext)();
-    if(hum){
-      hum.forEach(function(o){o.stop()});
-      hum = null;
-      this.textContent = '♪ Sound off';
-      return;
-    }
-    hum = [55, 82.4, 110.5].map(function(f, i){
-      var o = AC.createOscillator(), g = AC.createGain();
-      o.type = 'sine';
-      o.frequency.value = f;
-      g.gain.value = .05 / (i + 1);
-      o.connect(g);
-      g.connect(AC.destination);
-      o.start();
-      return o;
-    });
-    this.textContent = '♪ Sound on';
-    pop(750);
-    if(typeof TT !== 'undefined' && TT.mini) TT.mini(innerWidth - 70, 90, 'Music makes it purple 🎶', 2000);
-  }catch(e){}
-});
+var sndBadge = $('#snd-badge');
+if(sndBadge){
+  sndBadge.addEventListener('click', function(){
+    try{
+      var bgm = $('#bgm');
+      if(bgm && bgm.paused){
+        bgm.play().catch(function(){});
+      }
+      AC = AC || new(window.AudioContext || window.webkitAudioContext)();
+      if(AC && AC.state === 'suspended') AC.resume().catch(function(){});
+      pop(750);
+      if(typeof TT !== 'undefined' && TT.mini) TT.mini(innerWidth - 70, 90, 'Playing with love 💜', 2000);
+    }catch(e){}
+  });
+}
 
 function ctr(el){var b = el.getBoundingClientRect(); return [b.left + b.width/2, b.top + b.height/2];}
 function fly(x, y, em, d){
@@ -1137,32 +1136,87 @@ function goToStep(idx){
   $('#ly').textContent = Math.round(currentStep * 1380).toLocaleString();
 }
 
-/* Audio Gate Permission Click Handler */
-$('#gate-btn').addEventListener('click', function(){
-  var bgm = $('#bgm');
-  if(bgm){
-    bgm.volume = 0.85;
-    bgm.play().catch(function(){});
-    bgm.loop = true;
-    bgm.addEventListener('ended', function(){
-      bgm.currentTime = 0;
-      bgm.play().catch(function(){});
-    });
-  }
-  $('#audio-gate').classList.add('hide');
-  setTimeout(function(){
-    $('#audio-gate').style.display = 'none';
-  }, 700);
+/* Audio Gate Permission Click & Touch Handlers */
+function openGate(e){
+  if(gateOpened) return;
   gateOpened = true;
-  goToStep(0);
-  pop(700);
-});
+
+  if(e && e.cancelable && (e.type === 'touchend' || e.type === 'touchstart')){
+    e.preventDefault();
+  }
+
+  // 1. Immediately dismiss modal visually and disable pointer events
+  var gate = $('#audio-gate');
+  if(gate){
+    gate.classList.add('hide');
+    gate.style.opacity = '0';
+    gate.style.pointerEvents = 'none';
+    setTimeout(function(){
+      gate.style.display = 'none';
+    }, 700);
+  }
+
+  // 2. Play audio safely & unlock Web Audio Context
+  try {
+    var bgm = $('#bgm');
+    if(bgm){
+      bgm.volume = 0.85;
+      bgm.loop = true;
+      var p = bgm.play();
+      if(p && typeof p.catch === 'function'){
+        p.catch(function(err){ console.warn('Audio play deferred:', err); });
+      }
+      bgm.onended = function(){
+        try {
+          bgm.currentTime = 0;
+          bgm.play().catch(function(){});
+        } catch(err){}
+      };
+    }
+  } catch(err){
+    console.warn('BGM error:', err);
+  }
+
+  try {
+    AC = AC || new(window.AudioContext || window.webkitAudioContext)();
+    if(AC && AC.state === 'suspended'){
+      AC.resume().catch(function(){});
+    }
+  } catch(err){}
+
+  // 3. Initiate journey at step 0 and emit sound
+  try {
+    goToStep(0);
+  } catch(err){
+    console.error('goToStep(0) error:', err);
+  }
+  try {
+    pop(700);
+  } catch(err){}
+}
+
+var gateBtn = $('#gate-btn');
+if(gateBtn){
+  gateBtn.addEventListener('click', openGate);
+  gateBtn.addEventListener('touchend', openGate);
+}
+var audioGateEl = $('#audio-gate');
+if(audioGateEl){
+  audioGateEl.addEventListener('click', function(e){
+    if(e.target === audioGateEl || (e.target && e.target.closest && e.target.closest('#gate-btn'))){
+      openGate(e);
+    }
+  });
+}
 
 // Any user gesture resumes audio context and keeps music unpaused
 document.addEventListener('pointerdown', function(){
   var bgm = $('#bgm');
   if(gateOpened && bgm && bgm.paused){
     bgm.play().catch(function(){});
+  }
+  if(AC && AC.state === 'suspended'){
+    AC.resume().catch(function(){});
   }
 }, {passive: true});
 
