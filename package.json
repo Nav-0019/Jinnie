@@ -1,27 +1,16 @@
 {
-  "name": "a-little-world-made-for-you",
+  "name": "a-universe-made-for-you",
   "private": true,
   "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build && node scripts/sync-build.js",
-    "lint": "oxlint src",
     "preview": "vite preview",
     "deploy": "npx gh-pages -d dist"
   },
-  "dependencies": {
-    "canvas-confetti": "^1.9.4",
-    "lucide-react": "^1.59.0",
-    "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "three": "^0.186.1"
-  },
   "devDependencies": {
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
-    "oxlint": "^1.88.0",
+    "gh-pages": "^6.3.0",
     "vite": "^8.3.4"
   }
 }
