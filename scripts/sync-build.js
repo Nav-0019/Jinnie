@@ -8,10 +8,11 @@ const rootDir = path.resolve(__dirname, '..');
 const distDir = path.resolve(rootDir, 'dist');
 const docsDir = path.resolve(rootDir, 'docs');
 
-// Copy entire dist/ to docs/ for GitHub Pages
+// Clean docs/ and copy entire fresh dist/ to docs/ for GitHub Pages
 if (fs.existsSync(distDir)) {
+  fs.rmSync(docsDir, { recursive: true, force: true });
   fs.cpSync(distDir, docsDir, { recursive: true });
-  console.log('✓ Synced dist/ to /docs');
+  console.log('✓ Cleaned and synced dist/ to /docs');
 }
 
 // Ensure .nojekyll in root, dist, and docs
