@@ -366,33 +366,14 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .cb.gif{width:100%;height:auto;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(0,0,0,.55))}
 .cb.gif.bad{display:none}
 
-.pk{position:absolute;bottom:12px;width:82px;z-index:60;pointer-events:none}
-.pk.l{left:8px}
-.pk.r{right:8px}
-.pkc{height:96px;overflow:hidden}
-.pkc .cb{cursor:pointer;pointer-events:auto;transform:translateY(105%);transition:transform .75s cubic-bezier(.3,1.7,.5,1)}
-.pk.up .cb{transform:translateY(8%)}
-.pk.wig .cb{animation:wg .6s}
-@keyframes wg{30%{transform:translateY(-12%) rotate(-9deg)}65%{transform:translateY(-4%) rotate(9deg)}}
-.pk.got .cb{filter:drop-shadow(0 0 12px #d9a8ff)}
+.pk, .crowd, .run{display:none !important}
+
 .sb{position:absolute;bottom:100px;width:max-content;max-width:160px;padding:8px 12px;font:500 13px/1.3 "DM Sans",sans-serif;font-style:normal;color:#fff;background:rgba(70,22,130,.92);border:1px solid #cfa8ff;border-radius:14px;box-shadow:0 0 16px rgba(168,85,247,.6);opacity:0;transform:scale(.6);transition:.35s;pointer-events:none;text-shadow:none}
-.pk.l .sb{left:0;transform-origin:0 100%}.pk.r .sb{right:0;transform-origin:100% 100%}
-.pk.say .sb{opacity:1;transform:none}
 .sb b{color:#f0d8ff}
 
 .mn{position:fixed;z-index:95;width:76px;transform:translate(-50%,-100%);pointer-events:none;animation:mp .5s cubic-bezier(.3,1.7,.5,1)}
 @keyframes mp{from{transform:translate(-50%,-60%) scale(.2);opacity:0}}
 .mn .sb{left:50%;bottom:92%;opacity:1;transform:translateX(-50%)}
-
-.crowd{display:flex;justify-content:center;gap:3px;margin-top:20px;height:70px;overflow:hidden}
-.crowd .ci{width:46px;cursor:pointer;transform:translateY(80%);animation:cu .8s cubic-bezier(.3,1.7,.5,1) forwards;animation-delay:calc(var(--k)*.15s + .4s)}
-@keyframes cu{to{transform:translateY(6%)}}
-.crowd .ci:active{transform:translateY(-8%)}
-.crowd .ci.got{filter:drop-shadow(0 0 10px #e0a8ff)}
-
-.run{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);left:0;z-index:30;display:flex;gap:6px;pointer-events:none}
-.rn{width:52px;animation:hop .3s ease-in-out infinite alternate}
-.run.rev img{transform:scaleX(-1)}
 @keyframes hop{to{transform:translateY(-14px) rotate(4deg)}}
 
 .party{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 6px);z-index:95;display:flex;justify-content:center;gap:4px;pointer-events:none}
@@ -509,7 +490,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
   <!-- Top Fixed HUD -->
   <div class="hud">
     <span>🚀 <b id="ly">0</b> light-years from home</span>
-    <span id="crew">💜 <b id="fc">0</b>/7 ARMY crew</span>
+    <span id="crew">💜 For Jinnie<b id="fc" style="display:none">0</b></span>
     <div id="snd-badge" class="snd-badge" title="Continuous background music playing with love">
       <span>♪</span>
       <span class="eq-bar"></span>
@@ -1099,20 +1080,6 @@ function goToStep(idx){
       s.classList.add('in');
       s.classList.remove('out');
 
-      // Corner sticker management: NEVER show in sections past narrative 8
-      if(i > 8 || s.id === 'cakesec' || s.id === 'giftsec' || s.id === 'decksec' || s.id === 'lettersec' || s.id === 'replysec'){
-        document.querySelectorAll('.pk').forEach(function(p){ p.classList.remove('up', 'say'); });
-      } else {
-        document.querySelectorAll('.pk').forEach(function(p){ p.classList.remove('up', 'say'); });
-        if(s._pk){
-          s._pk.classList.add('up');
-          if(!s._pk.dataset.s){
-            s._pk.dataset.s = 1;
-            setTimeout(function(){ say(s._pk, s._pk.dataset.l); }, 900);
-          }
-        }
-      }
-
       // Typewriter streaming on narrative steps
       if(i <= 8 || s.id === 'lettersec'){
         startTypewriter(s);
@@ -1120,10 +1087,8 @@ function goToStep(idx){
     } else if(i < currentStep){
       s.classList.add('out');
       s.classList.remove('in');
-      if(s._pk) s._pk.classList.remove('up', 'say');
     } else {
       s.classList.remove('in', 'out');
-      if(s._pk) s._pk.classList.remove('up', 'say');
     }
   });
 
@@ -1965,31 +1930,7 @@ function collect(i, el){
   }
 }
 
-// Attach Peek-a-boo hiding members ONLY to narrative celestial sections (indices 0 to 8)
-var narrativeSecs = [].slice.call(document.querySelectorAll('.sc[data-o]')).filter(function(s){
-  return s.dataset.o && s.dataset.o !== 'none';
-});
-narrativeSecs.forEach(function(s, k){
-  var c = k % 7, p = document.createElement('div');
-  p.className = 'pk ' + (k % 2 ? 'l' : 'r');
-  p.dataset.l = zL[k % zL.length];
-  p.innerHTML = '<div class="sb"></div><div class="pkc">' + chibi(c) + '</div>';
-  appFrame.appendChild(p);
-  s._pk = p;
-
-  p.querySelector('.cb').addEventListener('click', function(e){
-    e.stopPropagation();
-    p.classList.remove('wig');
-    void p.offsetWidth;
-    p.classList.add('wig');
-    say(p, zT(c));
-    pop(700 + c*60);
-    burst(ctr(p), ['💜','✨'], 6, 70);
-    collect(c, p);
-  });
-});
-
-// Playful poke wobble every 9s on active section heading
+// Playful subtle wobble every 9s on active section heading
 if(!reduce) setInterval(function(){
   if(cakeLocked && phase > 0 && phase < 4) return;
   var hs = [].slice.call(document.querySelectorAll('.sc.in h1, .sc.in h2, .card.in h1, .card.in h2')).filter(function(h){
@@ -1997,52 +1938,10 @@ if(!reduce) setInterval(function(){
     return r.height && r.top > 70 && r.bottom < innerHeight - 110;
   });
   if(!hs.length) return;
-  var h = rnd(hs), r = h.getBoundingClientRect();
+  var h = rnd(hs);
   h.classList.add('wob');
   setTimeout(function(){ h.classList.remove('wob'); }, 1200);
-  TT.mini(r.left + r.width*(.2 + Math.random()*.6), r.top + 4, rnd(['Hehe, poke 🫵','Wobble wobble 💜','Is it just me or is this dramatic? 😭','Ooh, plot! 👀','Hold on, I’m reading 🤓']), 2600);
 }, 9000);
-
-// Lineup Crowd at Bottom of Section 1
-var cr = document.createElement('div');
-cr.className = 'crowd';
-for(var q=0; q<7; q++){
-  var ci = document.createElement('div');
-  ci.className = 'ci';
-  ci.style.setProperty('--k', q);
-  ci.innerHTML = chibi(q);
-  (function(ci, q){
-    ci.addEventListener('click', function(){
-      pop(500 + q*80);
-      TT.mini(ctr(ci)[0], ctr(ci)[1]-20, zT(q), 3600);
-      collect(q, ci);
-    });
-  })(ci, q);
-  cr.appendChild(ci);
-}
-document.querySelector('.card').appendChild(cr);
-
-// Runners sprinting across inside mobile-frame
-var ly0 = scrollY, lr = 0;
-function run(dn){
-  var w = document.createElement('div'), k = 3 + (Math.random()*3|0), s = Math.random()*7|0, h = '';
-  w.className = 'run' + (dn ? '' : ' rev');
-  for(var i=0; i<k; i++) h += '<div class="rn" style="animation-delay:' + (-i * 0.13) + 's">' + chibi((s + i) % 7) + '</div>';
-  w.innerHTML = h;
-  appFrame.appendChild(w);
-  w.animate([
-    {transform: 'translateX(' + (dn ? '-120%' : '105%') + ')'},
-    {transform: 'translateX(' + (dn ? '105%' : '-120%') + ')'}
-  ], {duration: 3600, easing: 'linear'}).onfinish = function(){ w.remove(); };
-}
-
-addEventListener('scroll', function(){
-  var n = performance.now(), dy = scrollY - ly0;
-  ly0 = scrollY;
-  if(reduce || n - lr < 4500 || Math.abs(dy) < 60) return;
-  lr = n;
-  run(dy > 0);
-}, {passive: true});
 
 // Initial Step: Ready behind audio permission gate
 })();
