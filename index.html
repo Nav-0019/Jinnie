@@ -610,16 +610,28 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 }
 
 /* Swipe Deck */
-.deck{position:relative;height:280px;margin:6px auto 14px;max-width:310px}
-.dc{position:absolute;inset:0;padding:22px 18px;border-radius:26px;background:linear-gradient(160deg,rgba(120,50,200,.88),rgba(60,20,120,.92));border:1px solid #d6b4ff;box-shadow:0 0 26px rgba(168,85,247,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;text-align:center}
-.dc i{font-style:normal;font-size:54px}.dc h3{margin:6px 0;font:500 24px "Cormorant Garamond",serif;font-style:normal;color:#fff}.dc p{margin:0;font-size:18px}
-.dc .rb{position:absolute;left:20px;right:20px;top:12px;height:4px;border-radius:9px;background:rgba(255,255,255,.2);overflow:hidden}
+.deck{position:relative;height:430px;margin:8px auto 12px;max-width:330px}
+.dc{position:absolute;inset:0;padding:12px 14px 14px;border-radius:24px;background:linear-gradient(165deg,rgba(40,16,68,.96),rgba(18,8,34,.98));border:1.5px solid rgba(214,180,255,.45);box-shadow:0 12px 36px rgba(0,0,0,.7), 0 0 24px rgba(168,85,247,.35);display:flex;flex-direction:column;align-items:center;touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab;text-align:left;overflow:hidden}
+.dc .card-photo-box{position:relative;width:100%;height:180px;border-radius:16px;overflow:hidden;flex-shrink:0;background:#0d0618;border:1px solid rgba(255,255,255,0.15)}
+.dc .card-photo-box img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}
+.dc:hover .card-photo-box img{transform:scale(1.03)}
+.dc .card-tag-pill{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);background:rgba(186,104,200,0.92);border:1px solid #ffe3a3;border-radius:99px;padding:3px 12px;font:600 11px "DM Sans",sans-serif;color:#fff;letter-spacing:0.04em;white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,0.5);display:flex;align-items:center;gap:4px}
+.dc .card-content-box{width:100%;padding:10px 4px 2px;flex:1;display:flex;flex-direction:column;overflow:hidden}
+.dc h3{margin:0 0 6px;font:600 19px/1.25 "Cormorant Garamond",Georgia,serif;font-style:normal;color:#ffe3a3}
+.dc p{margin:0;font:400 13px/1.5 "DM Sans",sans-serif;font-style:normal;color:rgba(238,240,250,0.92);overflow-y:auto;scrollbar-width:thin}
+.dc .rb{position:absolute;left:16px;right:16px;top:8px;height:3px;border-radius:9px;background:rgba(255,255,255,.2);overflow:hidden;z-index:10}
 .dc .rb:after{content:"";display:block;height:100%;width:0;background:#f0d8ff}
-.dc.top .rb:after{animation:rd 2s linear forwards}.dc.top.ready .rb:after{animation:none;width:100%;box-shadow:0 0 10px #fff}
+.dc.top .rb:after{animation:rd 2s linear forwards}
+.dc.top.ready .rb:after{animation:none;width:100%;box-shadow:0 0 10px #fff}
 @keyframes rd{to{width:100%}}
-.st{position:absolute;top:24px;font:700 17px "DM Sans",sans-serif;font-style:normal;padding:4px 10px;border:2px solid;border-radius:8px;opacity:0}.st.y{left:16px;color:#ffb3f0;transform:rotate(-12deg)}.st.n{right:16px;color:#b8c4ff;transform:rotate(12deg)}
-.dbtn{display:flex;justify-content:center;gap:24px;margin-bottom:8px}.dbtn button{width:54px;height:54px;padding:0;font-size:24px;border-radius:50%;transition:opacity .3s}.dbtn.wait button{opacity:.4}
-.cnt{color:var(--soft);font:500 13px "DM Sans",sans-serif;font-style:normal}
+.st{position:absolute;top:20px;font:700 16px "DM Sans",sans-serif;font-style:normal;padding:4px 10px;border:2px solid;border-radius:8px;opacity:0;z-index:20}
+.st.y{left:16px;color:#ffb3f0;border-color:#ffb3f0;transform:rotate(-12deg);background:rgba(0,0,0,0.6)}
+.st.n{right:16px;color:#b8c4ff;border-color:#b8c4ff;transform:rotate(12deg);background:rgba(0,0,0,0.6)}
+.dbtn{display:flex;justify-content:center;align-items:center;gap:20px;margin-bottom:6px}
+.dbtn button{width:50px;height:50px;padding:0;font-size:22px;border-radius:50%;transition:transform .2s, opacity .3s;box-shadow:0 4px 16px rgba(0,0,0,0.5)}
+.dbtn button:hover{transform:scale(1.08)}
+.dbtn.wait button{opacity:.4}
+.cnt{color:var(--soft);font:500 12.5px "DM Sans",sans-serif;font-style:normal}
 
 /* WhatsApp Share Button */
 .wa-btn{display:inline-flex;align-items:center;gap:8px;margin-top:10px;background:linear-gradient(135deg,#25D366,#128C7E);border-color:#a3ffc7;box-shadow:0 0 16px rgba(37,211,102,.5)}
@@ -838,9 +850,8 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <div id="bp" hidden>
           <div id="meter"><div id="mf"></div></div>
           <div class="bp-btns">
-            <button id="tap-blow" class="step-btn" style="background:linear-gradient(135deg,#ff8fb8,#c6a8ff);color:#fff;font-weight:600">Blow out candles 🎂🌬️</button>
+            <button id="mic" class="step-btn" style="background:linear-gradient(135deg,#ff8fb8,#c6a8ff);color:#fff;font-weight:600;box-shadow:0 0 20px rgba(255,143,184,.45)">Allow mic &amp; blow 🎤</button>
             <button id="hold" class="step-btn">Hold to blow 🌬️</button>
-            <button id="mic" class="step-btn">Mic 🎤</button>
           </div>
         </div>
         <button id="cake-to-gift-btn" class="step-btn" style="display:none;margin-top:12px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;font-weight:600">Continue to Surprise in the Stars 🎁 →</button>
@@ -1684,10 +1695,11 @@ $('#tc').addEventListener('click', function(e){
   drop(b.left + b.width/2, b.top + b.height*0.4, c);
 });
 
-// Tapping cake directly also plants candle or blows out
+// Tapping cake directly also plants candle, or provides a puff during blow phase
 cvs.addEventListener('click', function(e){
-  if(phase === 3 || phase === 2){
-    autoBlow();
+  if(phase === 3){
+    pow = Math.min(1, pow + 0.12);
+    pop(520);
     return;
   }
   if(phase !== 1 || placed.length >= 18 || justDropped) return;
@@ -1752,7 +1764,7 @@ function blowPhase(){
   phase = 3;
   var bp = $('#bp'); if(bp) bp.hidden = false;
   var c2g = $('#cake-to-gift-btn'); if(c2g) c2g.style.display = 'inline-block';
-  T_('Now blow out your candles! 🌬️', 'Tap blow below, blow into your mic, or tap the cake!');
+  T_('Now blow out your candles! 🌬️', 'Tap "Allow mic & blow 🎤" to blow with your voice, or hold the button below!');
   lt = performance.now();
   requestAnimationFrame(tick);
 }
@@ -1785,35 +1797,37 @@ function autoBlow(){
   setTimeout(finishCake, ord.length * 50 + 200);
 }
 
-var tapBlowBtn = $('#tap-blow');
-if(tapBlowBtn){
-  tapBlowBtn.addEventListener('click', function(e){
-    e.stopPropagation();
-    autoBlow();
-  });
-}
-
+var freqBuf = null, timeBuf = null;
 $('#mic').addEventListener('click', function(){
   var b = this;
   try{
-    navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false, noiseSuppression:false, autoGainControl:false}}).then(function(st){
+    navigator.mediaDevices.getUserMedia({
+      audio: {
+        echoCancellation: false,
+        noiseSuppression: false,
+        autoGainControl: false
+      }
+    }).then(function(st){
       AC = AC || new(window.AudioContext || window.webkitAudioContext)();
       if(AC.state === 'suspended') AC.resume();
       var src = AC.createMediaStreamSource(st);
       an = AC.createAnalyser();
-      an.fftSize = 1024;
+      an.fftSize = 512;
       src.connect(an);
       stream = st;
-      buf = new Float32Array(1024);
-      amb = 0;
-      t0 = performance.now();
-      b.hidden = true;
-      $('#cs').textContent = 'Stay quiet for a second… then BLOW with full power! 💨';
-    }).catch(function(){
-      $('#cs').textContent = 'Microphone blocked. Use the blow button below instead 👇';
+      freqBuf = new Uint8Array(an.frequencyBinCount);
+      timeBuf = new Uint8Array(an.fftSize);
+      b.innerHTML = '<span>Listening… Blow with full power! 💨</span>';
+      b.style.background = 'linear-gradient(135deg, #a855f7, #ec4899)';
+      b.style.boxShadow = '0 0 25px rgba(236,72,153,0.7)';
+      $('#cs').textContent = 'Microphone active! Blow right now into your mic with full power! 💨';
+      T_('Blow out your candles! 🌬️', 'Blow into your microphone, or hold down the button below!');
+    }).catch(function(err){
+      console.warn('Mic error:', err);
+      $('#cs').textContent = 'Microphone blocked. Hold the button below instead 👇';
     });
   }catch(e){
-    $('#cs').textContent = 'Microphone unavailable. Use the blow button below instead 👇';
+    $('#cs').textContent = 'Microphone unavailable. Hold the button below instead 👇';
   }
 });
 
@@ -1827,18 +1841,41 @@ function tick(ts){
   if(phase !== 3) return;
   var dt = Math.min(.05, (ts - lt)/1000 || .016);
   lt = ts;
-  var ml = 0;
-  if(an){
-    an.getFloatTimeDomainData(buf);
+  var micBlow = 0;
+  if(an && freqBuf){
+    an.getByteFrequencyData(freqBuf);
+    an.getByteTimeDomainData(timeBuf);
+
+    // Calculate low-frequency air turbulence (blowing wind has massive low-frequency rumble)
+    var lowSum = 0;
+    var maxBin = Math.min(28, freqBuf.length);
+    for(var i=1; i<maxBin; i++){
+      lowSum += freqBuf[i];
+    }
+    var lowAvg = lowSum / (maxBin - 1);
+
+    // Calculate RMS volume amplitude
     var q = 0;
-    for(var i=0; i<buf.length; i++) q += buf[i]*buf[i];
-    var rms = Math.sqrt(q / buf.length);
-    if(ts - t0 < 900) amb = Math.max(amb, rms);
-    else ml = Math.max(0, Math.min(1, (rms - amb*1.5 - .01)/.12));
+    for(var j=0; j<timeBuf.length; j++){
+      var diff = (timeBuf[j] - 128) / 128;
+      q += diff * diff;
+    }
+    var rms = Math.sqrt(q / timeBuf.length);
+
+    // Detect breath rush: lowAvg above quiet threshold (>18) or rms above quiet (>0.025)
+    if(lowAvg > 18 || rms > 0.025){
+      micBlow = Math.min(1, Math.max((lowAvg - 16) / 28, (rms - 0.018) / 0.07));
+    }
   }
-  var lvl = Math.max(ml, hold ? .95 : 0);
-  pow += lvl > .25 ? lvl*dt*.65 : -dt*.2;
+
+  var lvl = Math.max(micBlow, hold ? 0.95 : 0);
+  if(lvl > 0.12){
+    pow += lvl * dt * 0.85; // Fills gauge in ~1.5 - 2s of blowing
+  } else {
+    pow = Math.max(0, pow - dt * 0.04); // Gentle decay so taking a breath does not erase progress
+  }
   pow = Math.max(0, Math.min(1, pow));
+
   $('#mf').style.width = (pow * 100) + '%';
   cd.style.setProperty('--lean', lvl * 40);
   var halo = $('#halo'); if(halo) halo.style.opacity = Math.max(.15, 1 - pow);
@@ -1850,6 +1887,7 @@ function tick(ts){
       p.o = o;
       p.g.classList.toggle('out', o);
       p.g.classList.toggle('lit', !o);
+      if(o) pop(600 - i * 18);
     }
   });
 
@@ -1960,36 +1998,71 @@ $('#open').addEventListener('click', openG);
 $('#gift').addEventListener('click', openG);
 
 /* ========================================================
+   UNIVERSAL ASSET RESOLUTION & LIGHTBOX HELPERS
+   ======================================================== */
+function getImgUrl(filename){
+  var isGhRoot = window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs');
+  var base = isGhRoot ? './public/images/her photo/' : './images/her photo/';
+  return base + filename;
+}
+
+function openPhotoLightbox(src, title, caption){
+  var lb = $('#photo-lightbox');
+  if(!lb){
+    lb = document.createElement('div');
+    lb.id = 'photo-lightbox';
+    lb.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(5,2,15,0.92);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;cursor:pointer;';
+    lb.innerHTML = '<div style="position:relative;max-width:380px;width:100%;max-height:86vh;display:flex;flex-direction:column;align-items:center;background:rgba(20,10,35,0.95);border:1.5px solid rgba(220,188,255,0.4);border-radius:24px;overflow:hidden;box-shadow:0 0 40px rgba(168,85,247,0.4);">' +
+      '<button id="lb-close" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);border:1px solid #ffe3a3;color:#fff;border-radius:50%;width:34px;height:34px;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10">✕</button>' +
+      '<img id="lb-img" style="width:100%;max-height:55vh;object-fit:cover;display:block;" src="" alt="">' +
+      '<div style="padding:14px 16px;text-align:center;">' +
+        '<h4 id="lb-title" style="margin:0 0 6px;color:#ffe3a3;font:600 20px \'Cormorant Garamond\',serif;"></h4>' +
+        '<p id="lb-cap" style="margin:0;font:400 13.5px/1.4 \'DM Sans\',sans-serif;color:#d6c7f2;"></p>' +
+      '</div>' +
+    '</div>';
+    document.body.appendChild(lb);
+    lb.onclick = function(e){
+      lb.style.display = 'none';
+    };
+  }
+  $('#lb-img').src = src;
+  $('#lb-title').textContent = title || '';
+  $('#lb-cap').textContent = caption || '';
+  lb.style.display = 'flex';
+  pop(850);
+}
+
+/* ========================================================
    MEMORIES LEAF WIND LOGIC (PHOTOS CARRIED BY THE COSMIC WIND)
    ======================================================== */
 var MEMORIES_PHOTOS = [
   {
-    url: './images/her photo/photo1.jpg',
+    url: getImgUrl('photo1.jpg'),
     caption: 'The way your eyes catch the starlight ✦',
     hint: 'A memory carried by the wind…'
   },
   {
-    url: './images/her photo/photo2.jpg',
+    url: getImgUrl('photo2.jpg'),
     caption: 'That quiet, effortless smile I always look for 🌙',
     hint: 'Dancing like a leaf in the cosmic breeze…'
   },
   {
-    url: './images/her photo/photo3.jpg',
+    url: getImgUrl('photo3.jpg'),
     caption: 'Pure, dramatic, gloriously unapologetic 🌸',
     hint: 'Folds softly onto the screen…'
   },
   {
-    url: './images/her photo/photo4.jpg',
+    url: getImgUrl('photo4.jpg'),
     caption: 'Even across six months of distance, you feel so close 📱💜',
     hint: 'Every late-night conversation with you…'
   },
   {
-    url: './images/her photo/photo5.jpg',
+    url: getImgUrl('photo5.jpg'),
     caption: 'My favourite view in this whole universe ✨',
     hint: 'Holding the beauty of this moment…'
   },
   {
-    url: './images/her photo/photo6.jpg',
+    url: getImgUrl('photo6.jpg'),
     caption: 'Happy 18th Birthday, Jinnie. You are unforgettable 🎂💜',
     hint: 'Blowing like starlight into eternity…'
   }
@@ -2014,11 +2087,12 @@ function showLeafMemory(idx){
   var card = document.createElement('div');
   card.className = 'leaf-card leaf-fly-in';
   card.innerHTML = 
-    '<div class="leaf-img-wrap">' +
+    '<div class="leaf-img-wrap" onclick="event.stopPropagation(); openPhotoLightbox(\'' + data.url + '\', \'Memory #' + (idx + 1) + '\', \'' + data.caption.replace(/'/g, "\\'") + '\')">' +
       '<img class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.includes(\'/public/\')?this.src.replace(\'/public/\',\'/\'):this.src.replace(\'/images/\',\'/public/images/\');}" alt="Memory for Jinnie">' +
+      '<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.6);border:1px solid #ffe3a3;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#ffe3a3">🔍</div>' +
     '</div>' +
     '<div class="leaf-caption">' + data.caption + '</div>' +
-    '<div class="leaf-hint">🍃 Tap photo to blow into the wind</div>';
+    '<div class="leaf-hint">🍃 Tap card to let it drift into the wind · Tap 🔍 to zoom</div>';
 
   // Sound effects: starlight breeze flutter
   pop(620 + idx * 45);
@@ -2110,17 +2184,68 @@ if(lnb){
   });
 }
 
-/* Swipe Deck Implementation */
-var car = $('#car'), sls = [].slice.call(car.querySelectorAll('.sl')), dk = document.createElement('div'), db = document.createElement('div');
+/* Swipe Deck Implementation with Her Portrait Photographs & Compliments */
+var JINNIE_CARDS = [
+  {
+    image: 'photo1.jpg',
+    tag: 'Your Beautiful Soul',
+    title: 'The Purest Heart in My Universe',
+    compliment: 'Beyond anything words or pictures can capture, it is the sheer purity of your soul that leaves me in awe. In a world full of pretend, you are unapologetically, genuinely yourself. You have this quiet, radiant kindness you don’t even brag about, and that is the rarest kind of beauty to me. Your soul is a soft light in a loud world.'
+  },
+  {
+    image: 'photo2.jpg',
+    tag: 'Your Cute Little Anger',
+    title: 'The Most Adorable Fire',
+    compliment: 'Even your small anger is the most endearing thing in this universe to me. When you get mad, when you cross your arms and say "I’m dramatic?! Fine, bye!" — you try so hard to look dangerous and intimidating, but honestly you just look breathtakingly cute to me. Your little dramatic sighs and pouts make my heart melt every single time. I wouldn’t trade that fire for anything.'
+  },
+  {
+    image: 'photo3.jpg',
+    tag: 'Your Electric Energy',
+    title: 'Infectious Vibe & Laughter',
+    compliment: 'Your energy lights up everything around me, even across a cold phone screen hundreds of miles away. When you’re excited about something, your whole vibe shifts, and it is impossible for me not to smile. You bring vibrant color into days that used to feel monochrome. Talking to you is the easiest, sweetest part of my day.'
+  },
+  {
+    image: 'photo4.jpg',
+    tag: 'Your Nonchalant Charm',
+    title: 'The Cool Mystery with a Caring Heart',
+    compliment: 'My undisputed nonchalant queen. The way you pretend to act so cool, mysterious, and "whatever," but your eyes and your little caring check-ins give away how deeply you actually feel. You act unbothered, yet you remember the smallest things I told you weeks ago. That balance of effortless composure and secret tenderness completely captivates me.'
+  },
+  {
+    image: 'photo5.jpg',
+    tag: 'Your Radiant Smile',
+    title: 'A Smile That Heals Every Storm',
+    compliment: 'Your smile has this unbelievable superpower to wash away any bad day of mine in five seconds flat. When you genuinely laugh at my silly jokes at 2 AM and cover your face, my whole universe suddenly feels right where it belongs. Never let anyone dim that glow, Jinnie, because it’s the brightest light in my sky.'
+  },
+  {
+    image: 'photo6.jpg',
+    tag: 'Turning Eighteen',
+    title: 'The Brightest Star in My Sky',
+    compliment: 'Eighteen years ago, this universe was blessed with someone truly extraordinary. Out of 8 billion people, our paths crossed, collided, parted, and found their way back to each other. You are stunning in every single way, Jinnie — your soul, your mind, your fiery spirit, and that golden heart of yours. Happy 18th Birthday, from your Bewakuf, to my favorite person in the world.'
+  }
+];
+
+var car = $('#car'), dk = document.createElement('div'), db = document.createElement('div');
 var dI = 0, dC = [], dT, dR = 0, dX = null, dS = 0;
 dk.className = 'deck';
 db.className = 'dbtn wait';
 db.innerHTML = '<button aria-label="Keep for later" title="Keep for later 🌙">🌙</button><button aria-label="Love it" title="Love it 💜">💜</button>';
 
-sls.forEach(function(s){
+JINNIE_CARDS.forEach(function(cardData, idx){
   var c = document.createElement('div');
   c.className = 'dc';
-  c.innerHTML = '<span class="rb"></span><span class="st y">LOVE 💜</span><span class="st n">KEEP 🌙</span>' + s.innerHTML;
+  var imgUrl = getImgUrl(cardData.image);
+  c.innerHTML = 
+    '<span class="rb"></span>' +
+    '<span class="st y">LOVE 💜</span>' +
+    '<span class="st n">KEEP 🌙</span>' +
+    '<div class="card-photo-box" onclick="event.stopPropagation(); openPhotoLightbox(\'' + imgUrl + '\', \'' + cardData.title.replace(/'/g, "\\'") + '\', \'' + cardData.tag.replace(/'/g, "\\'") + '\')">' +
+      '<img src="' + imgUrl + '" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.includes(\'/public/\')?this.src.replace(\'/public/\',\'/\'):this.src.replace(\'/images/\',\'/public/images/\');}" alt="' + cardData.title + '" loading="eager">' +
+      '<div class="card-tag-pill"><span>💜</span> ' + cardData.tag + '</div>' +
+    '</div>' +
+    '<div class="card-content-box">' +
+      '<h3>' + cardData.title + '</h3>' +
+      '<p>' + cardData.compliment + '</p>' +
+    '</div>';
   dk.appendChild(c);
   dC.push(c);
 });
