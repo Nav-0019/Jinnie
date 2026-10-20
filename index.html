@@ -3057,29 +3057,59 @@
       }
       requestAnimationFrame(frame);
 
-      /* Message Stars Arena */
-      var M = [
-        'You’re unapologetically, gloriously yourself.',
-        'Your dramatic reactions are my favourite show.',
-        'Every late-night message felt like starlight.',
-        'I’m sorry for the words that hurt. I’m so glad you came back.',
-        'Six months in, and I still smile at your name. 💜'
+      /* Message Stars Arena: Nicknames & Secret Messages */
+      var STAR_NICKNAMES = [
+        {
+          name: 'Devi ji',
+          label: 'Devi ji 👑',
+          emoji: '👑',
+          msg: 'Devi ji — Unapologetically, gloriously yourself. ✦',
+          particles: ['✨', '👑', '💜']
+        },
+        {
+          name: 'Jinnie',
+          label: 'Jinnie 💜',
+          emoji: '💜',
+          msg: 'Jinnie — My dramatic, BTS-obsessed, adorable universe. 💜',
+          particles: ['💜', '✨', '🌸']
+        },
+        {
+          name: 'Cauliflower',
+          label: 'Cauliflower 🥦',
+          emoji: '🥦',
+          msg: 'Cauliflower — Cute, chaotic, and impossible to forget. 🥦✦',
+          particles: ['🥦', '✨', '💜']
+        },
+        {
+          name: 'Baali',
+          label: 'Baali 🌸',
+          emoji: '🌸',
+          msg: 'Baali — The one who keeps my whole orbit shining bright. 🌸✨',
+          particles: ['🌸', '✨', '💖']
+        },
+        {
+          name: '🔪',
+          label: '🔪',
+          emoji: '🔪',
+          msg: '🔪 — Possessive, dangerous, and wildly cute. 💜',
+          particles: ['🔪', '⚡', '💜', '✨']
+        }
       ], POS = [[10, 22], [62, 12], [28, 58], [74, 52], [48, 30]];
 
-      M.forEach(function (m, i) {
+      STAR_NICKNAMES.forEach(function (star, i) {
         var b = document.createElement('button');
         b.className = 'ms';
         b.textContent = '⭐';
-        b.setAttribute('aria-label', 'message star ' + (i + 1));
+        b.setAttribute('aria-label', star.name + ' star');
         b.style.left = POS[i][0] + '%';
         b.style.top = POS[i][1] + '%';
         b.style.animationDelay = (i * 0.4) + 's';
         b.addEventListener('click', function () {
-          $('#sm').textContent = m;
+          $('#sm').innerHTML = '<span style="font-size:1.15em;font-weight:700;color:#ffe3a3;display:inline-block;margin-bottom:2px;">' + star.label + '</span><br><span style="font-size:0.92em;color:#e8ddfa;">' + star.msg + '</span>';
           pop(500 + i * 90);
-          burst(ctr(b), ['✨', '💜'], 6, 70);
-          b.textContent = '💫';
-          TT.mini(ctr(b)[0], ctr(b)[1] - 8, zQ[i], 2200);
+          burst(ctr(b), star.particles, 8, 80);
+          b.textContent = star.emoji;
+          TT.mini(ctr(b)[0], ctr(b)[1] - 8, star.name, 2400);
         });
         $('#arena').appendChild(b);
       });
@@ -4037,7 +4067,7 @@
         'Seven of us are rooting for you ✨',
         'Borahae! 💜 (it means “I purple you”)'
       ];
-      var zQ = ['Told you 🤭', 'Ooh, she tapped it!', 'Read it out loud! 📣', 'Aww… 🥹', 'Don’t cry 😭💜'];
+      var zQ = ['Devi ji 👑', 'Jinnie 💜', 'Cauliflower 🥦', 'Baali 🌸', '🔪'];
       var ZL = [
         'A sea of purple lights, just for you, ARMY 💜',
         'Front row, always, for the best fan 🎫',
