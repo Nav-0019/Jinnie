@@ -1579,6 +1579,155 @@
       }
     }
 
+    /* Revealed Song Gift in Gift Section */
+    .song-gift-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 10px;
+      animation: songGiftFade .6s cubic-bezier(.2, .8, .2, 1) forwards;
+    }
+
+    @keyframes songGiftFade {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .song-vinyl-wrap {
+      position: relative;
+      width: 76px;
+      height: 76px;
+      margin: 2px auto 2px;
+    }
+
+    .song-vinyl {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: radial-gradient(circle, #2a1640 18%, #120622 22%, #381b5c 45%, #18092e 65%, #0d041a 100%);
+      border: 2.5px solid rgba(220, 188, 255, 0.45);
+      box-shadow: 0 0 25px rgba(168, 85, 247, 0.55), inset 0 0 14px rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: vinylSpin 7s linear infinite;
+    }
+
+    @keyframes vinylSpin {
+      to { transform: rotate(360deg); }
+    }
+
+    .song-vinyl-center {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      border: 1.5px solid #ffe3a3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 0 8px rgba(236, 72, 153, 0.8);
+    }
+
+    .song-gift-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(168, 85, 247, 0.25);
+      border: 1px solid rgba(220, 188, 255, 0.4);
+      border-radius: 99px;
+      padding: 3px 12px;
+      font: 600 11.5px "DM Sans", sans-serif;
+      color: #ffe3a3;
+      letter-spacing: .04em;
+    }
+
+    .song-gift-note {
+      font: 400 13px/1.48 "DM Sans", sans-serif !important;
+      font-style: normal !important;
+      color: #f3e8ff !important;
+      margin: 2px 0 6px !important;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
+    }
+
+    .song-now-playing {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(216, 180, 254, 0.25);
+      border-radius: 99px;
+      font: 500 11.5px "DM Sans", sans-serif;
+      color: #ffd4ff;
+    }
+
+    .song-download-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #a855f7, #ec4899);
+      border: 1.5px solid #ffe3a3;
+      border-radius: 999px;
+      color: #fff !important;
+      text-decoration: none;
+      box-shadow: 0 0 26px rgba(168, 85, 247, 0.7);
+      transition: all .25s ease;
+      cursor: pointer;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    .song-download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 36px rgba(236, 72, 153, 0.9);
+      filter: brightness(1.08);
+    }
+
+    .song-download-btn:active {
+      transform: scale(0.98);
+    }
+
+    .song-dl-icon {
+      font-size: 22px;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
+      animation: dlBounce 1.5s ease-in-out infinite alternate;
+    }
+
+    @keyframes dlBounce {
+      to { transform: translateY(-3px); }
+    }
+
+    .song-dl-text {
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+    }
+
+    .song-dl-main {
+      font: 600 14px/1.2 "DM Sans", sans-serif;
+      color: #fff;
+      letter-spacing: .02em;
+    }
+
+    .song-dl-sub {
+      font: 400 11px/1.2 "DM Sans", sans-serif;
+      color: #ffe3a3;
+      opacity: 0.95;
+    }
+
     @media (prefers-reduced-motion:reduce) {
       .sc {
         transition: none;
@@ -1910,10 +2059,49 @@
 
       <section class="sc" data-o="none" id="giftsec">
         <div class="big" id="gift">🎁</div>
-        <div class="card">
-          <h2>A surprise in the stars</h2>
-          <p>One last thing is waiting for you in the quiet of space.</p>
-          <button id="open">Open the gift 🎁</button>
+        <div class="card" id="gift-card">
+          <!-- Unopened State -->
+          <div id="gift-intro">
+            <h2>A surprise in the stars</h2>
+            <p>One last thing is waiting for you in the quiet of space.</p>
+            <button id="open">Open the gift 🎁</button>
+          </div>
+
+          <!-- Revealed State: Song Written with Heart & 10 Days Dedication -->
+          <div id="gift-revealed" class="song-gift-box" style="display:none;">
+            <div class="song-vinyl-wrap">
+              <div class="song-vinyl">
+                <div class="song-vinyl-center">🎵</div>
+              </div>
+            </div>
+
+            <div class="song-gift-tag">✦ 10 Days · Written with my whole heart ✦</div>
+
+            <h2 style="font-size:clamp(19px, 5.2vw, 24px);margin:2px 0;color:#ffe3a3;">A Song Written Especially for You</h2>
+
+            <p class="song-gift-note">
+              I gave my absolute all every single day for 10 days straight to write and compose this song for you.
+              When ordinary words couldn't express what you mean to me, I poured all my feelings, memories, and unspoken thoughts into this melody.
+              It's yours forever, Jinnie. 💜
+            </p>
+
+            <div class="song-now-playing">
+              <span>♪ Playing in the stars right now</span>
+              <span class="eq-bar" style="height:10px;"></span>
+              <span class="eq-bar" style="height:14px;animation-delay:0.2s;"></span>
+              <span class="eq-bar" style="height:8px;animation-delay:0.4s;"></span>
+            </div>
+
+            <a id="dl-song-btn" class="song-download-btn" href="./audio/background-music.mp3" download="A-Song-For-Jinnie.mp3">
+              <span class="song-dl-icon">📥</span>
+              <span class="song-dl-text">
+                <span class="song-dl-main">Download Your Song (.mp3)</span>
+                <span class="song-dl-sub">Save this melody to your device forever 💜</span>
+              </span>
+            </a>
+
+            <button id="gift-to-memories-btn" class="step-btn" style="margin-top:4px;width:100%;background:rgba(168,85,247,0.3);border-color:rgba(220,188,255,0.45);">Continue to Memories in the Wind 🍃 →</button>
+          </div>
         </div>
       </section>
 
@@ -2780,6 +2968,10 @@
             var cIdx = secs.findIndex(function (s) { return s.id === 'cakesec'; });
             if (cIdx >= 0) return goToStep(cIdx);
           }
+          if (b.id === 'gift-to-memories-btn') {
+            var mIdx = secs.findIndex(function (s) { return s.id === 'memoriessec'; });
+            if (mIdx >= 0) return goToStep(mIdx);
+          }
           if (b.id === 'letter-next-btn') {
             var rIdx = secs.findIndex(function (s) { return s.id === 'replysec'; });
             if (rIdx >= 0) return goToStep(rIdx);
@@ -3241,6 +3433,19 @@
       /* ========================================================
          GIFT BOX UNLOCK & SWIPE DECK
          ======================================================== */
+      function syncSongDownloadLink() {
+        var bgm = $('#bgm');
+        var dl = $('#dl-song-btn');
+        if (dl) {
+          if (bgm && bgm.currentSrc) {
+            dl.href = bgm.currentSrc;
+          } else {
+            var isGhRoot = window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs');
+            dl.href = isGhRoot ? './public/audio/background-music.mp3' : './audio/background-music.mp3';
+          }
+        }
+      }
+
       function openG() {
         var o = $('#open');
         if (o.disabled) return;
@@ -3257,28 +3462,43 @@
 
         // Massive explosion of particles & confetti
         var pt = ctr(gBox);
-        burst(pt, ['🎁', '💜', '✨', '💖', '🌟', '🎀', '🎉', '🎂'], 36, 220);
+        burst(pt, ['🎁', '💜', '✨', '💖', '🌟', '🎀', '🎉', '🎵', '🎶'], 36, 220);
         confetti(120);
-        rain(['💜', '✨', '🎁'], 30);
+        rain(['💜', '✨', '🎁', '🎵'], 30);
 
-        toast('🎉 Surprise Unlocked! 💜 Memories carried by the wind…');
+        toast('🎉 Surprise Unlocked! A song written especially for you 💜');
 
         setTimeout(function () {
+          gBox.style.display = 'none';
+          var intro = $('#gift-intro');
+          var revealed = $('#gift-revealed');
+          if (intro) intro.style.display = 'none';
+          if (revealed) {
+            revealed.style.display = 'flex';
+            syncSongDownloadLink();
+          }
+
+          // Unlock memories section in progression
           var msec = $('#memoriessec');
           if (msec) {
             msec.hidden = false;
             giftLocked = false;
-            var secs = getSections();
-            var memIdx = secs.findIndex(function (s) { return s.id === 'memoriessec'; });
-            if (memIdx >= 0) {
-              goToStep(memIdx);
-              startMemoriesWind();
-            }
           }
-        }, 400);
+        }, 550);
       }
       $('#open').addEventListener('click', openG);
       $('#gift').addEventListener('click', openG);
+
+      var dlSongBtn = $('#dl-song-btn');
+      if (dlSongBtn) {
+        dlSongBtn.addEventListener('click', function (e) {
+          pop(880);
+          setTimeout(function () { pop(1174); }, 120);
+          burst(ctr(dlSongBtn), ['🎵', '🎶', '💜', '✨', '🌟'], 20, 130);
+          confetti(60);
+          toast('🎶 Downloading your song… Cherish it forever, Jinnie! 💜');
+        });
+      }
 
       /* ========================================================
          UNIVERSAL ASSET RESOLUTION & LIGHTBOX HELPERS
