@@ -14,8 +14,7 @@
 
 <!-- Background Audio Player (Loops seamlessly) -->
 <audio id="bgm" preload="auto" loop playsinline>
-  <source src="./assets/nav%201-DR6ULPmN.mp3" type="audio/mpeg">
-  <source src="./assets/nav%201-DR6ULPmN.mp3" type="audio/mpeg">
+  <source src="./audio/background-music.mp3" type="audio/mpeg">
 </audio>
 
 <!-- Audio Permission Gate Modal (Locks universe until user enters with music) -->
@@ -1194,37 +1193,31 @@ $('#gift').addEventListener('click', openG);
 var MEMORIES_PHOTOS = [
   {
     url: './images/her photo/photo1.jpg',
-    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.39 PM.jpeg',
     caption: 'The way your eyes catch the starlight ✦',
     hint: 'A memory carried by the wind…'
   },
   {
     url: './images/her photo/photo2.jpg',
-    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.39 PM (1).jpeg',
     caption: 'That quiet, effortless smile I always look for 🌙',
     hint: 'Dancing like a leaf in the cosmic breeze…'
   },
   {
     url: './images/her photo/photo3.jpg',
-    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.39 PM (2).jpeg',
     caption: 'Pure, dramatic, gloriously unapologetic 🌸',
     hint: 'Folds softly onto the screen…'
   },
   {
     url: './images/her photo/photo4.jpg',
-    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.40 PM.jpeg',
     caption: 'Even across six months of distance, you feel so close 📱💜',
     hint: 'Every late-night conversation with you…'
   },
   {
     url: './images/her photo/photo5.jpg',
-    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.40 PM (1).jpeg',
     caption: 'My favourite view in this whole universe ✨',
     hint: 'Holding the beauty of this moment…'
   },
   {
     url: './images/her photo/photo6.jpg',
-    fallback: './images/her photo/WhatsApp Image 2026-09-20 at 9.53.41 PM.jpeg',
     caption: 'Happy 18th Birthday, Jinnie. You are unforgettable 🎂💜',
     hint: 'Blowing like starlight into eternity…'
   }
@@ -1250,7 +1243,7 @@ function showLeafMemory(idx){
   card.className = 'leaf-card leaf-fly-in';
   card.innerHTML = 
     '<div class="leaf-img-wrap">' +
-      '<img class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" alt="Memory for Jinnie" onerror="if(!this._tried){this._tried=true;this.src=\'' + data.fallback + '\';}">' +
+      '<img class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" alt="Memory for Jinnie">' +
     '</div>' +
     '<div class="leaf-caption">' + data.caption + '</div>' +
     '<div class="leaf-hint">🍃 Tap photo to blow into the wind</div>';
