@@ -1996,7 +1996,7 @@
             <!-- Active leaf photo animates in folding from top-right, fills center, then blows away -->
           </div>
           <div class="leaf-controls">
-            <div id="leaf-counter" class="cnt">1 / 5 · Tap photo to let it drift into the wind 🍃</div>
+            <div id="leaf-counter" class="cnt">1 / 6 · Tap photo to let it drift into the wind 🍃</div>
             <button id="leaf-next-btn" class="step-btn">Next Memory 🍃</button>
           </div>
         </div>
@@ -2031,7 +2031,7 @@
               <p>Exactly as you are.</p>
             </div>
           </div>
-          <div class="cnt" id="cnt">1 / 5 · read each card, then swipe 💌</div>
+          <div class="cnt" id="cnt">1 / 6 · read each card, then swipe 💌</div>
         </div>
       </section>
 
@@ -3374,6 +3374,7 @@
           lb.innerHTML = '<div style="position:relative;max-width:380px;width:100%;max-height:86vh;display:flex;flex-direction:column;align-items:center;background:rgba(20,10,35,0.95);border:1.5px solid rgba(220,188,255,0.4);border-radius:24px;overflow:hidden;box-shadow:0 0 40px rgba(168,85,247,0.4);">' +
             '<button id="lb-close" style="position:absolute;top:10px;right:10px;background:rgba(0,0,0,0.6);border:1px solid #ffe3a3;color:#fff;border-radius:50%;width:34px;height:34px;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10">✕</button>' +
             '<img id="lb-img" style="width:100%;max-height:55vh;object-fit:cover;display:block;" src="" alt="">' +
+            '<video id="lb-vid" style="width:100%;max-height:55vh;object-fit:cover;display:none;" playsinline controls autoplay loop></video>' +
             '<div style="padding:14px 16px;text-align:center;">' +
             '<h4 id="lb-title" style="margin:0 0 6px;color:#ffe3a3;font:600 20px \'Cormorant Garamond\',serif;"></h4>' +
             '<p id="lb-cap" style="margin:0;font:400 13.5px/1.4 \'DM Sans\',sans-serif;color:#d6c7f2;"></p>' +
@@ -3381,10 +3382,31 @@
             '</div>';
           document.body.appendChild(lb);
           lb.onclick = function (e) {
+            var v = $('#lb-vid');
+            if (v) v.pause();
             lb.style.display = 'none';
           };
         }
-        $('#lb-img').src = src;
+        var isVid = src.endsWith('.mp4');
+        var imgEl = $('#lb-img');
+        var vidEl = $('#lb-vid');
+        if (isVid) {
+          if (imgEl) imgEl.style.display = 'none';
+          if (vidEl) {
+            vidEl.style.display = 'block';
+            vidEl.src = src;
+            vidEl.play().catch(function () { });
+          }
+        } else {
+          if (vidEl) {
+            vidEl.pause();
+            vidEl.style.display = 'none';
+          }
+          if (imgEl) {
+            imgEl.style.display = 'block';
+            imgEl.src = src;
+          }
+        }
         $('#lb-title').textContent = title || '';
         $('#lb-cap').textContent = caption || '';
         lb.style.display = 'flex';
@@ -3417,8 +3439,13 @@
         },
         {
           url: getImgUrl('photo5.jpg'),
-          caption: 'Happy 18th Birthday, Jinnie. You are unforgettable 🎂💜',
-          hint: 'Blowing like starlight into eternity…'
+          caption: 'My favourite view in this whole universe ✨',
+          hint: 'Holding the beauty of this moment…'
+        },
+        {
+          url: getImgUrl('video1.mp4'),
+          caption: 'Happy 18th Birthday, Jinnie. A living memory in our stars 🎂🎥💜',
+          hint: 'A moving glimpse of your unforgettable light…'
         }
       ];
 
@@ -3438,15 +3465,20 @@
         leafBusy = true;
         currentLeaf = idx;
 
+        var isVid = data.url.endsWith('.mp4');
+        var mediaHtml = isVid
+          ? '<video class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>'
+          : '<img class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.includes(\'/public/\')?this.src.replace(\'/public/\',\'/\'):this.src.replace(\'/images/\',\'/public/images/\');}" alt="Memory for Jinnie">';
+
         var card = document.createElement('div');
         card.className = 'leaf-card leaf-fly-in';
         card.innerHTML =
           '<div class="leaf-img-wrap" onclick="event.stopPropagation(); openPhotoLightbox(\'' + data.url + '\', \'Memory #' + (idx + 1) + '\', \'' + data.caption.replace(/'/g, "\\'") + '\')">' +
-          '<img class="leaf-img" referrerpolicy="no-referrer" src="' + data.url + '" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.includes(\'/public/\')?this.src.replace(\'/public/\',\'/\'):this.src.replace(\'/images/\',\'/public/images/\');}" alt="Memory for Jinnie">' +
-          '<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.6);border:1px solid #ffe3a3;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#ffe3a3">🔍</div>' +
+          mediaHtml +
+          '<div style="position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.6);border:1px solid #ffe3a3;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#ffe3a3">' + (isVid ? '▶' : '🔍') + '</div>' +
           '</div>' +
           '<div class="leaf-caption">' + data.caption + '</div>' +
-          '<div class="leaf-hint">🍃 Tap card to let it drift into the wind · Tap 🔍 to zoom</div>';
+          '<div class="leaf-hint">🍃 Tap card to let it drift into the wind · Tap ' + (isVid ? '▶' : '🔍') + ' to view</div>';
 
         // Sound effects: starlight breeze flutter
         pop(620 + idx * 45);
@@ -3566,9 +3598,15 @@
         },
         {
           image: 'photo5.jpg',
-          tag: 'Turning Eighteen',
-          title: 'The Brightest Star in My Sky',
-          compliment: 'Eighteen years ago, this universe was blessed with someone truly extraordinary. Out of 8 billion people, our paths crossed, collided, parted, and found their way back to each other. You are stunning in every single way, Jinnie — your soul, your mind, your fiery spirit, and that golden heart of yours. Happy 18th Birthday, from your Bewakuf, to my favorite person in the world.'
+          tag: 'Your Radiant Smile',
+          title: 'A Smile That Heals Every Storm',
+          compliment: 'Your smile has this unbelievable superpower to wash away any bad day of mine in five seconds flat. When you genuinely laugh at my silly jokes at 2 AM and cover your face, my whole universe suddenly feels right where it belongs. Never let anyone dim that glow, Jinnie, because it’s the brightest light in my sky.'
+        },
+        {
+          image: 'video1.mp4',
+          tag: 'Turning Eighteen 🎥',
+          title: 'A Living Memory in the Stars',
+          compliment: 'No still photograph could ever fully capture your laughter, your expressions, and the way you bring warmth into every single second. Watching you move, smile, and exist in this world reminds me why you are so unforgettable. Out of 8 billion people, our paths collided, parted, and found their way back to each other. Happy 18th Birthday, from your Bewakuf, to my favorite person in the world.'
         }
       ];
 
@@ -3582,13 +3620,17 @@
         var c = document.createElement('div');
         c.className = 'dc';
         var imgUrl = getImgUrl(cardData.image);
+        var isVid = cardData.image.endsWith('.mp4');
+        var mediaTag = isVid
+          ? '<video src="' + imgUrl + '" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;display:block;"></video>'
+          : '<img src="' + imgUrl + '" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.includes(\'/public/\')?this.src.replace(\'/public/\',\'/\'):this.src.replace(\'/images/\',\'/public/images/\');}" alt="' + cardData.title + '" loading="eager">';
         c.innerHTML =
           '<span class="rb"></span>' +
           '<span class="st y">LOVE 💜</span>' +
           '<span class="st n">KEEP 🌙</span>' +
           '<div class="card-photo-box" onclick="event.stopPropagation(); openPhotoLightbox(\'' + imgUrl + '\', \'' + cardData.title.replace(/'/g, "\\'") + '\', \'' + cardData.tag.replace(/'/g, "\\'") + '\')">' +
-          '<img src="' + imgUrl + '" onerror="if(!this.dataset.fallback){this.dataset.fallback=\'1\';this.src=this.src.includes(\'/public/\')?this.src.replace(\'/public/\',\'/\'):this.src.replace(\'/images/\',\'/public/images/\');}" alt="' + cardData.title + '" loading="eager">' +
-          '<div class="card-tag-pill"><span>💜</span> ' + cardData.tag + '</div>' +
+          mediaTag +
+          '<div class="card-tag-pill"><span>' + (isVid ? '🎥' : '💜') + '</span> ' + cardData.tag + '</div>' +
           '</div>' +
           '<div class="card-content-box">' +
           '<h3>' + cardData.title + '</h3>' +
