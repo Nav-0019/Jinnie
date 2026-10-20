@@ -173,11 +173,12 @@
         <div id="bp" hidden>
           <div id="meter"><div id="mf"></div></div>
           <div class="bp-btns">
-            <button id="mic" class="step-btn">Allow mic &amp; blow 🎤</button>
+            <button id="tap-blow" class="step-btn" style="background:linear-gradient(135deg,#ff8fb8,#c6a8ff);color:#fff;font-weight:600">Blow out candles 🎂🌬️</button>
             <button id="hold" class="step-btn">Hold to blow 🌬️</button>
+            <button id="mic" class="step-btn">Mic 🎤</button>
           </div>
         </div>
-        <button id="cake-to-gift-btn" class="step-btn" style="display:none;margin-top:10px">Open Your Birthday Surprise 🎁</button>
+        <button id="cake-to-gift-btn" class="step-btn" style="display:none;margin-top:12px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;font-weight:600">Continue to Surprise in the Stars 🎁 →</button>
       </div>
     </section>
 
@@ -968,8 +969,12 @@ $('#tc').addEventListener('click', function(e){
   drop(b.left + b.width/2, b.top + b.height*0.4, c);
 });
 
-// Tapping cake directly also plants candle
+// Tapping cake directly also plants candle or blows out
 cvs.addEventListener('click', function(e){
+  if(phase === 3 || phase === 2){
+    autoBlow();
+    return;
+  }
   if(phase !== 1 || placed.length >= 18 || justDropped) return;
   var c = CS[placed.length % 5];
   drop(e.clientX, e.clientY, c);
@@ -1010,28 +1015,56 @@ function drop(cx, cy, c){
 
 function lightUp(){
   phase = 2;
+  cakeLocked = false;
   var tray = $('#tray'); if(tray) tray.style.display = 'none';
+  var c2g = $('#cake-to-gift-btn'); if(c2g) c2g.style.display = 'inline-block';
   T_('Lighting them up… 🔥', 'Watch every candle illuminate your sky.');
   ord = placed.slice().sort(function(a, b){ return SL.indexOf(a.s) - SL.indexOf(b.s); });
   ord.forEach(function(p, i){
     setTimeout(function(){
       p.g.classList.add('lit');
       pop(500 + i*30);
-    }, 250 + i*110);
+    }, 200 + i*95);
   });
   setTimeout(function(){
     var halo = $('#halo'); if(halo) halo.style.opacity = 1;
     T_('Happy 18th Birthday, Jinnie! 💜', 'Make a heartfelt wish… ✨');
-  }, 250 + 18*110 + 200);
-  setTimeout(blowPhase, 250 + 18*110 + 2000);
+  }, 200 + 18*95 + 200);
+  setTimeout(blowPhase, 200 + 18*95 + 1600);
 }
 
 function blowPhase(){
   phase = 3;
   var bp = $('#bp'); if(bp) bp.hidden = false;
-  T_('Now blow out your candles! 🌬️', 'Blow into your mic or hold down the button below!');
+  var c2g = $('#cake-to-gift-btn'); if(c2g) c2g.style.display = 'inline-block';
+  T_('Now blow out your candles! 🌬️', 'Tap blow below, blow into your mic, or tap the cake!');
   lt = performance.now();
   requestAnimationFrame(tick);
+}
+
+function autoBlow(){
+  if(phase !== 3 && phase !== 2) return;
+  phase = 4;
+  var bp = $('#bp'); if(bp) bp.hidden = true;
+  var halo = $('#halo'); if(halo) halo.style.opacity = 0;
+  var ord = placed.slice().sort(function(a, b){ return SL.indexOf(a.s) - SL.indexOf(b.s); });
+  ord.forEach(function(p, i){
+    setTimeout(function(){
+      p.o = true;
+      p.g.classList.add('out');
+      p.g.classList.remove('lit');
+      pop(600 - i*20);
+    }, i * 50);
+  });
+  setTimeout(finishCake, ord.length * 50 + 200);
+}
+
+var tapBlowBtn = $('#tap-blow');
+if(tapBlowBtn){
+  tapBlowBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    autoBlow();
+  });
 }
 
 $('#mic').addEventListener('click', function(){
@@ -1051,10 +1084,10 @@ $('#mic').addEventListener('click', function(){
       b.hidden = true;
       $('#cs').textContent = 'Stay quiet for a second… then BLOW with full power! 💨';
     }).catch(function(){
-      $('#cs').textContent = 'Microphone blocked. Use the hold button below instead 👇';
+      $('#cs').textContent = 'Microphone blocked. Use the blow button below instead 👇';
     });
   }catch(e){
-    $('#cs').textContent = 'Microphone unavailable. Use the hold button below instead 👇';
+    $('#cs').textContent = 'Microphone unavailable. Use the blow button below instead 👇';
   }
 });
 
@@ -1137,6 +1170,7 @@ var cakeToGiftBtn = $('#cake-to-gift-btn');
 if(cakeToGiftBtn){
   cakeToGiftBtn.addEventListener('click', function(e){
     e.stopPropagation();
+    cakeLocked = false;
     var secs = getSections();
     var giftIdx = secs.findIndex(function(s){ return s.id === 'giftsec'; });
     if(giftIdx >= 0) goToStep(giftIdx);
@@ -1144,6 +1178,8 @@ if(cakeToGiftBtn){
 }
 window.finishCake = finishCake;
 window.startCakeGame = startCakeGame;
+window.autoBlow = autoBlow;
+window.drop = drop;
 
 /* ========================================================
    GIFT BOX UNLOCK & SWIPE DECK
