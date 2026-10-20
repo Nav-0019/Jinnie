@@ -10,7 +10,10 @@ const docsDir = path.resolve(rootDir, 'docs');
 
 // Clean docs/ and copy entire fresh dist/ to docs/ for GitHub Pages
 if (fs.existsSync(distDir)) {
-  fs.rmSync(docsDir, { recursive: true, force: true });
+  if (fs.existsSync(docsDir)) {
+    fs.rmSync(docsDir, { recursive: true, force: true });
+  }
+  fs.mkdirSync(docsDir, { recursive: true });
   fs.cpSync(distDir, docsDir, { recursive: true });
   console.log('✓ Cleaned and synced dist/ to /docs');
 }
