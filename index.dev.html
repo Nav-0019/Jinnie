@@ -107,20 +107,94 @@ body{background:#0a0414}
 .hud>span{flex:1 1 auto;min-width:0;line-height:1.25;padding-top:7px}
 #crew{color:#e9d2ff}
 #snd{flex:0 0 auto;white-space:nowrap}
-.hud button{
-  pointer-events:auto;
-  background:rgba(40,12,80,.55);
-  color:var(--ink);
-  border:1px solid rgba(255,255,255,.25);
+.snd-badge{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:rgba(40,12,80,.6);
+  border:1px solid rgba(220,188,255,.35);
   border-radius:999px;
-  padding:6px 12px;
-  min-height:32px;
+  padding:5px 12px;
+  min-height:30px;
   font:500 12px "DM Sans",sans-serif;
-  cursor:pointer;
-  transition:all .25s ease;
+  color:#f0d8ff;
+  pointer-events:none;
 }
-.hud button:hover{background:rgba(70,22,130,.85);border-color:#dcbcff}
+.eq-bar{
+  display:inline-block;
+  width:2.5px;
+  height:10px;
+  background:#f0d8ff;
+  border-radius:1px;
+  animation:eq 1s ease-in-out infinite alternate;
+}
+.eq-bar:nth-child(2){animation-delay:.2s;height:14px}
+.eq-bar:nth-child(3){animation-delay:.4s;height:8px}
+.eq-bar:nth-child(4){animation-delay:.6s;height:12px}
+@keyframes eq{to{transform:scaleY(.3)}}
 @media (max-width:420px){.hud{font-size:11px}.hud>span:first-child{max-width:34%}}
+
+/* Fullscreen Audio Gate / Lock Modal */
+#audio-gate{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:radial-gradient(ellipse at center, rgba(32,12,65,0.96) 0%, rgba(6,3,14,0.98) 100%);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  opacity:1;
+  transition:opacity .7s cubic-bezier(.2,.8,.2,1), visibility .7s;
+}
+#audio-gate.hide{
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+}
+.gate-card{
+  max-width:390px;
+  width:100%;
+  text-align:center;
+  color:#f5edff;
+  padding:36px 24px;
+  border-radius:32px;
+  border:1px solid rgba(220,188,255,.35);
+  box-shadow:0 0 50px rgba(168,85,247,.4), inset 0 0 30px rgba(168,85,247,.15);
+  background:rgba(20,8,40,.65);
+}
+.gate-stars{font-size:26px;color:#f0d8ff;margin-bottom:12px;filter:drop-shadow(0 0 10px #c06bff)}
+.gate-title{font-family:"Cormorant Garamond",Georgia,serif;font-size:clamp(30px,7.5vw,40px);margin:0 0 .2em;color:#fdfaff;text-shadow:0 0 24px rgba(192,120,255,.9)}
+.gate-subtitle{font-family:"DM Sans",sans-serif;font-size:16px;color:#d8bbf7;margin:0 0 1.2em;letter-spacing:.05em}
+.gate-desc{font-size:18px;line-height:1.55;color:#e8ddfa;margin:0 0 .9em}
+.gate-hint{font-size:16px;color:#ffdfb8;margin:0 0 1.6em;font-weight:600}
+.gate-btn{
+  font:600 16px/1 "DM Sans",sans-serif;
+  letter-spacing:.03em;
+  padding:16px 32px;
+  min-height:52px;
+  border-radius:999px;
+  color:#fff;
+  background:linear-gradient(135deg,#a855f7,#ec4899);
+  border:1px solid #ffd4ff;
+  box-shadow:0 0 26px rgba(168,85,247,.7);
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  transition:all .25s ease;
+  animation:gatePulse 2s infinite alternate;
+}
+@keyframes gatePulse{
+  from{box-shadow:0 0 18px rgba(168,85,247,.5);transform:scale(1)}
+  to{box-shadow:0 0 34px rgba(236,72,153,.85);transform:scale(1.04)}
+}
+.gate-btn:hover{transform:scale(1.06);box-shadow:0 0 40px rgba(236,72,153,1)}
+.gate-note{font:500 12px "DM Sans",sans-serif;color:rgba(214,199,242,.7);margin-top:16px}
 
 /* Main Viewport Container inside Mobile Frame */
 main{
@@ -131,7 +205,8 @@ main{
   align-items:center;
   justify-content:center;
   pointer-events:none;
-  padding:calc(env(safe-area-inset-top,0px) + 60px) 20px calc(env(safe-area-inset-bottom,0px) + 24px);
+  padding:calc(env(safe-area-inset-top,0px) + 54px) 24px calc(env(safe-area-inset-bottom,0px) + 24px);
+  box-sizing:border-box;
 }
 
 /* In-place fading section (NO card box around text) */
@@ -146,8 +221,10 @@ main{
   visibility:hidden;
   transform:translateY(16px);
   filter:blur(8px);
-  transition:opacity .75s cubic-bezier(.2,.8,.2,1),transform .75s cubic-bezier(.2,.8,.2,1),filter .75s cubic-bezier(.2,.8,.2,1);
+  transition:opacity .6s cubic-bezier(.2,.8,.2,1),transform .6s cubic-bezier(.2,.8,.2,1),filter .6s cubic-bezier(.2,.8,.2,1);
   will-change:opacity,transform,filter;
+  padding:8px 12px;
+  box-sizing:border-box;
 }
 .sc[hidden]{display:none}
 .sc.in{opacity:1;visibility:visible;transform:translateY(0);filter:none;pointer-events:auto}
@@ -160,31 +237,46 @@ main{
   background:none;
   border:none;
   box-shadow:none;
-  padding:0;
+  padding:0 8px;
 }
-.card h1,.card h2,.card p,.card .note{
-  opacity:0;
-  filter:blur(8px);
-  transform:translateY(12px);
-  transition:opacity 1.1s cubic-bezier(.2,.8,.2,1),filter 1.1s cubic-bezier(.2,.8,.2,1),transform 1.1s cubic-bezier(.2,.8,.2,1);
-}
-.sc.in .card h1,.sc.in .card h2,.sc.in .card p,.sc.in .card .note,
-.card.in h1,.card.in h2,.card.in p,.card.in .note{
-  opacity:1;
-  filter:none;
-  transform:none;
-}
-.sc.in .card>:nth-child(2),.card.in>:nth-child(2){transition-delay:.4s}
-.sc.in .card>:nth-child(3),.card.in>:nth-child(3){transition-delay:.9s}
-.sc.in .card>:nth-child(4),.card.in>:nth-child(4){transition-delay:1.4s}
-.sc.in .card>:nth-child(5),.card.in>:nth-child(5){transition-delay:1.9s}
-
 .card h1,.card h2{color:#f7edff;text-shadow:0 0 22px rgba(192,120,255,.85),0 1px 3px #000}
-h1,h2{font-style:normal;font-weight:500;line-height:1.15;margin:0 0 .45em;letter-spacing:.01em}
-h1{font-size:clamp(32px,8vw,42px)}
-h2{font-size:clamp(26px,6.8vw,34px)}
-.card p{margin:0 0 .75em}
-.note{font-size:.8em;color:var(--soft);margin-top:1em}
+h1,h2{font-style:normal;font-weight:500;line-height:1.2;margin:0 0 .55em;letter-spacing:.01em}
+h1{font-size:clamp(30px,7.5vw,40px)}
+h2{font-size:clamp(25px,6.5vw,33px)}
+.card p{margin:0 0 .9em;font-size:clamp(17px,4.5vw,21px);line-height:1.55}
+.note{font-size:.85em;color:var(--soft);margin-top:1.1em;line-height:1.45}
+
+/* Typewriter Cursor */
+.tw-cur{
+  display:inline-block;
+  color:#ead4ff;
+  font-weight:300;
+  animation:curBlink .7s infinite;
+  margin-left:2px;
+  text-shadow:0 0 8px #d68aff;
+}
+@keyframes curBlink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Step Button */
+.step-btn{
+  margin-top:16px;
+  padding:10px 24px;
+  font:500 14px "DM Sans",sans-serif;
+  min-height:42px;
+  background:rgba(120,50,200,.45);
+  border:1px solid rgba(220,188,255,.5);
+  box-shadow:0 0 16px rgba(168,85,247,.35);
+  border-radius:999px;
+  color:#fff;
+  cursor:pointer;
+  transition:all .25s ease;
+  pointer-events:auto;
+}
+.step-btn:hover{
+  background:rgba(168,85,247,.7);
+  box-shadow:0 0 24px rgba(168,85,247,.7);
+  transform:translateY(-2px);
+}
 
 button{
   font:500 15px "DM Sans",sans-serif;
@@ -322,6 +414,50 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 /* WhatsApp Share Button */
 .wa-btn{display:inline-flex;align-items:center;gap:8px;margin-top:10px;background:linear-gradient(135deg,#25D366,#128C7E);border-color:#a3ffc7;box-shadow:0 0 16px rgba(37,211,102,.5)}
 
+/* Diwali Fireworks & Cracker Styles */
+.diwali-flash{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+  pointer-events:none;
+  background:radial-gradient(circle at center, rgba(255,200,80,.45) 0%, rgba(168,85,247,.3) 50%, transparent 80%);
+  animation:dFlash 1.8s ease-out forwards;
+}
+@keyframes dFlash{
+  0%{opacity:0}
+  20%{opacity:1}
+  100%{opacity:0}
+}
+.diwali-rocket{
+  position:fixed;
+  width:5px;
+  height:18px;
+  border-radius:3px;
+  background:linear-gradient(to top,#fff,#ffd700,#ff4500);
+  box-shadow:0 0 12px #ffbb00,0 8px 14px #ff3300;
+  z-index:9998;
+  pointer-events:none;
+}
+.diwali-spark{
+  position:fixed;
+  font-size:18px;
+  pointer-events:none;
+  z-index:9998;
+  filter:drop-shadow(0 0 8px currentColor);
+}
+
+/* Exciting Gift Unwrap Explosion */
+.gift-unwrap{
+  animation:giftExplode .55s cubic-bezier(.2,.8,.3,1.4) forwards;
+}
+@keyframes giftExplode{
+  0%{transform:scale(1) rotate(0deg)}
+  25%{transform:scale(1.3) rotate(-15deg)}
+  50%{transform:scale(1.5) rotate(15deg)}
+  75%{transform:scale(1.85) rotate(-8deg);filter:drop-shadow(0 0 35px #ffe3a3)}
+  100%{transform:scale(2.4);opacity:0}
+}
+
 @media (prefers-reduced-motion:reduce){.sc{transition:none;opacity:1;filter:none;transform:none}.big,.ms,.rn,.party div{animation:none}}
 </style>
 </head>
@@ -329,10 +465,33 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 <canvas id="cv" aria-hidden="true"></canvas>
 <div class="tint" aria-hidden="true"></div>
 
-<!-- Desktop Ambient Scroll Hint -->
-<div class="desktop-scroll-hint">✦ Scroll on trackpad or mouse to journey through the universe ✦</div>
+<!-- Background Audio Player (Loops seamlessly) -->
+<audio id="bgm" preload="auto" loop playsinline>
+  <source src="./assets/audio/background-music.mp3" type="audio/mpeg">
+  <source src="./song/nav 1.mp3" type="audio/mpeg">
+</audio>
 
-<!-- Virtual Scroll Track (Drives native scroll momentum on both desktop and mobile) -->
+<!-- Audio Permission Gate Modal (Locks universe until user enters with music) -->
+<div id="audio-gate">
+  <div class="gate-card">
+    <div class="gate-stars">✦ 💜 ✦</div>
+    <h1 class="gate-title">A Universe Made for You</h1>
+    <p class="gate-subtitle">For Jinnie 💜</p>
+    <p class="gate-desc">Every star in this sky, every late-night conversation, and every melody was crafted just for you.</p>
+    <p class="gate-hint">Turn up your volume, take a slow breath…</p>
+    <button id="gate-btn" class="gate-btn">
+      <span>🎵</span>
+      <span>Enter with Music</span>
+      <span>✦</span>
+    </button>
+    <div class="gate-note">♪ Music will play continuously across the cosmos</div>
+  </div>
+</div>
+
+<!-- Desktop Ambient Scroll Hint -->
+<div class="desktop-scroll-hint">✦ Click Continue ↓ or scroll to journey through the universe ✦</div>
+
+<!-- Virtual Scroll Track -->
 <div id="track"></div>
 
 <!-- Mobile View Frame: Constrains the experience to a mobile viewport on laptop/desktop -->
@@ -343,7 +502,13 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
   <div class="hud">
     <span>🚀 <b id="ly">0</b> light-years from home</span>
     <span id="crew">💜 <b id="fc">0</b>/7 ARMY crew</span>
-    <button id="snd">♪ Sound off</button>
+    <div id="snd-badge" class="snd-badge" title="Continuous background music playing with love">
+      <span>♪</span>
+      <span class="eq-bar"></span>
+      <span class="eq-bar"></span>
+      <span class="eq-bar"></span>
+      <span>Playing 💜</span>
+    </div>
   </div>
 
   <!-- Fixed Viewport: Pure floating starlight text that fades without going down -->
@@ -363,6 +528,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <p>We met online, through my classmate’s sister.</p>
         <p>Never face to face. Only glowing screens, late into the night.</p>
         <p>And you: nonchalant, a little dramatic, impossible to ignore. ✦</p>
+        <button class="step-btn">Continue ↓</button>
       </div>
     </section>
 
@@ -372,6 +538,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <p>No fairy-tale beginning.</p>
         <p>Five days in, we crashed like two clouds of gas. You were rude. I was blunt.</p>
         <p>Then, a cold silence. ❄️</p>
+        <button class="step-btn">Continue ↓</button>
       </div>
     </section>
 
@@ -381,6 +548,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <p>A gamma-ray burst is the brightest explosion in the universe.</p>
         <p>That argument felt like one.</p>
         <p>You were hurt, and neither of us was innocent. 🥀</p>
+        <button class="step-btn">Continue ↓</button>
       </div>
     </section>
 
@@ -390,6 +558,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <p>You blocked me.</p>
         <p>Not even light escapes a black hole.</p>
         <p>That’s how that silence felt.</p>
+        <button class="step-btn">Continue ↓</button>
       </div>
     </section>
 
@@ -398,6 +567,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <h2>A planet where nothing speaks</h2>
         <p>Cold. Quiet. Still.</p>
         <p>A world with no one left to answer.</p>
+        <button class="step-btn">Continue ↓</button>
       </div>
     </section>
 
@@ -408,6 +578,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <p>But you unblocked me. You came back.</p>
         <p>Not a movie scene, just a second chance. To me, your Bewakuf, it meant the world. 💜</p>
         <div class="note">✦ our doorway: the Magic Shop, where warm hearts find comfort</div>
+        <button class="step-btn">Continue ↓</button>
       </div>
     </section>
 
@@ -417,6 +588,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <p>Five months of quietly becoming the best part of my ordinary days.</p>
         <p>Your dramatic reactions. Our inside jokes. 3 a.m. thoughts.</p>
         <p>I’ve genuinely fallen for your vibe. 🥹</p>
+        <button class="step-btn">Continue ↓</button>
       </div>
     </section>
 
@@ -426,6 +598,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <p>Five stars carry messages for you. Tap them. ✦</p>
         <div id="arena"></div>
         <div class="msg" id="sm">Tap a star…</div>
+        <button class="step-btn" id="to-cake-btn">Make a Wish on the Cake 🎂</button>
       </div>
     </section>
 
@@ -466,6 +639,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
         <p>I don’t know what the future holds, and I won’t pretend five months online means I know everything about you.</p>
         <p>But on your eighteenth birthday, I wanted to say what has been quietly growing in my heart.</p>
         <p><b>I like you, Jinnie. Truly, honestly, more than a friend.</b></p>
+        <button class="step-btn" id="letter-next-btn">What does your star say? ✦</button>
       </div>
     </section>
 
@@ -643,7 +817,123 @@ var O = {
     var p=Math.pow(Math.max(0,Math.sin(t*1.6)),6);glow(x,y,R*(.7+p*.5),'rgba(255,255,255,'+(.6+p*.4)+')','rgba(120,180,255,0)');g.save();g.translate(x,y);g.rotate(-.55);var L=R*2.6,q=g.createLinearGradient(-L,0,L,0);q.addColorStop(0,'rgba(150,200,255,0)');q.addColorStop(.5,'rgba(200,230,255,'+(.5+p*.5)+')');q.addColorStop(1,'rgba(150,200,255,0)');g.fillStyle=q;var h=R*.07*(1+p*3);g.fillRect(-L,-h,L*2,h*2);g.restore();ring(x,y,R,t,'rgba(160,210,255,A)')
   },
   bh: function(x,y,R,t){
-    glow(x,y,R*1.5,'rgba(255,140,60,.18)','rgba(0,0,0,0)');g.save();g.translate(x,y);g.rotate(-.22);g.scale(1,.3);for(var i=0;i<7;i++){g.strokeStyle='hsla('+(25+i*14)+',95%,'+(62-i*3)+'%,.85)';g.lineWidth=R*.05;g.setLineDash([R*.5,R*.12]);g.lineDashOffset=-t*30*(1+i*.3);g.beginPath();g.arc(0,0,R*(.8+i*.1),0,6.283);g.stroke()}g.restore();g.setLineDash([]);g.fillStyle='#000';g.beginPath();g.arc(x,y,R*.5,0,6.283);g.fill();g.strokeStyle='rgba(255,200,140,.9)';g.lineWidth=2;g.stroke();g.strokeStyle='rgba(255,170,90,.6)';g.lineWidth=R*.06;g.beginPath();g.arc(x,y,R*.62,Math.PI*1.1,Math.PI*1.9);g.stroke()
+    var cx=x, cy=y;
+    // 1. Relativistic Spacetime Lensing Gradient (darkening + space warping)
+    var lensedSpace = g.createRadialGradient(cx, cy, R * 0.35, cx, cy, R * 2.5);
+    lensedSpace.addColorStop(0, 'rgba(0, 0, 0, 0.98)');
+    lensedSpace.addColorStop(0.3, 'rgba(12, 4, 28, 0.85)');
+    lensedSpace.addColorStop(0.65, 'rgba(28, 10, 52, 0.45)');
+    lensedSpace.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    g.fillStyle = lensedSpace;
+    g.beginPath();
+    g.arc(cx, cy, R * 2.5, 0, Math.PI * 2);
+    g.fill();
+
+    // 2. Gravitational Einstein Ring / Background Starlight Warping
+    var einsteinGrad = g.createRadialGradient(cx, cy, R * 0.85, cx, cy, R * 1.35);
+    einsteinGrad.addColorStop(0, 'rgba(255, 180, 80, 0)');
+    einsteinGrad.addColorStop(0.5, 'rgba(255, 200, 120, 0.28)');
+    einsteinGrad.addColorStop(0.8, 'rgba(180, 140, 255, 0.15)');
+    einsteinGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
+    g.fillStyle = einsteinGrad;
+    g.beginPath();
+    g.arc(cx, cy, R * 1.35, 0, Math.PI * 2);
+    g.fill();
+
+    g.save();
+    g.translate(cx, cy);
+    g.rotate(-0.25);
+
+    // 3. UPPER LENSED ACCRETION ARCH (Light from the back of the disk bent over the top)
+    g.save();
+    g.scale(1, 0.82);
+    for (var a = 0; a < 6; a++) {
+      var archR = R * (0.55 + a * 0.08);
+      var archGrad = g.createLinearGradient(-archR, 0, archR, 0);
+      archGrad.addColorStop(0, 'rgba(255, 245, 210, ' + (0.75 - a * 0.1) + ')');
+      archGrad.addColorStop(0.35, 'rgba(255, 175, 70, ' + (0.85 - a * 0.1) + ')');
+      archGrad.addColorStop(0.7, 'rgba(220, 80, 50, ' + (0.45 - a * 0.07) + ')');
+      archGrad.addColorStop(1, 'rgba(160, 40, 70, 0)');
+      g.strokeStyle = archGrad;
+      g.lineWidth = R * (0.05 + a * 0.02);
+      g.beginPath();
+      g.arc(0, -R * 0.06, archR, Math.PI * 0.95, Math.PI * 2.05);
+      g.stroke();
+    }
+    g.restore();
+
+    // 4. LOWER LENSED ACCRETION ARCH (Light from underside bent downward)
+    g.save();
+    g.scale(1, 0.45);
+    for (var b = 0; b < 3; b++) {
+      var bArchR = R * (0.6 + b * 0.09);
+      var bGrad = g.createLinearGradient(-bArchR, 0, bArchR, 0);
+      bGrad.addColorStop(0, 'rgba(255, 220, 150, ' + (0.5 - b * 0.12) + ')');
+      bGrad.addColorStop(0.5, 'rgba(230, 110, 40, ' + (0.4 - b * 0.1) + ')');
+      bGrad.addColorStop(1, 'rgba(120, 30, 50, 0)');
+      g.strokeStyle = bGrad;
+      g.lineWidth = R * (0.04 + b * 0.02);
+      g.beginPath();
+      g.arc(0, R * 0.15, bArchR, Math.PI * 0.08, Math.PI * 0.92);
+      g.stroke();
+    }
+    g.restore();
+
+    // 5. PHOTON SPHERE RING (Boundary where photons orbit)
+    g.strokeStyle = 'rgba(255, 255, 255, 0.92)';
+    g.lineWidth = 2.2;
+    g.beginPath();
+    g.arc(0, 0, R * 0.44, 0, Math.PI * 2);
+    g.stroke();
+
+    g.strokeStyle = 'rgba(255, 220, 160, 0.55)';
+    g.lineWidth = R * 0.04;
+    g.beginPath();
+    g.arc(0, 0, R * 0.46, 0, Math.PI * 2);
+    g.stroke();
+
+    // 6. EVENT HORIZON & GRAVITATIONAL SHADOW (Pitch Black Singularity)
+    g.fillStyle = '#000000';
+    g.beginPath();
+    g.arc(0, 0, R * 0.42, 0, Math.PI * 2);
+    g.fill();
+
+    // 7. PRIMARY EQUATORIAL ACCRETION DISK (Crossing in front with Doppler beaming)
+    g.save();
+    g.scale(1, 0.28);
+    for (var i = 0; i < 9; i++) {
+      var diskR = R * (0.58 + i * 0.11);
+      var diskGrad = g.createLinearGradient(-diskR * 1.2, 0, diskR * 1.2, 0);
+      diskGrad.addColorStop(0, 'rgba(255, 255, 255, ' + (0.95 - i * 0.08) + ')');
+      diskGrad.addColorStop(0.2, 'rgba(255, 220, 120, ' + (0.9 - i * 0.08) + ')');
+      diskGrad.addColorStop(0.5, 'rgba(255, 140, 50, ' + (0.75 - i * 0.07) + ')');
+      diskGrad.addColorStop(0.8, 'rgba(200, 60, 40, ' + (0.4 - i * 0.04) + ')');
+      diskGrad.addColorStop(1, 'rgba(100, 20, 50, 0)');
+      
+      g.strokeStyle = diskGrad;
+      g.lineWidth = R * (0.07 + (8 - i) * 0.015);
+      g.setLineDash([R * (0.4 + i * 0.05), R * (0.08 + i * 0.03)]);
+      g.lineDashOffset = -t * 24 * (1.6 - i * 0.08);
+      
+      g.beginPath();
+      g.arc(0, 0, diskR, 0, Math.PI * 2);
+      g.stroke();
+    }
+    g.setLineDash([]);
+    g.restore();
+
+    // 8. Relativistic Hotspot on Approaching Edge
+    var hotSpot = g.createRadialGradient(-R * 0.55, 0, 0, -R * 0.55, 0, R * 0.35);
+    hotSpot.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+    hotSpot.addColorStop(0.35, 'rgba(255, 225, 140, 0.7)');
+    hotSpot.addColorStop(0.7, 'rgba(255, 120, 40, 0.25)');
+    hotSpot.addColorStop(1, 'rgba(255, 60, 40, 0)');
+    g.fillStyle = hotSpot;
+    g.beginPath();
+    g.arc(-R * 0.55, 0, R * 0.35, 0, Math.PI * 2);
+    g.fill();
+
+    g.restore();
   },
   dead: function(x,y,R,t){
     var q=g.createRadialGradient(x-R*.3,y-R*.3,R*.1,x,y,R*.85);q.addColorStop(0,'#9aa0ad');q.addColorStop(.6,'#3a3f4c');q.addColorStop(1,'#0b0d14');g.fillStyle=q;g.beginPath();g.arc(x,y,R*.85,0,6.283);g.fill();[[-.3,-.2,.18],[.25,.1,.22],[-.1,.38,.12],[.38,-.35,.1]].forEach(function(c){g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.arc(x+c[0]*R,y+c[1]*R,c[2]*R,0,6.283);g.fill()});g.strokeStyle='rgba(0,0,0,.7)';g.lineWidth=2;g.beginPath();g.moveTo(x-R*.1,y-R*.8);g.lineTo(x+R*.05,y-R*.3);g.lineTo(x-R*.12,y+R*.05);g.lineTo(x+R*.1,y+R*.5);g.lineTo(x,y+R*.84);g.stroke();for(var i=0;i<18;i++){var a=i*.35+t*.1;g.fillStyle='rgba(150,155,170,.55)';g.fillRect(x+Math.cos(a)*R*1.25,y+Math.sin(a)*R*.3,2,2)}
@@ -707,54 +997,134 @@ addEventListener('pointerdown', function(e){
 });
 
 /* ========================================================
-   IN-PLACE FADING SCROLL CONTROLLER (WITHOUT GOING DOWN)
+/* ========================================================
+   DISCRETE STEP CONTROLLER & TYPEWRITER ENGINE
    ======================================================== */
-var currentStep = 0, cakeLocked = true, cakeShown = false;
+var currentStep = 0, cakeLocked = true, cakeShown = false, giftLocked = true, gateOpened = false;
 
 function getSections(){
   return [].slice.call(document.querySelectorAll('.sc')).filter(function(s){ return !s.hidden; });
 }
 
-function updateStepFromScroll(){
+/* Streaming Typewriter Engine (Flows continuously line-by-line) */
+var twTimer = null;
+function startTypewriter(sectionEl, onDone){
+  if(twTimer){ clearTimeout(twTimer); twTimer = null; }
+  var items = [].slice.call(sectionEl.querySelectorAll('.card h1, .card h2, .card p, .card .note'));
+  if(!items.length){ if(onDone) onDone(); return; }
+
+  if(sectionEl._hasTyped){
+    items.forEach(function(it){
+      if(it._origText !== undefined) it.textContent = it._origText;
+      it.style.opacity = '1';
+      it.style.filter = 'none';
+      it.style.transform = 'none';
+    });
+    var btn = sectionEl.querySelector('.step-btn, #go');
+    if(btn) btn.style.opacity = '1';
+    if(onDone) onDone();
+    return;
+  }
+
+  items.forEach(function(it){
+    if(it._origText === undefined) it._origText = it.textContent.trim();
+    it.textContent = '';
+    it.style.opacity = '1';
+    it.style.filter = 'none';
+    it.style.transform = 'none';
+  });
+
+  var btn = sectionEl.querySelector('.step-btn, #go');
+  if(btn){ btn.style.opacity = '0'; btn.style.transition = 'opacity .5s ease'; }
+
+  var curItem = 0, curChar = 0;
+  function finishAll(){
+    if(twTimer){ clearTimeout(twTimer); twTimer = null; }
+    items.forEach(function(it){
+      if(it._origText !== undefined) it.textContent = it._origText;
+    });
+    sectionEl._hasTyped = true;
+    if(btn) btn.style.opacity = '1';
+    if(onDone) onDone();
+  }
+
+  sectionEl._finishTyping = finishAll;
+  sectionEl.onclick = function(e){
+    if(e.target.closest('button, .ms, .cb, .big')) return;
+    if(!sectionEl._hasTyped) finishAll();
+  };
+
+  function typeNextChar(){
+    if(curItem >= items.length){
+      sectionEl._hasTyped = true;
+      if(btn) btn.style.opacity = '1';
+      if(onDone) onDone();
+      return;
+    }
+
+    var item = items[curItem];
+    var fullText = item._origText;
+    if(curChar < fullText.length){
+      curChar++;
+      item.innerHTML = fullText.slice(0, curChar) + '<span class="tw-cur">|</span>';
+      var ch = fullText[curChar - 1];
+      var delay = (ch === '.' || ch === '!' || ch === '?') ? 130 : (ch === ',' ? 65 : 18);
+      twTimer = setTimeout(typeNextChar, delay);
+    } else {
+      item.textContent = fullText;
+      curItem++;
+      curChar = 0;
+      twTimer = setTimeout(typeNextChar, 140);
+    }
+  }
+
+  typeNextChar();
+}
+
+function goToStep(idx){
   var secs = getSections();
   if(!secs.length) return;
-  var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-  var prog = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+  idx = Math.max(0, Math.min(secs.length - 1, idx));
+
+  // Gate & locks
+  var cakeIdx = secs.findIndex(function(s){ return s.id === 'cakesec'; });
+  if(cakeLocked && cakeIdx >= 0 && idx > cakeIdx) idx = cakeIdx;
   
-  // Cake lock: Stop at cake until candles are blown out
-  var cakeIndex = secs.findIndex(function(s){ return s.id === 'cakesec'; });
-  var cakeProg = cakeIndex >= 0 ? cakeIndex / (secs.length - 1) : 0.7;
+  var giftIdx = secs.findIndex(function(s){ return s.id === 'giftsec'; });
+  if(giftLocked && giftIdx >= 0 && idx > giftIdx && idx > (cakeIdx >= 0 ? cakeIdx : 0)) idx = giftIdx;
 
-  if(cakeLocked && prog > cakeProg){
-    window.scrollTo({ top: maxScroll * cakeProg, behavior: 'instant' });
-    prog = cakeProg;
-  }
-
-  var targetIdx = Math.min(secs.length - 1, Math.round(prog * (secs.length - 1)));
-  if(targetIdx !== currentStep){
-    currentStep = targetIdx;
-  }
+  currentStep = idx;
 
   secs.forEach(function(s, i){
-    var pk = s._pk;
     if(i === currentStep){
       s.classList.add('in');
       s.classList.remove('out');
-      // Trigger peek-a-boo
-      if(pk){
-        pk.classList.add('up');
-        if(!pk.dataset.s){
-          pk.dataset.s = 1;
-          setTimeout(function(){ say(pk, pk.dataset.l); }, 900);
+
+      // Corner sticker management: NEVER show in sections past narrative 8
+      if(i > 8 || s.id === 'cakesec' || s.id === 'giftsec' || s.id === 'decksec' || s.id === 'lettersec' || s.id === 'replysec'){
+        document.querySelectorAll('.pk').forEach(function(p){ p.classList.remove('up', 'say'); });
+      } else {
+        document.querySelectorAll('.pk').forEach(function(p){ p.classList.remove('up', 'say'); });
+        if(s._pk){
+          s._pk.classList.add('up');
+          if(!s._pk.dataset.s){
+            s._pk.dataset.s = 1;
+            setTimeout(function(){ say(s._pk, s._pk.dataset.l); }, 900);
+          }
         }
+      }
+
+      // Typewriter streaming on narrative steps
+      if(i <= 8 || s.id === 'lettersec'){
+        startTypewriter(s);
       }
     } else if(i < currentStep){
       s.classList.add('out');
       s.classList.remove('in');
-      if(pk) pk.classList.remove('up', 'say');
+      if(s._pk) s._pk.classList.remove('up', 'say');
     } else {
       s.classList.remove('in', 'out');
-      if(pk) pk.classList.remove('up', 'say');
+      if(s._pk) s._pk.classList.remove('up', 'say');
     }
   });
 
@@ -763,18 +1133,109 @@ function updateStepFromScroll(){
     cakeShown = true;
     startCakeGame();
   }
+
+  $('#ly').textContent = Math.round(currentStep * 1380).toLocaleString();
 }
 
-addEventListener('scroll', updateStepFromScroll, {passive: false});
+/* Audio Gate Permission Click Handler */
+$('#gate-btn').addEventListener('click', function(){
+  var bgm = $('#bgm');
+  if(bgm){
+    bgm.volume = 0.85;
+    bgm.play().catch(function(){});
+    bgm.loop = true;
+    bgm.addEventListener('ended', function(){
+      bgm.currentTime = 0;
+      bgm.play().catch(function(){});
+    });
+  }
+  $('#audio-gate').classList.add('hide');
+  setTimeout(function(){
+    $('#audio-gate').style.display = 'none';
+  }, 700);
+  gateOpened = true;
+  goToStep(0);
+  pop(700);
+});
+
+// Any user gesture resumes audio context and keeps music unpaused
+document.addEventListener('pointerdown', function(){
+  var bgm = $('#bgm');
+  if(gateOpened && bgm && bgm.paused){
+    bgm.play().catch(function(){});
+  }
+}, {passive: true});
+
+/* Discrete Step Button Click Listeners */
+document.querySelectorAll('.step-btn, #go').forEach(function(b){
+  b.addEventListener('click', function(e){
+    e.stopPropagation();
+    pop(650);
+    var secs = getSections();
+    if(b.id === 'to-cake-btn'){
+      var cIdx = secs.findIndex(function(s){ return s.id === 'cakesec'; });
+      if(cIdx >= 0) return goToStep(cIdx);
+    }
+    if(b.id === 'letter-next-btn'){
+      var rIdx = secs.findIndex(function(s){ return s.id === 'replysec'; });
+      if(rIdx >= 0) return goToStep(rIdx);
+    }
+    goToStep(currentStep + 1);
+  });
+});
+
+/* Discrete Wheel Scroll Listener (No slow fractional stopping!) */
+var wheelCooldown = 0;
+window.addEventListener('wheel', function(e){
+  if(!gateOpened) return;
+  if(cakeLocked && phase > 0 && phase < 4) return;
+  var now = performance.now();
+  if(now - wheelCooldown < 550) return;
+  if(Math.abs(e.deltaY) < 18) return;
+  wheelCooldown = now;
+  if(e.deltaY > 0){
+    goToStep(currentStep + 1);
+  } else {
+    goToStep(currentStep - 1);
+  }
+}, {passive: true});
+
+/* Discrete Touch Swipe Gesture Listener */
+var touchY0 = 0;
+window.addEventListener('touchstart', function(e){
+  if(e.touches && e.touches[0]) touchY0 = e.touches[0].clientY;
+}, {passive: true});
+window.addEventListener('touchend', function(e){
+  if(!gateOpened) return;
+  if(cakeLocked && phase > 0 && phase < 4) return;
+  if(!e.changedTouches || !e.changedTouches[0]) return;
+  var dy = touchY0 - e.changedTouches[0].clientY;
+  if(Math.abs(dy) > 38){
+    if(dy > 0) goToStep(currentStep + 1);
+    else goToStep(currentStep - 1);
+  }
+}, {passive: true});
+
+/* Keyboard Arrow Navigation */
+window.addEventListener('keydown', function(e){
+  if(!gateOpened) return;
+  if(cakeLocked && phase > 0 && phase < 4) return;
+  if(e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown'){
+    e.preventDefault();
+    goToStep(currentStep + 1);
+  } else if(e.key === 'ArrowUp' || e.key === 'PageUp'){
+    e.preventDefault();
+    goToStep(currentStep - 1);
+  }
+});
 
 /* Render Loop */
 function frame(ts){
   T = ts/1000;
-  var dv = scrollY - lastY; lastY = scrollY;
   drawNeb();
 
-  // Stars with scroll warp speed
-  var sp = .0015 + Math.abs(dv)*.0016, ln = Math.abs(dv)*.0016;
+  // Stars with ambient drift
+  var sp = .0016;
   ST.forEach(function(s){
     s.z -= sp;
     if(s.z <= .03){ s.z = 1; s.x = Math.random()*2-1; s.y = Math.random()*2-1; }
@@ -783,12 +1244,7 @@ function frame(ts){
     if(sx < -20 || sx > W+20 || sy < -20 || sy > H+20){ s.z = 1; s.x = Math.random()*2-1; s.y = Math.random()*2-1; return; }
     var al = Math.min(1, (1.05 - s.z)*1.1);
     g.strokeStyle = g.fillStyle = 'rgba(236,233,255,' + al + ')';
-    if(ln > .004){
-      var z2 = s.z + ln*(dv>0?1:-1), x2 = W/2 + s.x/z2*W*.45, y2 = H/2 + s.y/z2*W*.45;
-      g.lineWidth = 1.1; g.beginPath(); g.moveTo(sx, sy); g.lineTo(x2, y2); g.stroke();
-    } else {
-      g.fillRect(sx, sy, 1.6*(1.2 - s.z), 1.6*(1.2 - s.z));
-    }
+    g.fillRect(sx, sy, 1.6*(1.2 - s.z), 1.6*(1.2 - s.z));
   });
 
   // Draw active celestial object at center
@@ -801,19 +1257,9 @@ function frame(ts){
     o(W/2, cy, R, T);
   }
 
-  $('#ly').textContent = Math.round(scrollY * 9.46).toLocaleString();
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
-
-// Begin button smooth scroll to step 1
-$('#go').addEventListener('click', function(){
-  pop(600);
-  var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-  var secs = getSections();
-  var stepSize = maxScroll / (secs.length - 1);
-  window.scrollTo({ top: stepSize, behavior: reduce ? 'auto' : 'smooth' });
-});
 
 /* Message Stars Arena */
 var M = [
@@ -1078,23 +1524,36 @@ function openG(){
   var o = $('#open');
   if(o.disabled) return;
   o.disabled = true;
-  o.textContent = 'Gift opened ✨';
-  pop(900);
-  $('#gift').textContent = '✨';
-  burst(ctr($('#gift')), ['✨','💜','🎀'], 16, 150);
+  o.textContent = 'Unwrapping… ✨';
 
-  var dsec = $('#decksec');
-  if(dsec){
-    dsec.hidden = false;
-    setTimeout(function(){
-      var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+  var gBox = $('#gift');
+  gBox.classList.add('gift-unwrap');
+
+  // Ascending joyous fanfare
+  [523, 659, 784, 1047, 1319, 1568].forEach(function(f, i){
+    setTimeout(function(){ pop(f); }, i * 75);
+  });
+
+  // Massive explosion of particles & confetti
+  var pt = ctr(gBox);
+  burst(pt, ['🎁','💜','✨','💖','🌟','🎀','🎉','🎂'], 36, 220);
+  confetti(120);
+  rain(['💜','✨','🎁'], 30);
+
+  toast('🎉 Surprise Unlocked! 💜 6 things I adore about your soul...');
+
+  setTimeout(function(){
+    var dsec = $('#decksec');
+    if(dsec){
+      dsec.hidden = false;
+      giftLocked = false;
       var secs = getSections();
       var deckIdx = secs.findIndex(function(s){ return s.id === 'decksec'; });
       if(deckIdx >= 0){
-        window.scrollTo({ top: (deckIdx / (secs.length - 1)) * maxScroll, behavior: 'smooth' });
+        goToStep(deckIdx);
       }
-    }, 700);
-  }
+    }
+  }, 400);
 }
 $('#open').addEventListener('click', openG);
 $('#gift').addEventListener('click', openG);
@@ -1211,30 +1670,144 @@ function dDone(){
       s.removeAttribute('data-lock');
     });
     rain(['💜','💌','✨'], 30);
-    var maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
     var secs = getSections();
     var letIdx = secs.findIndex(function(s){ return s.id === 'lettersec'; });
     if(letIdx >= 0){
-      window.scrollTo({ top: (letIdx / (secs.length - 1)) * maxScroll, behavior: 'smooth' });
+      goToStep(letIdx);
     }
-  }, 1100);
+  }, 1000);
 }
 
-/* Response buttons & WhatsApp Share */
+/* ========================================================
+   DIWALI CRACKERS & CELEBRATION ENGINE
+   ======================================================== */
+function diwaliCelebration(callback){
+  // 1. Festive golden-purple cosmic screen flash
+  var fl = document.createElement('div');
+  fl.className = 'diwali-flash';
+  document.body.appendChild(fl);
+  setTimeout(function(){ fl.remove(); }, 1800);
+
+  // 2. Sequential Firework Rockets with audio whistle & detonation
+  var colors = ['#ffd700','#ff3366','#c06bff','#00ffcc','#ffffff','#ff7700','#ff69b4'];
+  var numRockets = 7;
+  
+  for(var r = 0; r < numRockets; r++){
+    (function(idx){
+      setTimeout(function(){
+        var destX = innerWidth * (0.15 + Math.random() * 0.7);
+        var destY = innerHeight * (0.12 + Math.random() * 0.38);
+        var startX = destX + (Math.random() * 60 - 30);
+        var startY = innerHeight + 20;
+
+        // Rising whistle sound
+        try{
+          if(AC){
+            var o = AC.createOscillator(), g = AC.createGain(), t = AC.currentTime;
+            o.frequency.setValueAtTime(260 + idx*50, t);
+            o.frequency.exponentialRampToValueAtTime(1100, t + 0.45);
+            g.gain.setValueAtTime(0.06, t);
+            g.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+            o.connect(g); g.connect(AC.destination);
+            o.start(); o.stop(t + 0.46);
+          }
+        }catch(e){}
+
+        var rk = document.createElement('div');
+        rk.className = 'diwali-rocket';
+        rk.style.left = startX + 'px';
+        rk.style.top = startY + 'px';
+        document.body.appendChild(rk);
+
+        rk.animate([
+          {transform: 'translate(0, 0) scale(1)', opacity: 1},
+          {transform: 'translate(' + (destX - startX) + 'px, ' + (destY - startY) + 'px) scale(0.6)', opacity: 1}
+        ], {duration: 480, easing: 'cubic-bezier(0.2, 0.7, 0.4, 1)'}).onfinish = function(){
+          rk.remove();
+          detonateDiwaliCracker(destX, destY, colors[idx % colors.length]);
+        };
+      }, idx * 280);
+    })(r);
+  }
+
+  // 3. Ground sparkles & celebratory Diyas
+  rain(['🪔','🎆','✨','💜','💖','🌟','🎇'], 45);
+  confetti(140);
+  toast('🎆 Happy Birthday, Jinnie! 💜✨ Diwali fireworks for you!');
+
+  // 4. Trigger callback after fireworks spectacle
+  setTimeout(function(){
+    if(callback) callback();
+  }, 2500);
+}
+
+function detonateDiwaliCracker(cx, cy, baseColor){
+  pop(220);
+  for(var c = 0; c < 8; c++){
+    setTimeout(function(){ pop(700 + Math.random()*900); }, 40 + c*35);
+  }
+
+  var numSparks = 34;
+  for(var i = 0; i < numSparks; i++){
+    var spark = document.createElement('span');
+    spark.className = 'diwali-spark';
+    spark.textContent = ['✦','✨','★','•'][i % 4];
+    spark.style.color = Math.random() < 0.3 ? '#ffffff' : baseColor;
+    spark.style.left = cx + 'px';
+    spark.style.top = cy + 'px';
+    document.body.appendChild(spark);
+
+    var angle = (i / numSparks) * Math.PI * 2 + (Math.random() - 0.5) * 0.3;
+    var dist = 80 + Math.random() * 110;
+    var vx = Math.cos(angle) * dist;
+    var vy = Math.sin(angle) * dist + 35;
+
+    (function(sp){
+      sp.animate([
+        {transform: 'translate(-50%, -50%) scale(1.6)', opacity: 1},
+        {transform: 'translate(calc(-50% + ' + vx + 'px), calc(-50% + ' + vy + 'px)) scale(0.4)', opacity: 0}
+      ], {duration: 1100 + Math.random() * 500, easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'}).onfinish = function(){
+        sp.remove();
+      };
+    })(spark);
+  }
+
+  burst([cx, cy], ['✨','💜','💥'], 6, 70);
+}
+
+/* Response buttons & Diwali WhatsApp Forward */
 var selectedReply = '';
-document.querySelectorAll('.ch2 button').forEach(function(b){
+document.querySelectorAll('.ch2 button').forEach(function(b, idx){
   b.addEventListener('click', function(){
     selectedReply = b.textContent;
     $('#ans').textContent = b.dataset.m;
     pop(800);
     burst(ctr(b), ['💜','✨'], 10, 110);
-    if(b.dataset.e) rain(['💜','💖','✨','🎉'], 36);
+
+    var isFirstOption = (idx === 0 || b.dataset.e);
+    var phone = '917310347742';
+    var textMessage = isFirstOption
+      ? '🌹 Jinnie chose:\n"I feel the same way 💜"\n\n✨ Happy 18th Birthday, Jinnie!\nSent to my Bewakuf 💜💫'
+      : ('🌹 Response from Jinnie:\n"' + selectedReply + '"\n\n' + b.dataset.m + '\nSent to my Bewakuf 💜');
+
+    var waUrl = 'https://api.whatsapp.com/send?phone=' + phone + '&text=' + encodeURIComponent(textMessage);
+
+    if(isFirstOption){
+      // Full Diwali fireworks celebration, then directly forward to WhatsApp
+      diwaliCelebration(function(){
+        window.open(waUrl, '_blank') || (window.location.href = waUrl);
+      });
+    } else {
+      rain(['💜','🌙','✨'], 30);
+    }
 
     $('#wa-container').style.display = 'block';
     $('#wa-btn').onclick = function(){
-      var msg = '🌹 Response from Jinnie:\n' + selectedReply + '\n' + b.dataset.m + '\nSent to my Bewakuf ✨';
-      window.open('https://wa.me/917310347742?text=' + encodeURIComponent(msg), '_blank');
+      window.open(waUrl, '_blank') || (window.location.href = waUrl);
     };
+    $('#wa-btn').innerHTML = isFirstOption
+      ? '📲 Forwarded to 7310347742 · Tap to open WhatsApp 💬'
+      : 'Send answer on WhatsApp 💬';
   });
 });
 
@@ -1338,10 +1911,11 @@ function collect(i, el){
   }
 }
 
-// Attach Peek-a-boo hiding members directly to sections inside mobile-frame
-var allSecs = [].slice.call(document.querySelectorAll('.sc'));
-allSecs.forEach(function(s, k){
-  if(s.id === 'cakesec') return;
+// Attach Peek-a-boo hiding members ONLY to narrative celestial sections (indices 0 to 8)
+var narrativeSecs = [].slice.call(document.querySelectorAll('.sc[data-o]')).filter(function(s){
+  return s.dataset.o && s.dataset.o !== 'none';
+});
+narrativeSecs.forEach(function(s, k){
   var c = k % 7, p = document.createElement('div');
   p.className = 'pk ' + (k % 2 ? 'l' : 'r');
   p.dataset.l = zL[k % zL.length];
@@ -1416,8 +1990,7 @@ addEventListener('scroll', function(){
   run(dy > 0);
 }, {passive: true});
 
-// Initial Step Sync
-updateStepFromScroll();
+// Initial Step: Ready behind audio permission gate
 })();
 </script>
 </body>
