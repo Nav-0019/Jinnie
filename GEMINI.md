@@ -34,8 +34,7 @@ This file serves as permanent memory for the Antigravity AI coding assistant. Wh
   - DO NOT re-add raw WhatsApp duplicate filenames (`WhatsApp Image...`).
 * **BTS Stickers & Chibi Badges**:
   - Served via direct Giphy animated stickers in `index.html`.
-  - Section 1 features the 7 BTS members in the bottom crowd lineup.
-  - Cards feature single cute companion sticker perched on the card's top-right corner.
+  - Cards feature single cute companion sticker perched on the card's top-right corner (bottom 7-member lineup removed for a cleaner look).
 
 ---
 

@@ -2431,30 +2431,8 @@
         setTimeout(function () { h.classList.remove('wob'); }, 1200);
       }, 9000);
 
-      // Section 1: The 7 ARMY Crew Lineup at the bottom of the Constellation card
+      // Narrative Cards: Attach one unique BTS member companion badge to each card (top corner)
       var allCards = document.querySelectorAll('.sc[data-o] .card');
-      if (allCards[1]) {
-        var cr = document.createElement('div');
-        cr.className = 'crowd';
-        for (var q = 0; q < 7; q++) {
-          var ci = document.createElement('div');
-          ci.className = 'ci';
-          ci.dataset.m = q;
-          ci.setAttribute('title', 'Tap ' + zN[q] + ' 💜');
-          ci.innerHTML = chibi(q);
-          (function (ci, q) {
-            ci.addEventListener('click', function (e) {
-              e.stopPropagation();
-              pop(520 + q * 65);
-              burst(ctr(ci), ['💜', '✨', '🌸'], 8, 80);
-              collect(q, ci);
-              toast(zN[q] + ': ' + rnd(ZL));
-            });
-          })(ci, q);
-          cr.appendChild(ci);
-        }
-        allCards[1].appendChild(cr);
-      }
 
       // Attach one unique BTS member companion badge to each narrative card (top corner)
       allCards.forEach(function (card, idx) {
