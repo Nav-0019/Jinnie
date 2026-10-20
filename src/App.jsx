@@ -1,233 +1,499 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { CosmicUniverse } from './scene/CosmicUniverse';
+import { UniverseCanvas } from './scene/UniverseCanvas';
+import { BTS_MEMBERS } from './utils/btsGifs';
+import {
+  BTSCrowd,
+  PeekMember,
+  CosmicWhale,
+  ScrollRunners,
+} from './components/BTSCrew';
+import { CakeGame } from './components/CakeGame';
+import { MessageStars } from './components/MessageStars';
+import { GiftSection } from './components/GiftSection';
+import { SwipeDeck } from './components/SwipeDeck';
+import { ConfessionCard } from './components/ConfessionCard';
+import {
+  pop,
+  toggleAmbientSound,
+  rainEmojis,
+} from './utils/audioSynth';
 import { storyContent } from './content/storyContent';
-import { AudioController } from './components/AudioController';
-import { ConstellationNav } from './components/ConstellationNav';
-import { StoryOverlays } from './components/StoryOverlays';
-import { SongConsentModal } from './components/SongConsentModal';
 
-const CAKE_LOCK_PROGRESS = 0.72;
+const CAKE_PROGRESS_LOCK = 0.82; // Milestone 9: Cake must be completed to unlock Gift & beyond
 
 export default function App() {
-  const canvasContainerRef = useRef(null);
-  const universeRef = useRef(null);
-
   const [currentProgress, setCurrentProgress] = useState(0);
-  const [isSongModalOpen, setIsSongModalOpen] = useState(false);
-  const [shouldPlayAudio, setShouldPlayAudio] = useState(false);
-  const [startUnmuted, setStartUnmuted] = useState(true);
+  const [scrollVelocity, setScrollVelocity] = useState(0);
+  const [isSoundOn, setIsSoundOn] = useState(false);
+  const [collectedMembers, setCollectedMembers] = useState([]);
+  const [showWhale, setShowWhale] = useState(false);
+  const [isScrollingFast, setIsScrollingFast] = useState(false);
+  const [scrollDir, setScrollDir] = useState(1);
+  const [toastText, setToastText] = useState(null);
 
-  // Cake blowing state & scroll lock
+  // Milestone unlock states
   const [candlesBlown, setCandlesBlown] = useState(false);
-  const [showCakeLockedNotice, setShowCakeLockedNotice] = useState(false);
+  const [giftOpened, setGiftOpened] = useState(false);
+  const [deckCompleted, setDeckCompleted] = useState(false);
+
   const candlesBlownRef = useRef(false);
-  const noticeTimerRef = useRef(null);
+  const lastScrollYRef = useRef(0);
+  const lastScrollTimeRef = useRef(0);
+  const fastScrollTimerRef = useRef(null);
 
-  const triggerCakeLockedNotice = useCallback(() => {
-    setShowCakeLockedNotice(true);
-    if (noticeTimerRef.current) clearTimeout(noticeTimerRef.current);
-    noticeTimerRef.current = setTimeout(() => {
-      setShowCakeLockedNotice(false);
-    }, 2800);
+  const showToast = useCallback((msg) => {
+    setToastText(msg);
+    setTimeout(() => {
+      setToastText(null);
+    }, 3200);
   }, []);
 
-  const handleCandlesBlown = useCallback(() => {
-    candlesBlownRef.current = true;
-    setCandlesBlown(true);
-    setShowCakeLockedNotice(false);
-    if (universeRef.current) {
-      universeRef.current.extinguishCandles();
-    }
-  }, []);
+  // Collect member logic
+  const handleCollectMember = useCallback(
+    (name) => {
+      setCollectedMembers((prev) => {
+        if (prev.includes(name)) return prev;
+        const updated = [...prev, name];
+        if (updated.length === 7) {
+          showToast('All seven found! ARMY + crew forever 💜');
+          setShowWhale(true);
+          rainEmojis(['💜', '✨', '🐋', '💖'], 40);
+        } else {
+          showToast(`You found ${name}! (${updated.length} of 7) 💜`);
+        }
+        return updated;
+      });
+    },
+    [showToast]
+  );
 
-  // Initialize Three.js Universe once
+  // Sound toggle
+  const handleToggleSound = () => {
+    const nextState = toggleAmbientSound();
+    setIsSoundOn(nextState);
+    pop(nextState ? 750 : 420);
+    showToast(nextState ? 'Sound on 🎶' : 'Sound off 🔇');
+  };
+
+  // Scroll listener: Calculates progress & enforces cake lock
   useEffect(() => {
-    if (!canvasContainerRef.current) return;
-
-    const universe = new CosmicUniverse(canvasContainerRef.current);
-    universeRef.current = universe;
+    lastScrollTimeRef.current = performance.now();
 
     const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      if (totalScroll > 0) {
-        let progress = Math.max(0, Math.min(1, window.scrollY / totalScroll));
+      const totalScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
+      if (totalScroll <= 0) return;
 
-        // MANDATORY SCROLL LOCK: Prevent scrolling past the 18th Birthday Cake until candles are blown
-        if (!candlesBlownRef.current && progress > CAKE_LOCK_PROGRESS) {
-          progress = CAKE_LOCK_PROGRESS;
-          window.scrollTo({ top: totalScroll * CAKE_LOCK_PROGRESS, behavior: 'instant' });
-          triggerCakeLockedNotice();
-        }
+      const now = performance.now();
+      const currentY = window.scrollY;
+      const dy = currentY - lastScrollYRef.current;
+      const dt = Math.max(10, now - lastScrollTimeRef.current);
+      const vel = (dy / dt) * 16;
 
-        setCurrentProgress(progress);
-        universe.setScrollProgress(progress);
+      lastScrollYRef.current = currentY;
+      lastScrollTimeRef.current = now;
+
+      setScrollVelocity(vel);
+      if (Math.abs(dy) > 40) {
+        setScrollDir(dy > 0 ? 1 : -1);
+        setIsScrollingFast(true);
+        if (fastScrollTimerRef.current) clearTimeout(fastScrollTimerRef.current);
+        fastScrollTimerRef.current = setTimeout(() => {
+          setIsScrollingFast(false);
+        }, 1200);
       }
-    };
 
-    // Intercept downward wheel, touch and key scrolls when at the cake
-    const handleWheel = (e) => {
-      if (!candlesBlownRef.current) {
-        const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const prog = window.scrollY / (totalScroll || 1);
-        if (prog >= CAKE_LOCK_PROGRESS - 0.008 && e.deltaY > 0) {
-          e.preventDefault();
-          triggerCakeLockedNotice();
-        }
+      let prog = Math.max(0, Math.min(1, currentY / totalScroll));
+
+      // MANDATORY CAKE LOCK: Prevent scrolling past Birthday Cake until 18 candles are blown
+      if (!candlesBlownRef.current && prog > CAKE_PROGRESS_LOCK) {
+        prog = CAKE_PROGRESS_LOCK;
+        window.scrollTo({
+          top: totalScroll * CAKE_PROGRESS_LOCK,
+          behavior: 'instant',
+        });
+        showToast('Blow out all 18 candles to unlock your surprise! 🎂');
       }
-    };
 
-    let touchStartY = 0;
-    const handleTouchStart = (e) => {
-      touchStartY = e.touches[0].clientY;
-    };
-
-    const handleTouchMove = (e) => {
-      if (!candlesBlownRef.current) {
-        const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const prog = window.scrollY / (totalScroll || 1);
-        const deltaY = touchStartY - e.touches[0].clientY; // upward drag = scrolling down
-        if (prog >= CAKE_LOCK_PROGRESS - 0.008 && deltaY > 0) {
-          e.preventDefault();
-          triggerCakeLockedNotice();
-        }
-      }
-    };
-
-    const handleKeyDown = (e) => {
-      if (!candlesBlownRef.current) {
-        const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-        const prog = window.scrollY / (totalScroll || 1);
-        if (
-          prog >= CAKE_LOCK_PROGRESS - 0.008 &&
-          ['ArrowDown', 'PageDown', ' ', 'End'].includes(e.key)
-        ) {
-          e.preventDefault();
-          triggerCakeLockedNotice();
-        }
-      }
+      setCurrentProgress(prog);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    window.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('keydown', handleKeyDown);
-
-    // Initial sync
     handleScroll();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('wheel', handleWheel);
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('keydown', handleKeyDown);
-      universe.destroy();
+      if (fastScrollTimerRef.current) clearTimeout(fastScrollTimerRef.current);
     };
-  }, [triggerCakeLockedNotice]);
-
-  // Enter the Universe clicked: show Song Consent Modal first
-  const handleStartJourney = () => {
-    setIsSongModalOpen(true);
-  };
-
-  // Agree to listen to his song
-  const handleAgreeAndPlaySong = () => {
-    setStartUnmuted(true);
-    setShouldPlayAudio(true);
-    setIsSongModalOpen(false);
-
-    // Smoothly scroll to Milestone 2 (progress ~ 0.12)
-    const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const targetY = totalScroll * 0.12;
-    window.scrollTo({ top: targetY, behavior: 'smooth' });
-  };
-
-  // Decline or choose silent mode
-  const handleDeclineSilence = () => {
-    setShouldPlayAudio(false);
-    setIsSongModalOpen(false);
-
-    // Smoothly scroll to Milestone 2
-    const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const targetY = totalScroll * 0.12;
-    window.scrollTo({ top: targetY, behavior: 'smooth' });
-  };
+  }, [showToast]);
 
   // Jump to specific milestone progress
-  const handleScrollToProgress = (targetProgress) => {
-    const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-    // If attempting to jump past cake while locked, clamp to cake
-    let safeProgress = targetProgress;
-    if (!candlesBlownRef.current && targetProgress > CAKE_LOCK_PROGRESS) {
-      safeProgress = CAKE_LOCK_PROGRESS;
-      triggerCakeLockedNotice();
+  const scrollToProgress = (targetProg) => {
+    const totalScroll =
+      document.documentElement.scrollHeight - window.innerHeight;
+    let safeProg = targetProg;
+    if (!candlesBlownRef.current && targetProg > CAKE_PROGRESS_LOCK) {
+      safeProg = CAKE_PROGRESS_LOCK;
+      showToast('Blow out all 18 candles first 🎂');
     }
-    const targetY = totalScroll * safeProgress;
-    window.scrollTo({ top: targetY, behavior: 'smooth' });
+    pop(600);
+    window.scrollTo({ top: totalScroll * safeProg, behavior: 'smooth' });
   };
 
-  // Replay experience: resets camera, interactions, and scrolls to top
-  const handleReplay = () => {
-    candlesBlownRef.current = false;
-    setCandlesBlown(false);
-    setShowCakeLockedNotice(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    if (universeRef.current) {
-      universeRef.current.resetCandles();
-      universeRef.current.resetGiftBox();
-      universeRef.current.setRoomLighting(false);
-      universeRef.current.setScrollProgress(0);
-    }
-    setCurrentProgress(0);
+  const handleBeginJourney = () => {
+    pop(650);
+    scrollToProgress(0.12);
   };
+
+  const handleCandlesFinished = () => {
+    candlesBlownRef.current = true;
+    setCandlesBlown(true);
+    showToast('Wish accepted! Surprise gift unlocked 🎁');
+  };
+
+  const handleGiftOpened = () => {
+    setGiftOpened(true);
+    showToast('Gift opened ✨ Swipe cards unlocked!');
+    setTimeout(() => {
+      scrollToProgress(0.94);
+    }, 800);
+  };
+
+  const handleDeckFinished = () => {
+    setDeckCompleted(true);
+    showToast('Letter unlocked 💌');
+    setTimeout(() => {
+      scrollToProgress(0.99);
+    }, 1000);
+  };
+
+  // Milestone Definitions for navigation dots
+  const MILESTONES_NAV = [
+    { title: 'The Beginning', prog: 0.02 },
+    { title: 'Six Months', prog: 0.12 },
+    { title: 'Day 5 Clash', prog: 0.21 },
+    { title: 'Explosion', prog: 0.30 },
+    { title: 'The Silence', prog: 0.39 },
+    { title: 'Dead Planet', prog: 0.48 },
+    { title: 'Magic Shop', prog: 0.57 },
+    { title: 'Five Months', prog: 0.66 },
+    { title: 'Message Stars', prog: 0.74 },
+    { title: 'Birthday Cake', prog: 0.82 },
+    { title: 'The Gift', prog: 0.89 },
+    { title: 'Soul Cards', prog: 0.94 },
+    { title: 'Confession', prog: 0.99 },
+  ];
+
+  const lightYears = Math.round(currentProgress * 8400 * 9.46);
 
   return (
-    <div className="cosmic-app-wrapper">
-      {/* Three.js Persistent 3D WebGL Canvas */}
-      <div ref={canvasContainerRef} className="cosmic-canvas-container" />
-
-      {/* Background Audio Controller (unmuted by default when agreed) */}
-      <AudioController
-        shouldPlay={shouldPlayAudio}
-        startUnmuted={startUnmuted}
+    <div className="universe-app-wrapper">
+      {/* 1. Procedural 2D Universe Canvas Background */}
+      <UniverseCanvas
+        scrollProgress={currentProgress}
+        scrollVelocity={scrollVelocity}
       />
 
-      {/* Subtle Constellation Progress Indicator */}
-      <ConstellationNav
-        milestones={storyContent.milestones}
-        currentProgress={currentProgress}
-        onSelectMilestone={handleScrollToProgress}
-      />
+      {/* 2. Fixed HUD at Top */}
+      <header className="hud">
+        <div className="hud-left">
+          <span className="hud-item">
+            🚀 <b>{lightYears.toLocaleString()}</b> light-years from home
+          </span>
+          <span className="hud-item">
+            💜 <b>{collectedMembers.length}</b>/7 ARMY crew
+          </span>
+        </div>
+        <div className="hud-right">
+          <button className="hud-btn" onClick={handleToggleSound}>
+            {isSoundOn ? '♪ Sound on' : '♪ Sound off'}
+          </button>
+        </div>
+      </header>
 
-      {/* Virtual Scroll Height to drive the 4–6 minute continuous journey */}
+      {/* 3. Constellation Navigation Dots */}
+      <nav
+        className="milestone-constellation-nav"
+        aria-label="Story chapters navigation"
+      >
+        {MILESTONES_NAV.map((m, idx) => {
+          const isActive =
+            Math.abs(currentProgress - m.prog) < 0.045 ||
+            (idx === 0 && currentProgress < 0.06);
+          return (
+            <button
+              key={idx}
+              className={`milestone-dot ${isActive ? 'active' : ''}`}
+              onClick={() => scrollToProgress(m.prog)}
+              title={m.title}
+            />
+          );
+        })}
+      </nav>
+
+      {/* 4. Runners sprint on scroll */}
+      <ScrollRunners isScrolling={isScrollingFast} direction={scrollDir} />
+
+      {/* 5. Cosmic Whale animation */}
+      {showWhale && <CosmicWhale onComplete={() => setShowWhale(false)} />}
+
+      {/* 6. Virtual Scroll Track to drive native smooth scrolling */}
       <div className="virtual-scroll-track" />
 
-      {/* Story Overlays, Interactions, Birthday Cake, Switch & Confession */}
-      <StoryOverlays
-        milestones={storyContent.milestones}
-        currentProgress={currentProgress}
-        onStartJourney={handleStartJourney}
-        universeRef={universeRef}
-        photos={storyContent.photos}
-        girlNickname={storyContent.personalization.girlNickname}
-        boyNickname={storyContent.personalization.boyNickname}
-        recipientPhone={storyContent.personalization.recipientPhone}
-        candlesBlown={candlesBlown}
-        onCandlesBlown={handleCandlesBlown}
-        showCakeLockedNotice={showCakeLockedNotice}
-        onReplay={handleReplay}
-        onScrollToProgress={handleScrollToProgress}
-      />
+      {/* 7. FIXED CENTRAL NARRATIVE OVERLAY (FADES WITHOUT GOING DOWN) */}
+      <main className="narrative-overlay-layer">
+        {/* MILESTONE 0: Opening Proem */}
+        <section
+          className={`overlay-card ${
+            currentProgress < 0.07 ? 'visible' : 'faded'
+          }`}
+        >
+          <h1>A Universe Made for You.</h1>
+          <p>
+            Some stars enter quietly. And somehow, you found your way back into
+            our sky.
+          </p>
+          <p>Turn up your sound, take a slow breath… and scroll. ✦</p>
+          <button className="btn-begin" onClick={handleBeginJourney}>
+            Begin ↓
+          </button>
 
-      {/* Song Consent Modal: Asks her to agree to play the song made to impress her */}
-      <SongConsentModal
-        isOpen={isSongModalOpen}
-        girlNickname={storyContent.personalization.girlNickname}
-        boyNickname={storyContent.personalization.boyNickname}
-        onAgreeAndPlay={handleAgreeAndPlaySong}
-        onDeclineSilence={handleDeclineSilence}
-      />
+          <BTSCrowd
+            onCollect={handleCollectMember}
+            collected={collectedMembers}
+          />
+        </section>
+
+        {/* MILESTONE 1: Across 6 Months of Distance */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.07 && currentProgress < 0.16
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <h2>Across six months of distance</h2>
+          <p>We met online, through my classmate’s sister.</p>
+          <p>Never face to face. Only glowing screens, late into the night.</p>
+          <p>And you: nonchalant, a little dramatic, impossible to ignore. ✦</p>
+
+          <PeekMember
+            memberIndex={0}
+            position="r"
+            hint="Psst… he built a whole universe for you 👀"
+            onCollect={handleCollectMember}
+            isCollected={collectedMembers.includes(BTS_MEMBERS[0].name)}
+          />
+        </section>
+
+        {/* MILESTONE 2: Day 5 - Collision */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.16 && currentProgress < 0.25
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <h2>Day 5: our collision</h2>
+          <p>No fairy-tale beginning.</p>
+          <p>
+            Five days in, we crashed like two clouds of gas. You were rude. I was
+            blunt.
+          </p>
+          <p>Then, a cold silence. ❄️</p>
+
+          <PeekMember
+            memberIndex={1}
+            position="l"
+            hint="Ooh, this part again? 🤭"
+            onCollect={handleCollectMember}
+            isCollected={collectedMembers.includes(BTS_MEMBERS[1].name)}
+          />
+        </section>
+
+        {/* MILESTONE 3: When Words Went Too Far */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.25 && currentProgress < 0.34
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <h2>When words went too far</h2>
+          <p>A gamma-ray burst is the brightest explosion in the universe.</p>
+          <p>That argument felt like one.</p>
+          <p>You were hurt, and neither of us was innocent. 🥀</p>
+
+          <PeekMember
+            memberIndex={2}
+            position="r"
+            hint="Scroll slower, we’re reading too! 📖"
+            onCollect={handleCollectMember}
+            isCollected={collectedMembers.includes(BTS_MEMBERS[2].name)}
+          />
+        </section>
+
+        {/* MILESTONE 4: And Then, The Dark */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.34 && currentProgress < 0.43
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <h2>And then, the dark</h2>
+          <p>You blocked me.</p>
+          <p>Not even light escapes a black hole.</p>
+          <p>That’s how that silence felt.</p>
+
+          <PeekMember
+            memberIndex={3}
+            position="l"
+            hint="We saw that smile 😏"
+            onCollect={handleCollectMember}
+            isCollected={collectedMembers.includes(BTS_MEMBERS[3].name)}
+          />
+        </section>
+
+        {/* MILESTONE 5: A Planet Where Nothing Speaks */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.43 && currentProgress < 0.52
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <h2>A planet where nothing speaks</h2>
+          <p>Cold. Quiet. Still.</p>
+          <p>A world with no one left to answer.</p>
+
+          <PeekMember
+            memberIndex={4}
+            position="r"
+            hint="Tap me. I dare you 💜"
+            onCollect={handleCollectMember}
+            isCollected={collectedMembers.includes(BTS_MEMBERS[4].name)}
+          />
+        </section>
+
+        {/* MILESTONE 6: Finding Your Way Back */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.52 && currentProgress < 0.61
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <h2>Finding your way back</h2>
+          <p>When two stars drift apart, they usually never cross paths again.</p>
+          <p>But you unblocked me. You came back.</p>
+          <p>
+            Not a movie scene, just a second chance. To me, your Bewakuf, it
+            meant the world. 💜
+          </p>
+          <div className="note">
+            ✦ our doorway: the Magic Shop, where warm hearts find comfort
+          </div>
+
+          <PeekMember
+            memberIndex={5}
+            position="l"
+            hint="This is the good part… 🌙"
+            onCollect={handleCollectMember}
+            isCollected={collectedMembers.includes(BTS_MEMBERS[5].name)}
+          />
+        </section>
+
+        {/* MILESTONE 7: The Conversations That Stayed */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.61 && currentProgress < 0.70
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <h2>The conversations that stayed</h2>
+          <p>
+            Five months of quietly becoming the best part of my ordinary days.
+          </p>
+          <p>Your dramatic reactions. Our inside jokes. 3 a.m. thoughts.</p>
+          <p>I’ve genuinely fallen for your vibe. 🥹</p>
+
+          <PeekMember
+            memberIndex={6}
+            position="r"
+            hint="Shhh, don’t tell her he’s blushing 🤫"
+            onCollect={handleCollectMember}
+            isCollected={collectedMembers.includes(BTS_MEMBERS[6].name)}
+          />
+        </section>
+
+        {/* MILESTONE 8: Message Stars */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.70 && currentProgress < 0.78
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <MessageStars />
+        </section>
+
+        {/* MILESTONE 9: 18th Birthday Cake (Lock active until candles blown) */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.78 && currentProgress < 0.86
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <CakeGame
+            isCompleted={candlesBlown}
+            onComplete={handleCandlesFinished}
+          />
+        </section>
+
+        {/* MILESTONE 10: The Mysterious Gift */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.86 && currentProgress < 0.92
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <GiftSection isOpened={giftOpened} onOpen={handleGiftOpened} />
+        </section>
+
+        {/* MILESTONE 11: Swipe Deck ("What I adore about your soul") */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.92 && currentProgress < 0.97
+              ? 'visible'
+              : 'faded'
+          }`}
+        >
+          <SwipeDeck
+            isUnlocked={deckCompleted}
+            onComplete={handleDeckFinished}
+          />
+        </section>
+
+        {/* MILESTONE 12: The Confession Letter & 3 Choices */}
+        <section
+          className={`overlay-card ${
+            currentProgress >= 0.97 ? 'visible' : 'faded'
+          }`}
+        >
+          <ConfessionCard
+            girlNickname={storyContent.personalization.girlNickname}
+            boyNickname={storyContent.personalization.boyNickname}
+            recipientPhone={storyContent.personalization.recipientPhone}
+          />
+        </section>
+      </main>
+
+      {/* Floating Toast notification */}
+      {toastText && <div className="toast">{toastText}</div>}
     </div>
   );
 }
