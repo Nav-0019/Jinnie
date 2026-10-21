@@ -1728,6 +1728,133 @@
       opacity: 0.95;
     }
 
+    .song-download-secondary {
+      background: linear-gradient(135deg, #7c3aed, #d946ef) !important;
+      border-color: #ffd4ff !important;
+    }
+
+    /* Dual Songs in Gift Section */
+    .gift-songs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+      margin: 4px 0 8px;
+    }
+
+    .gift-song-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(220, 188, 255, 0.28);
+      border-radius: 18px;
+      padding: 10px 12px;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all .25s ease;
+    }
+
+    .gift-song-card.downloaded {
+      border-color: #ffd4ff;
+      background: rgba(168, 85, 247, 0.18);
+      box-shadow: 0 0 16px rgba(168, 85, 247, 0.35);
+    }
+
+    .gift-song-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gift-song-icon {
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .gift-song-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .gift-song-title {
+      font: 600 14px/1.2 "DM Sans", sans-serif;
+      color: #ffe3a3;
+    }
+
+    .gift-song-sub {
+      font: 400 11px/1.3 "DM Sans", sans-serif;
+      color: #d6c7f2;
+      opacity: 0.9;
+    }
+
+    .gift-song-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .song-preview-btn {
+      width: 100%;
+      padding: 7px 14px;
+      font: 600 12px/1 "DM Sans", sans-serif;
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(216, 180, 254, 0.35);
+      border-radius: 999px;
+      color: #f3e8ff;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all .2s ease;
+      min-height: 32px;
+    }
+
+    .song-preview-btn:hover {
+      background: rgba(168, 85, 247, 0.3);
+      border-color: #ffe3a3;
+      color: #fff;
+    }
+
+    .song-preview-btn.playing {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.6), rgba(168, 85, 247, 0.6));
+      border-color: #ffd4ff;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(236, 72, 153, 0.6);
+    }
+
+    .gift-lock-hint {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font: 500 12px "DM Sans", sans-serif;
+      color: #ffdcb0;
+      margin: 2px 0 4px;
+      transition: all .3s ease;
+      text-align: center;
+    }
+
+    .gift-lock-hint.unlocked {
+      color: #a3ffc7;
+      text-shadow: 0 0 10px rgba(163, 255, 199, 0.7);
+    }
+
+    .gift-btn-locked {
+      background: linear-gradient(135deg, #371d50, #220e34) !important;
+      border: 1px dashed rgba(220, 188, 255, 0.38) !important;
+      color: #d1c4e9 !important;
+      box-shadow: none !important;
+      opacity: 0.9 !important;
+      cursor: pointer !important;
+    }
+
+    .gift-btn-locked:hover {
+      transform: none !important;
+      border-color: #ffd4ff !important;
+    }
+
     @media (prefers-reduced-motion:reduce) {
       .sc {
         transition: none;
@@ -1755,6 +1882,15 @@
     <source src="./public/audio/background-music.mp3" type="audio/mpeg">
     <source src="./audio/background-music.mp3" type="audio/mpeg">
     <source src="./docs/audio/background-music.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Gift Track 2: Jana Sun -->
+  <audio id="jana-audio" preload="none" playsinline>
+    <source src="./public/audio/jana-sun.mp3" type="audio/mpeg">
+    <source src="./audio/jana-sun.mp3" type="audio/mpeg">
+    <source src="./docs/audio/jana-sun.mp3" type="audio/mpeg">
+    <source src="./public/audio/Jana Sun.mp3" type="audio/mpeg">
+    <source src="./audio/Jana Sun.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Audio Permission Gate Modal (Locks universe until user enters with music) -->
@@ -2067,7 +2203,7 @@
             <button id="open">Open the gift 🎁</button>
           </div>
 
-          <!-- Revealed State: Song Written with Heart & 10 Days Dedication -->
+          <!-- Revealed State: Dual Songs Written & Dedicated with Love -->
           <div id="gift-revealed" class="song-gift-box" style="display:none;">
             <div class="song-vinyl-wrap">
               <div class="song-vinyl">
@@ -2075,32 +2211,67 @@
               </div>
             </div>
 
-            <div class="song-gift-tag">✦ 10 Days · Written with my whole heart ✦</div>
+            <div class="song-gift-tag">✦ Two Special Songs for Jinnie ✦</div>
 
-            <h2 style="font-size:clamp(19px, 5.2vw, 24px);margin:2px 0;color:#ffe3a3;">A Song Written Especially for You</h2>
+            <h2 style="font-size:clamp(18px, 5vw, 23px);margin:2px 0;color:#ffe3a3;">Songs for Your Universe</h2>
 
             <p class="song-gift-note">
-              I gave my absolute all every single day for 10 days straight to write and compose this song for you.
-              When ordinary words couldn't express what you mean to me, I poured all my feelings, memories, and unspoken thoughts into this melody.
-              It's yours forever, Jinnie. 💜
+              I gave my absolute all every day for 10 days writing your song, and added another special melody close to my heart.
+              Download them to keep with you forever and unlock the journey! 💜
             </p>
 
-            <div class="song-now-playing">
-              <span>♪ Playing in the stars right now</span>
-              <span class="eq-bar" style="height:10px;"></span>
-              <span class="eq-bar" style="height:14px;animation-delay:0.2s;"></span>
-              <span class="eq-bar" style="height:8px;animation-delay:0.4s;"></span>
+            <!-- Dual Songs List -->
+            <div class="gift-songs-list">
+              <!-- Song 1: A Song for Jinnie -->
+              <div class="gift-song-card" id="card-song-1">
+                <div class="gift-song-meta">
+                  <span class="gift-song-icon">🎵</span>
+                  <div class="gift-song-info">
+                    <div class="gift-song-title">1. A Song for Jinnie</div>
+                    <div class="gift-song-sub">Written in 10 days · Playing in background ♪</div>
+                  </div>
+                </div>
+                <a id="dl-song-btn" class="song-download-btn" href="./audio/background-music.mp3" download="A-Song-For-Jinnie.mp3">
+                  <span class="song-dl-icon">📥</span>
+                  <span class="song-dl-text">
+                    <span class="song-dl-main">Download "A Song for Jinnie"</span>
+                    <span class="song-dl-sub" id="dl-status-1">Original 10-day melody (.mp3) 💜</span>
+                  </span>
+                </a>
+              </div>
+
+              <!-- Song 2: Jana Sun -->
+              <div class="gift-song-card" id="card-song-2">
+                <div class="gift-song-meta">
+                  <span class="gift-song-icon">🌙</span>
+                  <div class="gift-song-info">
+                    <div class="gift-song-title">2. Jana Sun</div>
+                    <div class="gift-song-sub">Special gift track for your heart ✨</div>
+                  </div>
+                </div>
+                <div class="gift-song-actions">
+                  <button id="play-jana-btn" class="song-preview-btn" type="button">
+                    <span id="jana-play-icon">▶</span> <span id="jana-play-text">Listen to Jana Sun</span>
+                  </button>
+                  <a id="dl-song2-btn" class="song-download-btn song-download-secondary" href="./audio/jana-sun.mp3" download="Jana-Sun-For-Jinnie.mp3">
+                    <span class="song-dl-icon">📥</span>
+                    <span class="song-dl-text">
+                      <span class="song-dl-main">Download "Jana Sun"</span>
+                      <span class="song-dl-sub" id="dl-status-2">Special gift track (.mp3) 💜</span>
+                    </span>
+                  </a>
+                </div>
+              </div>
             </div>
 
-            <a id="dl-song-btn" class="song-download-btn" href="./audio/background-music.mp3" download="A-Song-For-Jinnie.mp3">
-              <span class="song-dl-icon">📥</span>
-              <span class="song-dl-text">
-                <span class="song-dl-main">Download Your Song (.mp3)</span>
-                <span class="song-dl-sub">Save this melody to your device forever 💜</span>
-              </span>
-            </a>
+            <!-- Unlock Hint & Locked Continue Button -->
+            <div id="gift-lock-hint" class="gift-lock-hint">
+              <span>🔒</span> <span id="gift-lock-text">Download either song to unlock the next chapter</span>
+            </div>
 
-            <button id="gift-to-memories-btn" class="step-btn" style="margin-top:4px;width:100%;background:rgba(168,85,247,0.3);border-color:rgba(220,188,255,0.45);">Continue to Memories in the Wind 🍃 →</button>
+            <button id="gift-to-memories-btn" class="step-btn gift-btn-locked" style="margin-top:4px;width:100%;">
+              <span id="mem-btn-icon">🔒</span> <span id="mem-btn-text">Download Song to Continue</span>
+            </button>
           </div>
         </div>
       </section>
@@ -2969,6 +3140,22 @@
             if (cIdx >= 0) return goToStep(cIdx);
           }
           if (b.id === 'gift-to-memories-btn') {
+            if (giftLocked || !songDownloaded) {
+              pop(360);
+              toast('Please download your song first to take it with you! 💜🎵');
+              var dlCards = document.querySelectorAll('.gift-song-card');
+              dlCards.forEach(function (c) {
+                c.classList.add('wob');
+                setTimeout(function () { c.classList.remove('wob'); }, 850);
+              });
+              return;
+            }
+            var janaAudio = $('#jana-audio');
+            if (janaAudio && !janaAudio.paused) {
+              janaAudio.pause();
+              var bgm = $('#bgm');
+              if (bgm && gateOpened) bgm.play().catch(function () { });
+            }
             var mIdx = secs.findIndex(function (s) { return s.id === 'memoriessec'; });
             if (mIdx >= 0) return goToStep(mIdx);
           }
@@ -3463,16 +3650,54 @@
       /* ========================================================
          GIFT BOX UNLOCK & SWIPE DECK
          ======================================================== */
+      var songDownloaded = false;
+
       function syncSongDownloadLink() {
         var bgm = $('#bgm');
-        var dl = $('#dl-song-btn');
-        if (dl) {
-          if (bgm && bgm.currentSrc) {
-            dl.href = bgm.currentSrc;
-          } else {
-            var isGhRoot = window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs');
-            dl.href = isGhRoot ? './public/audio/background-music.mp3' : './audio/background-music.mp3';
+        var dl1 = $('#dl-song-btn');
+        var dl2 = $('#dl-song2-btn');
+        var isGhRoot = window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs');
+        var base = isGhRoot ? './public/audio/' : './audio/';
+        if (dl1) {
+          if (bgm && bgm.currentSrc) dl1.href = bgm.currentSrc;
+          else dl1.href = base + 'background-music.mp3';
+        }
+        if (dl2) {
+          dl2.href = base + 'jana-sun.mp3';
+        }
+      }
+
+      function unlockGift(songName) {
+        if (!songDownloaded) {
+          songDownloaded = true;
+          giftLocked = false;
+          var msec = $('#memoriessec');
+          if (msec) msec.hidden = false;
+
+          var hint = $('#gift-lock-hint');
+          if (hint) {
+            hint.classList.add('unlocked');
+            hint.innerHTML = '<span>✨</span> <span>Unlocked! Tap below to explore your memories 💜</span>';
           }
+
+          var memBtn = $('#gift-to-memories-btn');
+          if (memBtn) {
+            memBtn.classList.remove('gift-btn-locked');
+            memBtn.style.background = 'linear-gradient(135deg, #a855f7, #ec4899)';
+            var icon = $('#mem-btn-icon');
+            var text = $('#mem-btn-text');
+            if (icon) icon.textContent = '🍃';
+            if (text) text.textContent = 'Continue to Memories in the Wind →';
+          }
+
+          pop(880);
+          setTimeout(function () { pop(1174); }, 130);
+          burst(ctr(memBtn || document.body), ['🎵', '🎶', '💜', '✨', '🍃', '🌟'], 24, 130);
+          confetti(75);
+          toast('🎶 Download started! Memories in the wind unlocked 💜');
+        } else {
+          pop(880);
+          toast('🎶 Downloading ' + songName + '… Cherish it forever, Jinnie! 💜');
         }
       }
 
@@ -3496,7 +3721,7 @@
         confetti(120);
         rain(['💜', '✨', '🎁', '🎵'], 30);
 
-        toast('🎉 Surprise Unlocked! A song written especially for you 💜');
+        toast('🎉 Surprise Unlocked! Special songs for you 💜');
 
         setTimeout(function () {
           gBox.style.display = 'none';
@@ -3508,12 +3733,10 @@
             syncSongDownloadLink();
           }
 
-          // Unlock memories section in progression
+          // Enforce: Keep memories locked until she downloads!
+          giftLocked = true;
           var msec = $('#memoriessec');
-          if (msec) {
-            msec.hidden = false;
-            giftLocked = false;
-          }
+          if (msec) msec.hidden = true;
         }, 550);
       }
       $('#open').addEventListener('click', openG);
@@ -3522,12 +3745,59 @@
       var dlSongBtn = $('#dl-song-btn');
       if (dlSongBtn) {
         dlSongBtn.addEventListener('click', function (e) {
-          pop(880);
-          setTimeout(function () { pop(1174); }, 120);
-          burst(ctr(dlSongBtn), ['🎵', '🎶', '💜', '✨', '🌟'], 20, 130);
-          confetti(60);
-          toast('🎶 Downloading your song… Cherish it forever, Jinnie! 💜');
+          var c1 = $('#card-song-1');
+          if (c1) c1.classList.add('downloaded');
+          var s1 = $('#dl-status-1');
+          if (s1) s1.textContent = '✓ Downloaded with love 💜';
+          unlockGift('"A Song for Jinnie"');
         });
+      }
+
+      var dlSong2Btn = $('#dl-song2-btn');
+      if (dlSong2Btn) {
+        dlSong2Btn.addEventListener('click', function (e) {
+          var c2 = $('#card-song-2');
+          if (c2) c2.classList.add('downloaded');
+          var s2 = $('#dl-status-2');
+          if (s2) s2.textContent = '✓ Downloaded with love 💜';
+          unlockGift('"Jana Sun"');
+        });
+      }
+
+      // Preview Player for Jana Sun
+      var playJanaBtn = $('#play-jana-btn');
+      var janaAudio = $('#jana-audio');
+      var bgm = $('#bgm');
+      if (playJanaBtn && janaAudio) {
+        playJanaBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          if (janaAudio.paused) {
+            if (bgm) bgm.pause();
+            janaAudio.play().then(function () {
+              playJanaBtn.classList.add('playing');
+              $('#jana-play-icon').textContent = '⏸';
+              $('#jana-play-text').textContent = 'Pause Jana Sun';
+              pop(680);
+              toast('🎵 Now playing: Jana Sun 💜');
+            }).catch(function (err) {
+              console.warn('Jana Sun play error:', err);
+            });
+          } else {
+            janaAudio.pause();
+            playJanaBtn.classList.remove('playing');
+            $('#jana-play-icon').textContent = '▶';
+            $('#jana-play-text').textContent = 'Listen to Jana Sun';
+            pop(480);
+            if (bgm && gateOpened) bgm.play().catch(function () { });
+          }
+        });
+
+        janaAudio.onended = function () {
+          playJanaBtn.classList.remove('playing');
+          $('#jana-play-icon').textContent = '▶';
+          $('#jana-play-text').textContent = 'Listen to Jana Sun';
+          if (bgm && gateOpened) bgm.play().catch(function () { });
+        };
       }
 
       /* ========================================================
