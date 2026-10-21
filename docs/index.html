@@ -18,12 +18,16 @@
 
   <!-- Background Audio Player (Loops seamlessly) -->
   <audio id="bgm" preload="auto" loop playsinline>
+    <source src="./assets/background-music-DR6ULPmN.mp3" type="audio/mpeg">
     <source src="./audio/background-music.mp3" type="audio/mpeg">
+    <source src="./assets/background-music-DR6ULPmN.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Gift Track 2: Jana Sun -->
   <audio id="jana-audio" preload="none" playsinline>
+    <source src="./assets/jana-sun-DnMiiIKT.mp3" type="audio/mpeg">
     <source src="./audio/jana-sun.mp3" type="audio/mpeg">
+    <source src="./assets/jana-sun-DnMiiIKT.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Audio Permission Gate Modal (Locks universe until user enters with music) -->
@@ -359,7 +363,7 @@
                     <div class="gift-song-sub">10-day melody · Playing in background ♪</div>
                   </div>
                 </div>
-                <a id="dl-song-btn" class="song-download-btn" href="./audio/background-music.mp3" download="A-Song-For-Jinnie.mp3">
+                <a id="dl-song-btn" class="song-download-btn" href="./public/audio/background-music.mp3" download="A-Song-For-Jinnie.mp3">
                   <span class="song-dl-icon">📥</span>
                   <span class="song-dl-main" id="dl-status-1">Download "A Song for Jinnie" (.mp3)</span>
                 </a>
@@ -378,7 +382,7 @@
                   <button id="play-jana-btn" class="song-preview-btn" type="button">
                     <span id="jana-play-icon">▶</span> <span id="jana-play-text">Listen</span>
                   </button>
-                  <a id="dl-song2-btn" class="song-download-btn song-download-secondary" href="./audio/jana-sun.mp3" download="Jana-Sun-For-Jinnie.mp3">
+                  <a id="dl-song2-btn" class="song-download-btn song-download-secondary" href="./public/audio/jana-sun.mp3" download="Jana-Sun-For-Jinnie.mp3">
                     <span class="song-dl-icon">📥</span>
                     <span class="song-dl-main" id="dl-status-2">Download (.mp3)</span>
                   </a>
@@ -1088,8 +1092,15 @@
         var bgm = $('#bgm');
         if (!bgm) return;
         if (bgm.currentSrc && !bgm.error && bgm.networkState !== 3) return;
-        var candidates = [
-          './audio/background-music.mp3'
+        var isGhRoot = window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs');
+        var candidates = isGhRoot ? [
+          './public/audio/background-music.mp3',
+          './audio/background-music.mp3',
+          './docs/audio/background-music.mp3'
+        ] : [
+          './audio/background-music.mp3',
+          './public/audio/background-music.mp3',
+          './docs/audio/background-music.mp3'
         ];
         var idx = 0;
         function probeNext() {
@@ -1807,16 +1818,23 @@
          ======================================================== */
       var songDownloaded = false;
 
+      function getAudioUrl(filename) {
+        var isGhRoot = window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs');
+        var base = isGhRoot ? './public/audio/' : './audio/';
+        return base + filename;
+      }
+
       function syncSongDownloadLink() {
         var dl1 = $('#dl-song-btn');
         var dl2 = $('#dl-song2-btn');
         if (dl1) {
-          dl1.href = './audio/background-music.mp3';
+          dl1.href = getAudioUrl('background-music.mp3');
         }
         if (dl2) {
-          dl2.href = './audio/jana-sun.mp3';
+          dl2.href = getAudioUrl('jana-sun.mp3');
         }
       }
+      syncSongDownloadLink();
 
       function unlockGift(songName) {
         if (!songDownloaded) {
@@ -1896,6 +1914,7 @@
       var dlSongBtn = $('#dl-song-btn');
       if (dlSongBtn) {
         dlSongBtn.addEventListener('click', function (e) {
+          syncSongDownloadLink();
           var c1 = $('#card-song-1');
           if (c1) c1.classList.add('downloaded');
           var s1 = $('#dl-status-1');
@@ -1907,10 +1926,11 @@
       var dlSong2Btn = $('#dl-song2-btn');
       if (dlSong2Btn) {
         dlSong2Btn.addEventListener('click', function (e) {
+          syncSongDownloadLink();
           var c2 = $('#card-song-2');
           if (c2) c2.classList.add('downloaded');
           var s2 = $('#dl-status-2');
-          if (s2) s2.textContent = '✓ Downloaded with love 💜';
+          if (s2) s2.textContent = '✓ Downloaded 💜';
           unlockGift('"Jana Sun"');
         });
       }
@@ -1924,20 +1944,27 @@
           e.stopPropagation();
           if (janaAudio.paused) {
             if (bgm) bgm.pause();
+            if (!janaAudio.currentSrc || janaAudio.error) {
+              janaAudio.src = getAudioUrl('jana-sun.mp3');
+              janaAudio.load();
+            }
             janaAudio.play().then(function () {
               playJanaBtn.classList.add('playing');
               $('#jana-play-icon').textContent = '⏸';
-              $('#jana-play-text').textContent = 'Pause Jana Sun';
+              $('#jana-play-text').textContent = 'Listen';
               pop(680);
               toast('🎵 Now playing: Jana Sun 💜');
             }).catch(function (err) {
               console.warn('Jana Sun play error:', err);
+              janaAudio.src = getAudioUrl('jana-sun.mp3');
+              janaAudio.load();
+              janaAudio.play().catch(function () { });
             });
           } else {
             janaAudio.pause();
             playJanaBtn.classList.remove('playing');
             $('#jana-play-icon').textContent = '▶';
-            $('#jana-play-text').textContent = 'Listen to Jana Sun';
+            $('#jana-play-text').textContent = 'Listen';
             pop(480);
             if (bgm && gateOpened) bgm.play().catch(function () { });
           }
@@ -1946,7 +1973,7 @@
         janaAudio.onended = function () {
           playJanaBtn.classList.remove('playing');
           $('#jana-play-icon').textContent = '▶';
-          $('#jana-play-text').textContent = 'Listen to Jana Sun';
+          $('#jana-play-text').textContent = 'Listen';
           if (bgm && gateOpened) bgm.play().catch(function () { });
         };
       }
