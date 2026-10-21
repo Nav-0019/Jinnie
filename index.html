@@ -1602,9 +1602,9 @@
 
     .song-vinyl-wrap {
       position: relative;
-      width: 76px;
-      height: 76px;
-      margin: 2px auto 2px;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 3px;
     }
 
     .song-vinyl {
@@ -1612,8 +1612,8 @@
       height: 100%;
       border-radius: 50%;
       background: radial-gradient(circle, #2a1640 18%, #120622 22%, #381b5c 45%, #18092e 65%, #0d041a 100%);
-      border: 2.5px solid rgba(220, 188, 255, 0.45);
-      box-shadow: 0 0 25px rgba(168, 85, 247, 0.55), inset 0 0 14px rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(220, 188, 255, 0.45);
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.45), inset 0 0 10px rgba(255, 255, 255, 0.2);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1625,16 +1625,16 @@
     }
 
     .song-vinyl-center {
-      width: 28px;
-      height: 28px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       background: linear-gradient(135deg, #a855f7, #ec4899);
-      border: 1.5px solid #ffe3a3;
+      border: 1px solid #ffe3a3;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      box-shadow: 0 0 8px rgba(236, 72, 153, 0.8);
+      font-size: 11px;
+      box-shadow: 0 0 6px rgba(236, 72, 153, 0.8);
     }
 
     .song-gift-tag {
@@ -1651,22 +1651,23 @@
     }
 
     .song-gift-note {
-      font: 400 13px/1.48 "DM Sans", sans-serif !important;
+      font: 400 12px/1.35 "DM Sans", sans-serif !important;
       font-style: normal !important;
       color: #f3e8ff !important;
       margin: 2px 0 6px !important;
       text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7) !important;
+      opacity: 0.92;
     }
 
     .song-now-playing {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 5px 12px;
+      padding: 4px 10px;
       background: rgba(255, 255, 255, 0.06);
       border: 1px solid rgba(216, 180, 254, 0.25);
       border-radius: 99px;
-      font: 500 11.5px "DM Sans", sans-serif;
+      font: 500 11px "DM Sans", sans-serif;
       color: #ffd4ff;
     }
 
@@ -1674,15 +1675,16 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
+      gap: 8px;
       width: 100%;
-      padding: 12px 18px;
+      padding: 8px 12px;
+      min-height: 34px;
       background: linear-gradient(135deg, #a855f7, #ec4899);
       border: 1.5px solid #ffe3a3;
       border-radius: 999px;
       color: #fff !important;
       text-decoration: none;
-      box-shadow: 0 0 26px rgba(168, 85, 247, 0.7);
+      box-shadow: 0 0 18px rgba(168, 85, 247, 0.55);
       transition: all .25s ease;
       cursor: pointer;
       user-select: none;
@@ -1692,7 +1694,7 @@
 
     .song-download-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 0 36px rgba(236, 72, 153, 0.9);
+      box-shadow: 0 0 28px rgba(236, 72, 153, 0.8);
       filter: brightness(1.08);
     }
 
@@ -1701,7 +1703,7 @@
     }
 
     .song-dl-icon {
-      font-size: 22px;
+      font-size: 16px;
       filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.6));
       animation: dlBounce 1.5s ease-in-out infinite alternate;
     }
@@ -1717,13 +1719,13 @@
     }
 
     .song-dl-main {
-      font: 600 14px/1.2 "DM Sans", sans-serif;
+      font: 600 12.5px/1.2 "DM Sans", sans-serif;
       color: #fff;
       letter-spacing: .02em;
     }
 
     .song-dl-sub {
-      font: 400 11px/1.2 "DM Sans", sans-serif;
+      font: 400 10.5px/1.2 "DM Sans", sans-serif;
       color: #ffe3a3;
       opacity: 0.95;
     }
@@ -1737,20 +1739,20 @@
     .gift-songs-list {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 7px;
       width: 100%;
-      margin: 4px 0 8px;
+      margin: 2px 0 6px;
     }
 
     .gift-song-card {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(220, 188, 255, 0.28);
-      border-radius: 18px;
-      padding: 10px 12px;
+      border-radius: 15px;
+      padding: 7px 10px;
       text-align: left;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 5px;
       transition: all .25s ease;
     }
 
@@ -1763,11 +1765,11 @@
     .gift-song-meta {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .gift-song-icon {
-      font-size: 22px;
+      font-size: 18px;
       flex-shrink: 0;
     }
 
@@ -1777,12 +1779,12 @@
     }
 
     .gift-song-title {
-      font: 600 14px/1.2 "DM Sans", sans-serif;
+      font: 600 13px/1.2 "DM Sans", sans-serif;
       color: #ffe3a3;
     }
 
     .gift-song-sub {
-      font: 400 11px/1.3 "DM Sans", sans-serif;
+      font: 400 10.5px/1.2 "DM Sans", sans-serif;
       color: #d6c7f2;
       opacity: 0.9;
     }
@@ -1796,8 +1798,8 @@
 
     .song-preview-btn {
       width: 100%;
-      padding: 7px 14px;
-      font: 600 12px/1 "DM Sans", sans-serif;
+      padding: 6px 12px;
+      font: 600 11.5px/1 "DM Sans", sans-serif;
       background: rgba(255, 255, 255, 0.09);
       border: 1px solid rgba(216, 180, 254, 0.35);
       border-radius: 999px;
@@ -1806,7 +1808,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
+      gap: 5px;
       transition: all .2s ease;
       min-height: 32px;
     }
@@ -1879,18 +1881,12 @@
 
   <!-- Background Audio Player (Loops seamlessly) -->
   <audio id="bgm" preload="auto" loop playsinline>
-    <source src="./public/audio/background-music.mp3" type="audio/mpeg">
     <source src="./audio/background-music.mp3" type="audio/mpeg">
-    <source src="./docs/audio/background-music.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Gift Track 2: Jana Sun -->
   <audio id="jana-audio" preload="none" playsinline>
-    <source src="./public/audio/jana-sun.mp3" type="audio/mpeg">
     <source src="./audio/jana-sun.mp3" type="audio/mpeg">
-    <source src="./docs/audio/jana-sun.mp3" type="audio/mpeg">
-    <source src="./public/audio/Jana Sun.mp3" type="audio/mpeg">
-    <source src="./audio/Jana Sun.mp3" type="audio/mpeg">
   </audio>
 
   <!-- Audio Permission Gate Modal (Locks universe until user enters with music) -->
@@ -2187,9 +2183,10 @@
               <button id="hold" class="step-btn">Hold to blow 🌬️</button>
             </div>
           </div>
-          <button id="cake-to-gift-btn" class="step-btn"
-            style="display:none;margin-top:12px;background:linear-gradient(135deg,#8b5cf6,#ec4899);color:#fff;font-weight:600">Continue
-            to Surprise in the Stars 🎁 →</button>
+          <button id="cake-to-gift-btn" class="step-btn gift-btn-locked"
+            style="display:none;margin-top:12px;width:100%;">
+            <span id="cake-lock-icon">🔒</span> <span id="cake-btn-text">Blow Out Candles to Unlock Gift 🎁</span>
+          </button>
         </div>
       </section>
 
@@ -2211,14 +2208,8 @@
               </div>
             </div>
 
-            <div class="song-gift-tag">✦ Two Special Songs for Jinnie ✦</div>
-
-            <h2 style="font-size:clamp(18px, 5vw, 23px);margin:2px 0;color:#ffe3a3;">Songs for Your Universe</h2>
-
-            <p class="song-gift-note">
-              I gave my absolute all every day for 10 days writing your song, and added another special melody close to my heart.
-              Download them to keep with you forever and unlock the journey! 💜
-            </p>
+            <h2 style="font-size:clamp(17px, 4.8vw, 21px);margin:0;color:#ffe3a3;">Two Songs for You 💜</h2>
+            <p class="song-gift-note">Written with all my heart across 10 days. Download to keep forever ✨</p>
 
             <!-- Dual Songs List -->
             <div class="gift-songs-list">
@@ -2228,15 +2219,12 @@
                   <span class="gift-song-icon">🎵</span>
                   <div class="gift-song-info">
                     <div class="gift-song-title">1. A Song for Jinnie</div>
-                    <div class="gift-song-sub">Written in 10 days · Playing in background ♪</div>
+                    <div class="gift-song-sub">10-day melody · Playing in background ♪</div>
                   </div>
                 </div>
                 <a id="dl-song-btn" class="song-download-btn" href="./audio/background-music.mp3" download="A-Song-For-Jinnie.mp3">
                   <span class="song-dl-icon">📥</span>
-                  <span class="song-dl-text">
-                    <span class="song-dl-main">Download "A Song for Jinnie"</span>
-                    <span class="song-dl-sub" id="dl-status-1">Original 10-day melody (.mp3) 💜</span>
-                  </span>
+                  <span class="song-dl-main" id="dl-status-1">Download "A Song for Jinnie" (.mp3)</span>
                 </a>
               </div>
 
@@ -2246,30 +2234,27 @@
                   <span class="gift-song-icon">🌙</span>
                   <div class="gift-song-info">
                     <div class="gift-song-title">2. Jana Sun</div>
-                    <div class="gift-song-sub">Special gift track for your heart ✨</div>
+                    <div class="gift-song-sub">Dedicated gift track ✨</div>
                   </div>
                 </div>
-                <div class="gift-song-actions">
+                <div class="gift-song-actions" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
                   <button id="play-jana-btn" class="song-preview-btn" type="button">
-                    <span id="jana-play-icon">▶</span> <span id="jana-play-text">Listen to Jana Sun</span>
+                    <span id="jana-play-icon">▶</span> <span id="jana-play-text">Listen</span>
                   </button>
                   <a id="dl-song2-btn" class="song-download-btn song-download-secondary" href="./audio/jana-sun.mp3" download="Jana-Sun-For-Jinnie.mp3">
                     <span class="song-dl-icon">📥</span>
-                    <span class="song-dl-text">
-                      <span class="song-dl-main">Download "Jana Sun"</span>
-                      <span class="song-dl-sub" id="dl-status-2">Special gift track (.mp3) 💜</span>
-                    </span>
+                    <span class="song-dl-main" id="dl-status-2">Download (.mp3)</span>
                   </a>
                 </div>
               </div>
             </div>
 
             <!-- Unlock Hint & Locked Continue Button -->
-            <div id="gift-lock-hint" class="gift-lock-hint">
-              <span>🔒</span> <span id="gift-lock-text">Download either song to unlock the next chapter</span>
+            <div id="gift-lock-hint" class="gift-lock-hint" style="margin:2px 0;">
+              <span>🔒</span> <span id="gift-lock-text">Download either song to continue</span>
             </div>
 
-            <button id="gift-to-memories-btn" class="step-btn gift-btn-locked" style="margin-top:4px;width:100%;">
+            <button id="gift-to-memories-btn" class="step-btn gift-btn-locked" style="margin-top:2px;width:100%;">
               <span id="mem-btn-icon">🔒</span> <span id="mem-btn-text">Download Song to Continue</span>
             </button>
           </div>
@@ -2958,21 +2943,16 @@
         } catch (err) { }
       }
 
-      /* Background Audio Candidate Fallback Helper
-         Natively, the browser will sequentially try the <source> elements in #bgm:
-         1. ./public/audio/background-music.mp3 (Works on GitHub Pages root & Vite dev)
-         2. ./audio/background-music.mp3 (Works in /dist, /docs, & Vite dev)
-         3. ./docs/audio/background-music.mp3 (Works on GitHub Pages)
-         If and only if the audio element signals a fatal network/source error, we probe candidates cleanly.
+      /* Background Audio Helper
+         The canonical audio path is ./audio/background-music.mp3.
+         If and only if the audio element signals a fatal network/source error, we probe cleanly.
       */
       function checkAndFallbackAudio() {
         var bgm = $('#bgm');
         if (!bgm) return;
         if (bgm.currentSrc && !bgm.error && bgm.networkState !== 3) return;
         var candidates = [
-          './public/audio/background-music.mp3',
-          './audio/background-music.mp3',
-          './docs/audio/background-music.mp3'
+          './audio/background-music.mp3'
         ];
         var idx = 0;
         function probeNext() {
@@ -3138,6 +3118,20 @@
           if (b.id === 'to-cake-btn') {
             var cIdx = secs.findIndex(function (s) { return s.id === 'cakesec'; });
             if (cIdx >= 0) return goToStep(cIdx);
+          }
+          if (b.id === 'cake-to-gift-btn') {
+            if (cakeLocked || phase < 4) {
+              pop(360);
+              toast('Blow out your 18 candles and complete the bar first! 🎂🌬️');
+              var c2g = $('#cake-to-gift-btn');
+              if (c2g) {
+                c2g.classList.add('wob');
+                setTimeout(function () { c2g.classList.remove('wob'); }, 850);
+              }
+              return;
+            }
+            var gIdx = secs.findIndex(function (s) { return s.id === 'giftsec'; });
+            if (gIdx >= 0) return goToStep(gIdx);
           }
           if (b.id === 'gift-to-memories-btn') {
             if (giftLocked || !songDownloaded) {
@@ -3434,9 +3428,7 @@
 
       function lightUp() {
         phase = 2;
-        cakeLocked = false;
         var tray = $('#tray'); if (tray) tray.style.display = 'none';
-        var c2g = $('#cake-to-gift-btn'); if (c2g) c2g.style.display = 'inline-block';
         T_('Lighting them up… 🔥', 'Watch every candle illuminate your sky.');
         ord = placed.slice().sort(function (a, b) { return SL.indexOf(a.s) - SL.indexOf(b.s); });
         ord.forEach(function (p, i) {
@@ -3454,8 +3446,19 @@
 
       function blowPhase() {
         phase = 3;
+        cakeLocked = true;
         var bp = $('#bp'); if (bp) bp.hidden = false;
-        var c2g = $('#cake-to-gift-btn'); if (c2g) c2g.style.display = 'inline-block';
+        var c2g = $('#cake-to-gift-btn');
+        if (c2g) {
+          c2g.style.display = 'inline-block';
+          c2g.classList.add('gift-btn-locked');
+          c2g.style.background = '';
+          c2g.style.boxShadow = '';
+          var icon = $('#cake-lock-icon');
+          var text = $('#cake-btn-text');
+          if (icon) icon.textContent = '🔒';
+          if (text) text.textContent = 'Blow Out Candles to Unlock Gift 🎁';
+        }
         T_('Now blow out your candles! 🌬️', 'Tap "Allow mic & blow 🎤" to blow with your voice, or hold the button below!');
         lt = performance.now();
         requestAnimationFrame(tick);
@@ -3619,7 +3622,16 @@
         }, 260);
 
         var c2gBtn = $('#cake-to-gift-btn');
-        if (c2gBtn) c2gBtn.style.display = 'inline-block';
+        if (c2gBtn) {
+          c2gBtn.style.display = 'inline-block';
+          c2gBtn.classList.remove('gift-btn-locked');
+          c2gBtn.style.background = 'linear-gradient(135deg, #8b5cf6, #ec4899)';
+          c2gBtn.style.boxShadow = '0 0 20px rgba(236,72,153,0.5)';
+          var icon = $('#cake-lock-icon');
+          var text = $('#cake-btn-text');
+          if (icon) icon.textContent = '🎁';
+          if (text) text.textContent = 'Continue to Surprise in the Stars 🎁 →';
+        }
 
         // Smoothly & promptly transition directly to the surprise gift step after 2.0s!
         setTimeout(function () {
@@ -3636,7 +3648,13 @@
       if (cakeToGiftBtn) {
         cakeToGiftBtn.addEventListener('click', function (e) {
           e.stopPropagation();
-          cakeLocked = false;
+          if (cakeLocked || phase < 4) {
+            pop(360);
+            toast('Blow out your 18 candles and complete the bar first! 🎂🌬️');
+            cakeToGiftBtn.classList.add('wob');
+            setTimeout(function () { cakeToGiftBtn.classList.remove('wob'); }, 850);
+            return;
+          }
           var secs = getSections();
           var giftIdx = secs.findIndex(function (s) { return s.id === 'giftsec'; });
           if (giftIdx >= 0) goToStep(giftIdx);
@@ -3653,17 +3671,13 @@
       var songDownloaded = false;
 
       function syncSongDownloadLink() {
-        var bgm = $('#bgm');
         var dl1 = $('#dl-song-btn');
         var dl2 = $('#dl-song2-btn');
-        var isGhRoot = window.location.hostname.includes('github.io') && !window.location.pathname.includes('/docs');
-        var base = isGhRoot ? './public/audio/' : './audio/';
         if (dl1) {
-          if (bgm && bgm.currentSrc) dl1.href = bgm.currentSrc;
-          else dl1.href = base + 'background-music.mp3';
+          dl1.href = './audio/background-music.mp3';
         }
         if (dl2) {
-          dl2.href = base + 'jana-sun.mp3';
+          dl2.href = './audio/jana-sun.mp3';
         }
       }
 
