@@ -55,7 +55,10 @@ Navigation uses discrete step-by-step progression via `goToStep(idx)`. Fractiona
   - Tap or drag from tray to place candles.
   - Lighting sequence -> Microphone / button hold blow phase.
   - Immediate celebratory fanfare and confetti, transitioning automatically at 2.0s to `#giftsec`.
-* **Step 10 (`giftsec`)**: Surprise in the Stars — Pulsating 3D gift box with "Open the gift 🎁" button. Unwrapping launches fireworks and unlocks Step 11.
+* **Step 10 (`giftsec`)**: Surprise in the Stars — Pulsating 3D gift box with "Open the gift 🎁" button. Unwrapping reveals two special songs:
+  - Song 1: "A Song for Jinnie" (10-day dedication melody).
+  - Song 2: "Jana Sun" (Special gift track with in-card audio player).
+  - Strict Lock: Progression to Step 11 is locked until she downloads the songs.
 * **Step 11 (`memoriessec`)**: Memories in the Wind — Photos drift in folding from top-right like leaves on a cosmic breeze, showcase with captions, and blow away on tap. Cycles through all 6 photos before unlocking Step 12.
 * **Step 12 (`decksec`)**: What I adore about your soul — 6 interactive swipe cards.
 * **Step 13 (`lettersec`)**: The Love Letter — Typewritten letter ("I like you, Jinnie. Truly, honestly, more than a friend.").
